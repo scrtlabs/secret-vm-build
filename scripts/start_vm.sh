@@ -1,0 +1,21 @@
+qemu-system-x86_64 -accel kvm \
+                   -cpu host \
+                   -m 16G \
+                   -smp 16 \
+                   -nographic \
+                   -nodefaults \
+                   -object '{"qom-type":"tdx-guest","id":"tdx","quote-generation-socket":{"type": "vsock", "cid":"2","port":"4050"}}' \
+                   -machine q35,kernel_irqchip=split,confidential-guest-support=tdx,hpet=off \
+                   -name ubuntu-2222.qcow2,process=ubuntu-2222.qcow2,debug-threads=on \
+                   -device virtio-net-pci,netdev=nic0_td,mac=02:6a:df:9e:e2:ee \
+                   -netdev user,id=nic0_td,hostfwd=tcp::2230-:22 \
+                   -drive file=rootfs.qcow2,if=none,id=virtio-disk0 \
+                   -device virtio-blk-pci,drive=virtio-disk0 \
+                   -pidfile /tmp/ubuntu-2222.qcow2-pid.pid \
+                   -device vhost-vsock-pci,guest-cid=7 \
+                   -bios /shared/custom/tdx-linux/edk2/OVMF-c4c99e41-574b-44b2-88f5-8ae904b6aa1b.fd \
+                   -kernel ../build/tmp-glibc/deploy/images/qemux86-64/bzImage \
+                   -initrd ../build/tmp-glibc/deploy/images/qemux86-64/secretai-initramfs-qemux86-64.rootfs.cpio.gz \
+                   -append "console=ttyS0 earlyprintk=ttyS0 debug clearcpuid=mtrr,rtmr ro" \
+                   -serial mon:stdio \
+		   -virtfs local,path=config,security_model=mapped,readonly=on,mount_tag=guest_config

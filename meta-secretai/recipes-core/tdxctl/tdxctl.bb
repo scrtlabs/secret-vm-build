@@ -1,0 +1,11 @@
+SUMMARY = "tdxctl tool"
+DESCRIPTION = "${SUMMARY}"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+
+inherit cargo_bin
+
+SRC_URI = "file://${THISDIR}/files"
+S = "${WORKDIR}/${THISDIR}/files/tdxctl"
+
+do_compile[network] = "1"
