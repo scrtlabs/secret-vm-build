@@ -1,9 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
 set -ex
 
-TMP_PATH=./tmp
+SCRIPTS_DIR=$(realpath $(dirname ${BASH_SOURCE[0]}))
+TMP_PATH=$SCRIPTS_DIR/tmp
 CPIO_IMG_ABSOLUTE_PATH=$(realpath $1)
+DESTINATION_DIR=$(realpath $2)
 
 mkdir $TMP_PATH
 mkdir $TMP_PATH/rootfs
@@ -29,6 +31,6 @@ sudo umount $TMP_PATH/mnt
 sudo losetup -d $LOOP_DEV
 
 qemu-img convert -f raw -O qcow2 $TMP_PATH/rootfs.raw $TMP_PATH/rootfs.qcow2
-cp $TMP_PATH/rootfs.qcow2 .
+cp $TMP_PATH/rootfs.qcow2 $DESTINATION_DIR
 
 rm -rf $TMP_PATH
