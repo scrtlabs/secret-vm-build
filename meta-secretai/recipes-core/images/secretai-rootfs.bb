@@ -5,6 +5,7 @@ inherit core-image
 
 
 PACKAGE_INSTALL = "base-files \
+                   attest-tool \
                    busybox \
                    systemd \
                    openssh \

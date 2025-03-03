@@ -24,10 +24,10 @@ ROOTFS_HASH=$(cat mnt/rootfs_hash)
 echo "DOCKER_COMPOSE_HASH=$DOCKER_COMPOSE_HASH"
 echo "ROOTFS_HASH=$ROOTFS_HASH"
 
-tdxctl show
-tdxctl extend -i 3 -d $DOCKER_COMPOSE_HASH --associated-data "docker-compose-hash"
-tdxctl extend -i 3 -d $ROOTFS_HASH --associated-data "rootfs-hash"
-tdxctl show
+attest_tool report
+attest_tool extendrt 3 $DOCKER_COMPOSE_HASH
+attest_tool extendrt 3 $ROOTFS_HASH
+attest_tool report
 
 ip link set lo up
 ifconfig lo 127.0.0.1

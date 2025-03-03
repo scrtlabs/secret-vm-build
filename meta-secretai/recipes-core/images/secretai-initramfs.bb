@@ -5,7 +5,7 @@ inherit core-image
 
 PACKAGE_INSTALL = "base-files \
                    busybox \
-                   tdxctl \
+                   attest-tool \
                    kernel-module-tdx-guest \
                    secretai-initramfs-files"
 
