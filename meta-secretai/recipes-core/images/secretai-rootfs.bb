@@ -10,6 +10,9 @@ PACKAGE_INSTALL = "base-files \
                    busybox \
                    systemd \
                    openssh \
+                   kms-tool \
+                   caddy \
+                   rest-server \
                    docker-compose"
 
 IMAGE_FSTYPES = "cpio"
