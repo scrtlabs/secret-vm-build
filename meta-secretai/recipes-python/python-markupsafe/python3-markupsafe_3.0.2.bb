@@ -1,7 +1,7 @@
 SUMMARY = "Safely add untrusted strings to HTML/XML markup"
 HOMEPAGE = "https://palletsprojects.com/p/markupsafe/"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE.rst;md5=ffeffa59c90c9c4a033c7574f8f3fb75"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=ffeffa59c90c9c4a033c7574f8f3fb75"
 
 inherit pypi setuptools3
 
