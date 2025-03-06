@@ -5,7 +5,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/LICENSE;md5=c3b5d03219ab5e8c51db90d893d6e1f7"
 
 GO_IMPORT = "github.com/caddyserver/caddy/v2"
-SRC_URI = "git://${GO_IMPORT};protocol=https;branch=master;name=caddy \
+SRC_URI = "git://github.com/caddyserver/caddy;protocol=https;branch=master;name=caddy \
            file://secretai-caddy.service \
            file://Caddyfile.template \
            file://claive-api-reverse-proxy/ \
@@ -43,19 +43,17 @@ do_configure:prepend() {
     cp -r ${WORKDIR}/claive-api-reverse-proxy/* ${S}/src/claive-reverse-proxy-module/
     
     # Configure to build Caddy with standard modules and Claive API reverse proxy module
-    cat > ${S}/src/${GO_IMPORT}/cmd/caddy/main.go << EOF
-package main
-
-import (
-	caddycmd "github.com/caddyserver/caddy/v2/cmd"
-	_ "github.com/caddyserver/caddy/v2/modules/standard"
-	_ "claive-reverse-proxy-module"
-)
-
-func main() {
-	caddycmd.Main()
-}
-EOF
+    echo 'package main' > ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo '' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo 'import (' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo '    caddycmd "github.com/caddyserver/caddy/v2/cmd"' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo '    _ "github.com/caddyserver/caddy/v2/modules/standard"' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo '    _ "claive-reverse-proxy-module"' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo ')' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo '' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo 'func main() {' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo '    caddycmd.Main()' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    echo '}' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
 }
 
 do_compile() {
@@ -115,4 +113,3 @@ FILES:${PN} += " \
 "
 
 INSANE_SKIP:${PN} = "ldflags"
-
