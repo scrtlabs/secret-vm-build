@@ -1,6 +1,7 @@
 SUMMARY = "Python attrs module"
 HOMEPAGE = "https://pypi.org/project/attrs/"
-LICENSE = "CLOSED"  # Update this with the actual license
+# Update this with the actual license
+LICENSE = "CLOSED"
 
 inherit pypi setuptools3
 

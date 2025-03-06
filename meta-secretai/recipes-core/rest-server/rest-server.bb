@@ -19,7 +19,7 @@ RDEPENDS:${PN} += " \
     python3-bs4 \
     python3-click \
     python3-flask \
-    python3-flask_sslify \
+    python3-flask-sslify \
     python3-itsdangerous \
     python3-jinja2 \
     python3-markupsafe \

@@ -1,6 +1,7 @@
 SUMMARY = "Python Jinja2 module"
 HOMEPAGE = "https://pypi.org/project/Jinja2/"
-LICENSE = "CLOSED"  # Update this with the actual license
+# Update this with the actual license
+LICENSE = "CLOSED"
 
 inherit pypi setuptools3
 

@@ -1,0 +1,17 @@
+SUMMARY = "The ultimate Python library in building OAuth and OpenID Connect servers and clients."
+SECTION = "devel/python"
+LICENSE = "BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=79282424084a4099a6c4a241e7f8c566"
+
+SRC_URI[sha256sum] = "5cbc85ecb0667312c1cdc2f9095680bb735883b123fb509fde1e65b1c5df972e"
+
+PYPI_PACKAGE = "Authlib"
+
+inherit pypi setuptools3
+
+RDEPENDS:${PN} += " \
+    ${PYTHON_PN}-cryptography \
+    ${PYTHON_PN}-requests \
+"
+
+BBCLASSEXTEND = "native nativesdk"

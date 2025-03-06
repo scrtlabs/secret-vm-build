@@ -1,6 +1,7 @@
 SUMMARY = "Python pycparser module"
 HOMEPAGE = "https://pypi.org/project/pycparser/"
-LICENSE = "CLOSED"  # Update this with the actual license
+# Update this with the actual license
+LICENSE = "CLOSED"
 
 inherit pypi setuptools3
 

@@ -1,6 +1,7 @@
 SUMMARY = "Python cryptography module"
 HOMEPAGE = "https://pypi.org/project/cryptography/"
-LICENSE = "CLOSED"  # Update this with the actual license
+# Update this with the actual license
+LICENSE = "CLOSED"
 
 inherit pypi setuptools3
 

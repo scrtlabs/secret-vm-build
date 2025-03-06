@@ -1,6 +1,7 @@
 SUMMARY = "Python Flask-SSLify module"
 HOMEPAGE = "https://pypi.org/project/Flask-SSLify/"
-LICENSE = "CLOSED"  # Update this with the actual license
+# Update this with the actual license
+LICENSE = "CLOSED"
 
 inherit pypi setuptools3
 

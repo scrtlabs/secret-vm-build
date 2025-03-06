@@ -1,6 +1,7 @@
 SUMMARY = "Python itsdangerous module"
 HOMEPAGE = "https://pypi.org/project/itsdangerous/"
-LICENSE = "CLOSED"  # Update this with the actual license
+# Update this with the actual license
+LICENSE = "CLOSED"
 
 inherit pypi setuptools3
 

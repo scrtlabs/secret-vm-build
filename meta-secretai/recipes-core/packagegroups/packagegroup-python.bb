@@ -8,6 +8,7 @@ RDEPENDS:${PN} = " \
     python3-aiohttp \
     python3-aiosignal \
     python3-attrs \
+    python3-authlib \
     python3-bech32 \
     python3-betterproto \
     python3-bip32utils \
@@ -19,7 +20,7 @@ RDEPENDS:${PN} = " \
     python3-cryptography \
     python3-ecdsa \
     python3-flask \
-    python3-flask_sslify \
+    python3-flask-sslify \
     python3-frozenlist \
     python3-furl \
     python3-grpclib \

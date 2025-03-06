@@ -1,6 +1,7 @@
 SUMMARY = "Python python-dateutil module"
 HOMEPAGE = "https://pypi.org/project/python-dateutil/"
-LICENSE = "CLOSED"  # Update this with the actual license
+# Update this with the actual license
+LICENSE = "CLOSED"
 
 inherit pypi setuptools3
 
