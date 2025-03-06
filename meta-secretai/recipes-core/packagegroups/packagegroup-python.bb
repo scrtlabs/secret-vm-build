@@ -34,7 +34,7 @@ RDEPENDS:${PN} = " \
     python3-miscreant \
     python3-mnemonic \
     python3-multidict \
-    python3-nest_asyncio \
+    python3-nest-asyncio \
     python3-orderedmultidict \
     python3-propcache \
     python3-protobuf \
