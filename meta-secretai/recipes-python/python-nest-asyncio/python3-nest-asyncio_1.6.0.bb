@@ -7,7 +7,7 @@ inherit pypi setuptools3
 
 SRC_URI[sha256sum] = "6f172d5449aca15afd6c646851f4e31e02c598d553a667e38cafa997cfec55fe"
 
-PYPI_PACKAGE = "nest-asyncio"
+PYPI_PACKAGE = "nest_asyncio"
 PYPI_PACKAGE_EXT = "tar.gz"
 
 RDEPENDS:${PN} += " \
