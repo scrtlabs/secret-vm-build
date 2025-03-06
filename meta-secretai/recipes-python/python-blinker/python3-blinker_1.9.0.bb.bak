@@ -7,9 +7,9 @@ LIC_FILES_CHKSUM = "file://LICENSE.rst;md5=42cd19c88fc13d1307a4efd7982bc2e3"
 inherit pypi setuptools3
 
 # MD5 hash for the wheel
-SRC_URI[md5sum] = "1ffce54aca3d568ab18ee921d479274f"
+SRC_URI[md5sum] = "26605819b98a22f8bc46ee0eb2e0d4d2"
 # SHA256 hash for the wheel
-SRC_URI[sha256sum] = "b4ce2265a7abece45e7cc896e98dbebe6cead56bcf805a3d23136d145f5445bf"
+SRC_URI[sha256sum] = "ba0efaa9080b619ff2f3459d1d500c57bddea4a6b424b60a91141db6fd2f08bc"
 
 PYPI_PACKAGE = "blinker"
 

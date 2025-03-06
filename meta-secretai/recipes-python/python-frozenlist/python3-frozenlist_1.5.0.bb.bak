@@ -7,9 +7,9 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=cf056e8e7a0a5477451af18b7b5aa98c"
 inherit pypi setuptools3
 
 # MD5 hash for the package
-SRC_URI[md5sum] = "0882f528872840df39091fb5085e258a"
+SRC_URI[md5sum] = "649401d9ab9b34097739aca8949330d4"
 # SHA256 hash for the package
-SRC_URI[sha256sum] = "81d5af29e61b9c8348e876d442253723928dce6433e0e76cd925cd83f1b4b817"
+SRC_URI[sha256sum] = "d994863bba198a4a518b467bb971c56e1db3f180a25c6cf7bb1949c267f748c3"
 
 PYPI_PACKAGE = "frozenlist"
 

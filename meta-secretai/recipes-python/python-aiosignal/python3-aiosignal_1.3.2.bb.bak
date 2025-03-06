@@ -5,8 +5,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=cf056e8e7a0a5477451af18b7b5aa98c"
 
 inherit pypi setuptools3
 
-SRC_URI[md5sum] = "b40f0e0d5d442b6c1bc79e4e4c8eb7a6"
-SRC_URI[sha256sum] = "a8c255c66fafb1e499c9351d0bf32ff2d8a0321595ebac3b93713656d2436f54"
+SRC_URI[md5sum] = "1cebd65b57dfca568ff8ea624497f30d"
+SRC_URI[sha256sum] = "45cde58e409a301715980c2b01d0c28bdde3770d8290b5eb2173759d9acb31a5"
 
 PYPI_PACKAGE = "aiosignal"
 

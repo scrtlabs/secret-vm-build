@@ -1,17 +1,28 @@
-SUMMARY = "Python protobuf module"
+SUMMARY = "Protocol Buffers"
 HOMEPAGE = "https://pypi.org/project/protobuf/"
-# According to PyPI, license is BSD-3-Clause
+SECTION = "devel/python"
 LICENSE = "BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://PKG-INFO;md5=b6f66d458c4a5df99071a3879b6ef017"
 
 inherit pypi setuptools3
 
-# MD5 hash for the wheel
-SRC_URI[md5sum] = "d54a346e6bfbd0e599cc639e8b671b56"
-# SHA256 hash for the wheel
-SRC_URI[sha256sum] = "a7ca6d488aa8ff7f329d4c545b2dbad8ac31464f1d8b1c87ad1346717731e4db"
+SRC_URI[md5sum] = "4bea84984e1c30f6470b32ebd3d67ddb"
+SRC_URI[sha256sum] = "2e3427429c9cffebf259491be0af70189607f365c2f41c7c3764af6f337105f2"
 
-PYPI_PACKAGE = "protobuf"
+UPSTREAM_CHECK_REGEX = "protobuf/(?P<pver>\d+(\.\d+)+)/"
+
+DEPENDS += "${PYTHON_PN}-setuptools-native"
 
 RDEPENDS:${PN} += " \
-    ${PYTHON_PN}-core \
+    ${PYTHON_PN}-datetime \
+    ${PYTHON_PN}-json \
+    ${PYTHON_PN}-logging \
+    ${PYTHON_PN}-netclient \
+    ${PYTHON_PN}-numbers \
+    ${PYTHON_PN}-pkgutil \
+    ${PYTHON_PN}-six \
+    ${PYTHON_PN}-unittest \
 "
+
+# For usage in other recipies when protoc is needed
+BBCLASSEXTEND = "native nativesdk"

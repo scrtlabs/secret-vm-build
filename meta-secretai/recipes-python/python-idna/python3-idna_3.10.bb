@@ -7,9 +7,9 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=239668a7c6066d9e0c5382e9c8c6c0e1"
 inherit pypi setuptools3
 
 # MD5 hash for the wheel
-SRC_URI[md5sum] = "ce22685f1b296fb33e5fda362870685d"
+SRC_URI[md5sum] = "28448b00665099117b6daa9887812cc4"
 # SHA256 hash for the wheel
-SRC_URI[sha256sum] = "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+SRC_URI[sha256sum] = "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9"
 
 PYPI_PACKAGE = "idna"
 

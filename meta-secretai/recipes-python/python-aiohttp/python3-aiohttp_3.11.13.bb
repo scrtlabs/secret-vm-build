@@ -7,9 +7,9 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=9873c5f5c22213f5ba8d63b1e1afa924"
 inherit pypi setuptools3
 
 # MD5 hash for the wheel
-SRC_URI[md5sum] = "0a78a5683a0a7418988229344211a8e8"
+SRC_URI[md5sum] = "f4ba6290d7a4d5ccb4cfe22730743879"
 # SHA256 hash for the wheel
-SRC_URI[sha256sum] = "a4fe27dbbeec445e6e1291e61d61eb212ee9fed6e47998b27de71d70d3e8777d"
+SRC_URI[sha256sum] = "8ce789231404ca8fff7f693cdce398abf6d90fd5dae2b1847477196c243b1fbb"
 
 PYPI_PACKAGE = "aiohttp"
 
