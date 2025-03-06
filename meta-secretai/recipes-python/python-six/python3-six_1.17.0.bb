@@ -2,7 +2,7 @@ SUMMARY = "Python six module"
 HOMEPAGE = "https://pypi.org/project/six/"
 # According to PyPI, license is MIT
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=6c9a35d2eae8e148a636524471d4f471"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=e50fab7e9501f3dfc920eafeb24b46ea"
 
 inherit pypi setuptools3
 
