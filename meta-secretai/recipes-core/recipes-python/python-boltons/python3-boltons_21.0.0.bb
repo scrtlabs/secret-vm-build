@@ -1,12 +1,18 @@
-SUMMARY = "Python boltons module"
-HOMEPAGE = "https://pypi.org/project/boltons/"
-LICENSE = "CLOSED"  # Update this with the actual license
+SUMMARY = "When they're not builtins, they're boltons."
+DESCRIPTION = "Functionality that should be in the standard library. Like builtins, but Boltons."
+HOMEPAGE = "https://github.com/mahmoud/boltons"
+LICENSE = "BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=7a6ba2da5d2fc3a268454dcfddce0b7c"
 
 inherit pypi setuptools3
 
-SRC_URI[md5sum] = "md5sum_placeholder"  # Replace with actual md5sum
-SRC_URI[sha256sum] = "sha256sum_placeholder"  # Replace with actual sha256sum
+SRC_URI[md5sum] = "c7a17577f80a5c3316b8cb61b79d09c9"
+SRC_URI[sha256sum] = "65e70a79a731a7fe6e98592ecfb5ccf2115873d01dbc576079874629e5c90f13"
 
 PYPI_PACKAGE = "boltons"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += " \
+    ${PYTHON_PN}-core \
+"
+
+BBCLASSEXTEND = "native nativesdk"

@@ -1,0 +1,22 @@
+SUMMARY = "Python propcache module"
+HOMEPAGE = "https://pypi.org/project/propcache/"
+# According to PyPI, license is Apache-2.0
+LICENSE = "Apache-2.0"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=86d3f3a95c324c9479bd8986968f4327"
+
+inherit pypi setuptools3
+
+# MD5 hash for the package
+SRC_URI[md5sum] = "e21cefaa1f64bade3837e33eb6b9ff6d"
+# SHA256 hash for the package
+SRC_URI[sha256sum] = "a8fd93de4e1d278046345f49e2238cdb298589325849b2645d4a94c53faeffc5"
+
+PYPI_PACKAGE = "propcache"
+
+RDEPENDS:${PN} += " \
+    ${PYTHON_PN}-core \
+"
+
+# Requires Python 3.9 or newer
+PYTHON_BASEVERSION = "3.9"
+PYTHON_MAJMIN = "3.9"
