@@ -10,4 +10,4 @@ SRC_URI[sha256sum] = "a29c3f2817e95ab89aa4660681ad547c0e9547f20e75b0562fe7723c9a
 
 PYPI_PACKAGE = "wheel"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += "    ${PYTHON_PN}-core "

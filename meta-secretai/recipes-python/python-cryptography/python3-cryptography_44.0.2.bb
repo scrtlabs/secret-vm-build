@@ -10,4 +10,4 @@ SRC_URI[sha256sum] = "c63454aa261a0cf0c5b4718349629793e9e634993538db841165b3df74
 
 PYPI_PACKAGE = "cryptography"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += "    ${PYTHON_PN}-core "

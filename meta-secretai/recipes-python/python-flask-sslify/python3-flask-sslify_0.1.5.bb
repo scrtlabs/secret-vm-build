@@ -10,4 +10,4 @@ SRC_URI[sha256sum] = "d33e1d3c09cd95154176aa8a7319418e52129fc482dd56d8a8ad7c2450
 
 PYPI_PACKAGE = "Flask-SSLify"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += "    ${PYTHON_PN}-core "

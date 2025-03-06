@@ -10,4 +10,4 @@ SRC_URI[sha256sum] = "491c8be9c040f5390f5bf44a5b07752bd07f56edf992381b05c701439e
 
 PYPI_PACKAGE = "pycparser"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += "    ${PYTHON_PN}-core "

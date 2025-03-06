@@ -10,4 +10,4 @@ SRC_URI[sha256sum] = "ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d
 
 PYPI_PACKAGE = "click"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += "    ${PYTHON_PN}-core "

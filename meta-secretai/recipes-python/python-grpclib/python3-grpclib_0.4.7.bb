@@ -10,4 +10,4 @@ SRC_URI[sha256sum] = "2988ef57c02b22b7a2e8e961792c41ccf97efc2ace91ae7a5b0de03c36
 
 PYPI_PACKAGE = "grpclib"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += "    ${PYTHON_PN}-core "

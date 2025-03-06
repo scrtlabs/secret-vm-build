@@ -10,4 +10,4 @@ SRC_URI[sha256sum] = "22ae2ebf9b0c69d206c003e2f6a914ea33f0a932d4aa16f236afc049d9
 
 PYPI_PACKAGE = "multidict"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += "    ${PYTHON_PN}-core "

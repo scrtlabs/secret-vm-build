@@ -10,4 +10,4 @@ SRC_URI[sha256sum] = "e0050c0b7da1eea53ffaf149c0cfbb5c6e2e2b69c4bef22c81fa6eb73e
 
 PYPI_PACKAGE = "itsdangerous"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += "    ${PYTHON_PN}-core "

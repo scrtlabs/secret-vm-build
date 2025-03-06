@@ -10,4 +10,4 @@ SRC_URI[sha256sum] = "41388e9d4d1522446fe79d3213196bd9e3b301a336965b9e27ca2788eb
 
 PYPI_PACKAGE = "wrapt"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += "    ${PYTHON_PN}-core "
