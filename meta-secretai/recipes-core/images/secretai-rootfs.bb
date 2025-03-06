@@ -10,6 +10,7 @@ PACKAGE_INSTALL = "base-files \
                    busybox \
                    systemd \
                    openssh \
+                   recipes-python \
                    kms-tool \
                    caddy \
                    rest-server \
