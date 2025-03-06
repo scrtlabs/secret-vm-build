@@ -11,7 +11,7 @@ SRC_URI[md5sum] = "ff3a2b0d0953eadee90c945d879c5aac"
 # SHA256 hash for the wheel
 SRC_URI[sha256sum] = "54b78bf3716d19a65be4fceccc0d1d7b89e608834989dfae50ea87564639213e"
 
-PYPI_PACKAGE = "Werkzeug"
+PYPI_PACKAGE = "werkzeug"
 
 RDEPENDS:${PN} += " \
     ${PYTHON_PN}-core \
