@@ -9,7 +9,6 @@ SRC_URI = "file://server.py \
            file://env.py \
            file://config.py \
            file://attest_tool \
-           file://rest-server.service \
 "
 
 S = "${WORKDIR}"
