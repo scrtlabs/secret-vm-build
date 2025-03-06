@@ -41,7 +41,7 @@ RDEPENDS:${PN} = " \
     python3-pycparser \
     python3-dateutil \
     python3-dotenv \
-    python3-secret_sdk \
+    python3-secret-sdk \
     python3-setuptools \
     python3-six \
     python3-tensorboardx \
