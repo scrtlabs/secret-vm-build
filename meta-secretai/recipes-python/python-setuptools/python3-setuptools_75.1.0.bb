@@ -1,12 +1,17 @@
 SUMMARY = "Python setuptools module"
 HOMEPAGE = "https://pypi.org/project/setuptools/"
-LICENSE = "CLOSED"  # Update this with the actual license
+# Based on the PyPI classifiers: License :: OSI Approved :: MIT License
+LICENSE = "MIT"
 
 inherit pypi setuptools3
 
-SRC_URI[md5sum] = "md5sum_placeholder"  # Replace with actual md5sum
-SRC_URI[sha256sum] = "sha256sum_placeholder"  # Replace with actual sha256sum
+# MD5 hash for the source package
+SRC_URI[md5sum] = "8e8aed1625afae37b59272ff981d6e1c"
+# SHA256 hash for the source package
+SRC_URI[sha256sum] = "d59a21b17a275fb872a9c3dae73963160ae079f1049ed956880cd7c09b120538"
 
 PYPI_PACKAGE = "setuptools"
 
-RDEPENDS:${PN} += " \\\n    ${PYTHON_PN}-core \\\n"
+RDEPENDS:${PN} += " \
+    ${PYTHON_PN}-core \
+"

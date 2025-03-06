@@ -4,8 +4,8 @@ LICENSE = "CLOSED"  # Update this with the actual license
 
 inherit pypi setuptools3
 
-SRC_URI[md5sum] = "md5sum_placeholder"  # Replace with actual md5sum
-SRC_URI[sha256sum] = "sha256sum_placeholder"  # Replace with actual sha256sum
+SRC_URI[md5sum] = "083d64f070f6f1b5f75971ae60240785"
+SRC_URI[sha256sum] = "8fefff8dc3034e27bb80d67c671eb8a9bc424c0ef4c0826edbff304cceff43bb"
 
 PYPI_PACKAGE = "Jinja2"
 
