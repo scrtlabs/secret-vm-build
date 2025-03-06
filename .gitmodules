@@ -13,6 +13,3 @@
 	path = meta-virtualization
 	url = https://git.yoctoproject.org/meta-virtualization
 	branch = scarthgap
-[submodule "meta-secretai/recipes-core/recipes-caddy/files/claive-api-reverse-proxy"]
-	path = meta-secretai/recipes-core/recipes-caddy/files/claive-api-reverse-proxy
-	url = git@github.com:scrtlabs/claive-api-reverse-proxy.git
