@@ -2,7 +2,7 @@ SUMMARY = "Ordered Multivalue Dictionary"
 DESCRIPTION = "Ordered Multivalue Dictionary - omdict."
 HOMEPAGE = "https://github.com/gruns/orderedmultidict"
 LICENSE = "Unlicense"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=89aad37e72d8ecafe28b2b9ec16018b6"
+LIC_FILES_CHKSUM = "file://LICENSE.md;md5=[new-md5-value]"
 
 inherit pypi setuptools3
 
