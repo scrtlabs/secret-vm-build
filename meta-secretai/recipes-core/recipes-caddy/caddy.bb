@@ -5,7 +5,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/LICENSE;md5=c3b5d03219ab5e8c51db90d893d6e1f7"
 
 GO_IMPORT = "github.com/caddyserver/caddy/v2"
-SRC_URI = "git://github.com/caddyserver/caddy;protocol=https;branch=master;name=caddy \
+SRC_URI = "git://github.com/caddyserver/caddy;protocol=https;nobranch=1;name=caddy \
            file://secretai-caddy.service \
            file://Caddyfile.template \
            file://claive-api-reverse-proxy/ \
@@ -13,7 +13,9 @@ SRC_URI = "git://github.com/caddyserver/caddy;protocol=https;branch=master;name=
            file://scripts/secretai_build_install_caddy.md \
 "
 
-SRCREV_caddy = "v2.7.6"
+SRCREV_caddy = "6d9a83376b5e19b3c0368541ee46044ab284038b"
+
+
 
 inherit go systemd useradd
 
