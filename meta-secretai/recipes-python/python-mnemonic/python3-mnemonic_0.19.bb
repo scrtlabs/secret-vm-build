@@ -2,7 +2,7 @@ SUMMARY = "Python mnemonic module"
 HOMEPAGE = "https://pypi.org/project/mnemonic/"
 # According to PyPI classifiers, license is MIT
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=9dd462d0e7c6d8f3cb431ab8c60e2f84"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=47284558328af55c15e2ee19ee17e912"
 
 inherit pypi setuptools3
 

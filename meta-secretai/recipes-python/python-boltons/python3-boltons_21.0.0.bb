@@ -2,7 +2,7 @@ SUMMARY = "Functionality that should be in the standard library"
 DESCRIPTION = "Boltons is a set of over 160 BSD-licensed, pure-Python utilities in the same spirit as the standard library, and yet somehow not in the standard library"
 HOMEPAGE = "https://boltons.readthedocs.io/"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=aef5566ac4fede9815eccf124c281317"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=7a6ba2da5d2fc3a268454dcfddce0b7c"
 
 inherit pypi setuptools3
 
