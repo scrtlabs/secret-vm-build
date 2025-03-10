@@ -1,7 +1,7 @@
 SUMMARY = "Patch asyncio to allow nested event loops"
 HOMEPAGE = "https://pypi.org/project/nest-asyncio/"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=c70be50007498ec0189239a999594a99"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=767eeb0122cccaf224035860df064532"
 
 inherit pypi setuptools3
 

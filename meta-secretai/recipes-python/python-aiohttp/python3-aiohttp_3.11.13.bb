@@ -2,7 +2,7 @@ SUMMARY = "Python aiohttp module"
 HOMEPAGE = "https://pypi.org/project/aiohttp/"
 # According to PyPI, license is Apache-2.0
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=9873c5f5c22213f5ba8d63b1e1afa924"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=748073912af33aa59430d3702aa32d41"
 
 inherit pypi setuptools3
 

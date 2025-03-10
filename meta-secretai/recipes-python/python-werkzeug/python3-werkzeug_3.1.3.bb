@@ -2,7 +2,7 @@ SUMMARY = "The comprehensive WSGI web application library."
 HOMEPAGE = "https://pypi.org/project/Werkzeug/"
 # License is BSD according to classifiers
 LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://LICENSE.rst;md5=5dc88300786f1c214c1e9827a5229462"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=5dc88300786f1c214c1e9827a5229462"
 
 inherit pypi setuptools3
 

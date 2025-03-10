@@ -2,7 +2,7 @@ SUMMARY = "Python idna module"
 HOMEPAGE = "https://pypi.org/project/idna/"
 # According to classifiers, license is BSD
 LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://LICENSE.md;md5=239668a7c6066d9e0c5382e9c8c6c0e1"
+LIC_FILES_CHKSUM = "file://LICENSE.md;md5=204c0612e40a4dd46012a78d02c80fb1"
 
 inherit pypi setuptools3
 

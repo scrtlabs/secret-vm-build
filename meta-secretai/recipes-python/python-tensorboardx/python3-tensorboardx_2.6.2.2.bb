@@ -1,7 +1,7 @@
 SUMMARY = "Python TensorBoardX module"
 HOMEPAGE = "https://github.com/lanpa/tensorboardX"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=a5f458e5b8c320bcb57e60308ad1ccb1"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=43cd57f6635eb3467ba9041a2d7a0c94"
 
 inherit pypi setuptools3
 

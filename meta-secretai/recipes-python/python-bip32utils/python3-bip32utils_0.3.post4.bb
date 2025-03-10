@@ -2,7 +2,7 @@ SUMMARY = "Python bip32utils module"
 HOMEPAGE = "https://pypi.org/project/bip32utils/"
 # According to PyPI, license is MIT
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=6547e6ba273fb42648401421c6e7ffc3"
+LIC_FILES_CHKSUM = "file://setup.py;md5=b001ba16ee4c53cee06b1c6faa8ac3c0"
 
 inherit pypi setuptools3
 

@@ -2,7 +2,7 @@ SUMMARY = "Fast, simple object-to-object and broadcast signaling"
 HOMEPAGE = "https://pypi.org/project/blinker/"
 # License is MIT according to classifiers
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE.rst;md5=42cd19c88fc13d1307a4efd7982bc2e3"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=42cd19c88fc13d1307a4efd64ee90e4e"
 
 inherit pypi setuptools3
 

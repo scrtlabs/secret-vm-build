@@ -2,7 +2,9 @@ SUMMARY = "Python betterproto module"
 HOMEPAGE = "https://pypi.org/project/betterproto/"
 # According to PyPI, license is MIT
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=6547e6ba273fb42648401421c6e7ffc3"
+LIC_FILES_CHKSUM = "file://LICENSE.md;md5=xxx;downloadfilename=LICENSE"
+SRC_URI += "https://raw.githubusercontent.com/danielgtaylor/python-betterproto/master/LICENSE.md;name=license"
+SRC_URI[license.md5sum] = "393474300131412f76a83934dd8a3830"
 
 inherit pypi setuptools3
 

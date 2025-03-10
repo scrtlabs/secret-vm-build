@@ -2,7 +2,7 @@ SUMMARY = "Python aiohappyeyeballs module"
 HOMEPAGE = "https://pypi.org/project/aiohappyeyeballs/"
 # According to PyPI, license is PSF-2.0 (Python Software Foundation)
 LICENSE = "PSF-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=a484c8d0a0124bb795b57a93d16ed93d"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=fcf6b249c2641540219a727f35d8d2c2"
 
 inherit pypi setuptools3
 

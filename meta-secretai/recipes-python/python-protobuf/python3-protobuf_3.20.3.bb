@@ -2,7 +2,7 @@ SUMMARY = "Protocol Buffers"
 HOMEPAGE = "https://pypi.org/project/protobuf/"
 SECTION = "devel/python"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://PKG-INFO;md5=b6f66d458c4a5df99071a3879b6ef017"
+LIC_FILES_CHKSUM = "file://PKG-INFO;md5=89ac20b61f442d8ce13e120c8315e50b"
 
 inherit pypi setuptools3
 

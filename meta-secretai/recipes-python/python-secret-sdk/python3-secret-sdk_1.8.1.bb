@@ -2,7 +2,7 @@ SUMMARY = "Python secret-sdk module"
 HOMEPAGE = "https://pypi.org/project/secret-sdk/"
 # License is MIT according to PyPI
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=7f6b11d68e9bf586f690eab0e7e45848"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=3966467009164958d9b246c45bfbd060"
 
 inherit pypi setuptools3
 

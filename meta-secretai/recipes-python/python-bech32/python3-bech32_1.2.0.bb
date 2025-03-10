@@ -1,7 +1,10 @@
 SUMMARY = "Reference implementation for Bech32 and segwit addresses."
 HOMEPAGE = "https://pypi.org/project/bech32/"
+
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=a9adf20934ffdc3b3e86fe7e0a1b39b7"
+SRC_URI += "https://raw.githubusercontent.com/fiatjaf/bech32/master/LICENSE;name=license"
+SRC_URI[license.md5sum] = "ebd83dc242796eeae855af1ea0077bc6"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=ebd83dc242796eeae855af1ea0077bc6"
 
 inherit pypi setuptools3
 
