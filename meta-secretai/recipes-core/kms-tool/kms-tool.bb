@@ -23,7 +23,7 @@ inherit python3-dir
 do_install() {
     # Install binaries
     install -d ${D}${bindir}
-    install -m 0755 ${S}/attest_tool ${D}${bindir}
+    # install -m 0755 ${S}/attest_tool ${D}${bindir}
     
     # Install shell scripts
     install -m 0755 ${S}/kms.sh ${D}${bindir}
