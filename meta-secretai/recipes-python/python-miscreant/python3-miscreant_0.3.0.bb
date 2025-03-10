@@ -2,7 +2,7 @@ SUMMARY = "Python miscreant module"
 HOMEPAGE = "https://pypi.org/project/miscreant/"
 # According to PyPI, license is MIT
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=300461cc24aa5750ef97d93e3f591660"
+LIC_FILES_CHKSUM = "file://setup.py;md5=1714beeb10f9b1ce3788f977e5d1d84c"
 
 inherit pypi setuptools3
 

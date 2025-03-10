@@ -2,7 +2,7 @@ SUMMARY = "URL manipulation made simple."
 DESCRIPTION = "furl is a small Python library that makes parsing and manipulating URLs easy."
 HOMEPAGE = "https://github.com/gruns/furl"
 LICENSE = "Unlicense"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=d3a903a86c26ef50af6c357f13643c60"
+LIC_FILES_CHKSUM = "file://LICENSE.md;md5=e2ebb70c96633646130ad9c38cf1092f"
 
 inherit pypi setuptools3
 
