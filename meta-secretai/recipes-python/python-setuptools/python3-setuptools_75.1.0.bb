@@ -2,6 +2,8 @@ SUMMARY = "Python setuptools module"
 HOMEPAGE = "https://pypi.org/project/setuptools/"
 # Based on the PyPI classifiers: License :: OSI Approved :: MIT License
 LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=141643e11c48898150daa83802dbc65f"
+
 
 inherit pypi setuptools3
 
