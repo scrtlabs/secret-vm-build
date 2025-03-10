@@ -1,3 +1,4 @@
+#!/bin/bash
 # Startup script
 
 # helper function, tests if a variable is a valid hex-encoded data
