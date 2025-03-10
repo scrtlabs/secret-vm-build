@@ -4,7 +4,6 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "file://${THISDIR}/files"
-S = "${WORKDIR}/${THISDIR}/files"
 
 # Python dependencies
 RDEPENDS:${PN} += "\
@@ -26,7 +25,7 @@ do_install() {
     # install -m 0755 ${S}/attest_tool ${D}${bindir}
     
     # Install shell scripts
-    install -m 0755 ${S}/kms.sh ${D}${bindir}
+    install -m 0755 ${SRC_URI}/kms.sh ${D}${bindir}
     
     # Install Python scripts and modules
     install -d ${D}${PYTHON_SITEPACKAGES_DIR}/kms_tool
@@ -42,7 +41,7 @@ do_install() {
     touch ${D}${PYTHON_SITEPACKAGES_DIR}/kms_tool/__init__.py
     
     # Also copy Python scripts to bindir for direct execution
-    for py_script in ${S}/*.py; do
+    for py_script in ${SRC_URI}/*.py; do
         if [ -f "$py_script" ] && grep -q "^#\!/usr/bin/env python" "$py_script"; then
             base_name=$(basename "$py_script")
             install -m 0755 $py_script ${D}${bindir}/$base_name
@@ -52,7 +51,7 @@ do_install() {
 
 do_run_script() {
     # Execute your script
-    ${S}/kms.sh
+    ${SRC_URI}/kms.sh
 }
 
 # Set up proper task dependencies
