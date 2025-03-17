@@ -14,6 +14,7 @@ PACKAGE_INSTALL = "base-files \
                    kms-tool \
                    caddy \
                    rest-server \
+                   user-config \
                    docker-compose"
 
 IMAGE_FSTYPES = "cpio"
