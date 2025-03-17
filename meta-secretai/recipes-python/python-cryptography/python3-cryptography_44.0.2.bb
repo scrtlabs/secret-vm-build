@@ -7,6 +7,9 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=bf405a8056a6647e7d077b0e7bc36aba \
 
 inherit pypi python_setuptools_build_meta python_setuptools3_rust
 
+# Include crates
+require ${BPN}-crates.inc
+
 SRC_URI[md5sum] = "9cb2411324687347a27d349d3e74eb7c"
 SRC_URI[sha256sum] = "c63454aa261a0cf0c5b4718349629793e9e634993538db841165b3df74f37ec0"
 
@@ -16,9 +19,25 @@ DEPENDS += " \
     python3-cffi-native \
     python3-pip-native \
     python3-setuptools-rust-native \
+    openssl \
 "
 
 RDEPENDS:${PN} += " \
     ${PYTHON_PN}-cffi \
     ${PYTHON_PN}-core \
 "
+
+do_compile:prepend() {
+    # Create config file to vendor crates
+    mkdir -p ${S}/.cargo
+    cat > ${S}/.cargo/config.toml << EOCFG
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "${WORKDIR}/cargo_home"
+EOCFG
+}
+
+# Allow network access during compilation
+do_compile[network] = "1"

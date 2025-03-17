@@ -13,6 +13,8 @@ SRC_URI[sha256sum] = "a8fd93de4e1d278046345f49e2238cdb298589325849b2645d4a94c53f
 
 PYPI_PACKAGE = "propcache"
 
+DEPENDS += "python3-expandvars-native"
+
 RDEPENDS:${PN} += " \
     ${PYTHON_PN}-core \
     python3-expandvars \
