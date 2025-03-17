@@ -22,13 +22,13 @@ get_master_secret()
 {
     # get random 32 bytes
     #local seed=$(head -c 32 /dev/random | xxd -p -c 32)
-    local seed=$(/usr/bin/crypt_tool rand)
+    local seed=$(/usr/bin/crypt-tool rand)
     if ! test_valid_hex_data "seed"; then
         return 1
     fi
 
     # use it to derive initial pubkey
-    local pubkey=$(/usr/bin/crypt_tool generate-key -s $seed)
+    local pubkey=$(/usr/bin/crypt-tool generate-key -s $seed)
     if ! test_valid_hex_data "pubkey"; then
         return 1
     fi
@@ -60,7 +60,7 @@ get_master_secret()
     fi
 
     # finally decrypt the result
-    master_secret=$(/usr/bin/crypt_tool decrypt -s $seed -d $encrypted_secret -p $export_pubkey)
+    master_secret=$(/usr/bin/crypt-tool decrypt -s $seed -d $encrypted_secret -p $export_pubkey)
     if ! test_valid_hex_data "master_secret"; then
         return 1
     fi

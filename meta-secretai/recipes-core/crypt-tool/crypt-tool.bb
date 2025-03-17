@@ -12,7 +12,7 @@ do_compile[network] = "1"
 
 do_install() {
     install -d ${D}${bindir}
-    install -m 0755 ${B}/target/x86_64-unknown-linux-gnu/release/crypt_tool ${D}${bindir}/crypt_tool
+    install -m 0755 ${B}/target/x86_64-unknown-linux-gnu/release/crypt-tool ${D}${bindir}/crypt-tool
 }
 
-FILES:${PN} += "${bindir}/crypt_tool"
+FILES:${PN} += "${bindir}/crypt-tool"
