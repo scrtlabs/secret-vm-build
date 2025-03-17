@@ -1,0 +1,11 @@
+[Unit]
+Description=KMS Tool Service
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/kms.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

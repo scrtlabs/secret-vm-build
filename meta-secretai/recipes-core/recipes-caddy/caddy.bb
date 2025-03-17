@@ -36,13 +36,26 @@ SYSTEMD_AUTO_ENABLE = "enable"
 
 # For permissions
 USERADD_PACKAGES = "${PN}"
-USERADD_PARAM:${PN} = "--system --home ${CADDY_DATA_DIR} --no-create-home --shell /bin/false --user-group ${CADDY_USER}"
+USERADD_PARAM:${PN} = "--system --home ${CADDY_DATA_DIR} --no-create-home --shell /sbin/nologin -g ${CADDY_GROUP} ${CADDY_USER}"
 GROUPADD_PARAM:${PN} = "--system ${CADDY_GROUP}"
 
 do_configure:prepend() {
     # Copy Claive API reverse proxy module to the appropriate Go source directory
-    install -d ${S}/src/claive-reverse-proxy-module
-    cp -r ${WORKDIR}/claive-api-reverse-proxy/* ${S}/src/claive-reverse-proxy-module/
+    
+    # Fix: Create the full import path structure instead of a relative one
+    mkdir -p ${S}/src/${GO_IMPORT}/vendor/claive-reverse-proxy-module/query-contract
+    # Copy module files to the vendor directory
+    cp -r ${WORKDIR}/claive-api-reverse-proxy/*.go ${S}/src/${GO_IMPORT}/vendor/claive-reverse-proxy-module/
+    cp -r ${WORKDIR}/claive-api-reverse-proxy/go.mod ${S}/src/${GO_IMPORT}/vendor/claive-reverse-proxy-module/
+    cp -r ${WORKDIR}/claive-api-reverse-proxy/go.sum ${S}/src/${GO_IMPORT}/vendor/claive-reverse-proxy-module/ 2>/dev/null || :
+    cp -r ${WORKDIR}/claive-api-reverse-proxy/query-contract/* ${S}/src/${GO_IMPORT}/vendor/claive-reverse-proxy-module/query-contract/
+
+    # Also copy these files for runtime access
+    mkdir -p ${S}/src/${GO_IMPORT}/cmd/caddy/claive-api-reverse-proxy/
+    cp -r ${WORKDIR}/claive-api-reverse-proxy/*.txt ${S}/src/${GO_IMPORT}/cmd/caddy/claive-api-reverse-proxy/ 2>/dev/null || :
+    cp -r ${WORKDIR}/claive-api-reverse-proxy/*.json ${S}/src/${GO_IMPORT}/cmd/caddy/claive-api-reverse-proxy/ 2>/dev/null || :
+    cp -r ${WORKDIR}/claive-api-reverse-proxy/*.pem ${S}/src/${GO_IMPORT}/cmd/caddy/claive-api-reverse-proxy/ 2>/dev/null || :
+
     
     # Configure to build Caddy with standard modules and Claive API reverse proxy module
     echo 'package main' > ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
@@ -50,17 +63,20 @@ do_configure:prepend() {
     echo 'import (' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
     echo '    caddycmd "github.com/caddyserver/caddy/v2/cmd"' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
     echo '    _ "github.com/caddyserver/caddy/v2/modules/standard"' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
-    echo '    _ "claive-reverse-proxy-module"' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
+    # Fix: Use the full import path from the vendor directory
+    echo '    _ "github.com/caddyserver/caddy/v2/vendor/claive-reverse-proxy-module"' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
     echo ')' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
     echo '' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
     echo 'func main() {' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
     echo '    caddycmd.Main()' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
     echo '}' >> ${S}/src/${GO_IMPORT}/cmd/caddy/main.go
 }
+do_compile[network] = "1"
 
 do_compile() {
     cd ${S}/src/${GO_IMPORT}/cmd/caddy
-    ${GO} build -o ${B}/caddy -trimpath
+    # Fix: Add vendor mode to use the modules in vendor/
+    ${GO} build -mod=vendor -o ${B}/caddy -trimpath
 }
 
 do_install() {
@@ -81,6 +97,14 @@ do_install() {
         install -d ${D}${systemd_unitdir}/system
         install -m 0644 ${WORKDIR}/secretai-caddy.service ${D}${systemd_unitdir}/system/
     fi
+
+    # Install module data files
+    install -d ${D}${CADDY_DATA_DIR}/claive-api-reverse-proxy
+    for file in ${S}/src/${GO_IMPORT}/cmd/caddy/claive-api-reverse-proxy/*; do
+        if [ -f "$file" ]; then
+            install -m 0644 $file ${D}${CADDY_DATA_DIR}/claive-api-reverse-proxy/
+        fi
+    done
 
     # Set appropriate ownership
     chown -R ${CADDY_USER}:${CADDY_GROUP} ${D}${CADDY_DATA_DIR}

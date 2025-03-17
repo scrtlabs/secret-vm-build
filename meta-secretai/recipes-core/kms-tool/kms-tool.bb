@@ -3,15 +3,20 @@ DESCRIPTION = "${SUMMARY}"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
+inherit systemd
 
 SRC_URI = "file://kms.sh \
-           file://kms_query.py \
-           file://requirements.txt"
+          file://kms_query.py \
+          file://requirements.txt \
+          file://kms-tool.service"
 
 S = "${WORKDIR}"
 
 # Python dependencies
 RDEPENDS:${PN} += "\
+    cryptsetup \
+    crypt-tool \
+    attest-tool \
     python3-secret-sdk \
     python3-authlib \
     python3-certifi \
@@ -24,6 +29,10 @@ RDEPENDS:${PN} += "\
 "
 
 inherit python3-dir
+
+SYSTEMD_SERVICE:${PN} = "kms-tool.service"
+SYSTEMD_AUTO_ENABLE = "enable"
+
 do_install() {
     # Install binaries
     install -d ${D}${bindir}
@@ -52,12 +61,15 @@ do_install() {
             install -m 0755 $py_script ${D}${bindir}/$base_name
         fi
     done
+
+    # Install systemd service file
+    install -d ${D}${systemd_system_unitdir}
+    install -m 0644 ${WORKDIR}/kms-tool.service ${D}${systemd_system_unitdir}/
 }
 
-do_run_script() {
-    # Execute your script
-    ${S}/kms.sh
-}
-
-# Set up proper task dependencies
-addtask run_script after do_install before do_package
+FILES:${PN} += "\
+    ${bindir}/* \
+    ${PYTHON_SITEPACKAGES_DIR}/kms_tool/* \
+    ${PYTHON_SITEPACKAGES_DIR}/kms_tool \
+    ${systemd_system_unitdir}/* \
+"
