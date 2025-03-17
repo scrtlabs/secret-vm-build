@@ -4,7 +4,7 @@ HOMEPAGE = "https://pypi.org/project/propcache/"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-inherit pypi setuptools3
+inherit pypi python_setuptools_build_meta
 
 # MD5 hash for the package
 SRC_URI[md5sum] = "e21cefaa1f64bade3837e33eb6b9ff6d"
@@ -15,8 +15,8 @@ PYPI_PACKAGE = "propcache"
 
 RDEPENDS:${PN} += " \
     ${PYTHON_PN}-core \
+    python3-expandvars \
 "
 
-# Requires Python 3.9 or newer
-PYTHON_BASEVERSION = "3.9"
-PYTHON_MAJMIN = "3.9"
+# Include all installed files in the package
+FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}/*"

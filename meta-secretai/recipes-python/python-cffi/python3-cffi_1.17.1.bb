@@ -18,6 +18,9 @@ RDEPENDS:${PN} += " \
     python3-pycparser \
 "
 
+# Include all installed files in the package
+FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}/*"
+
 # Requires Python 3.8 or newer
 PYTHON_BASEVERSION = "3.8"
 PYTHON_MAJMIN = "3.8"

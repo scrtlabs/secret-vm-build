@@ -4,7 +4,7 @@ HOMEPAGE = "https://pypi.org/project/blinker/"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=42cd19c88fc13d1307a4efd64ee90e4e"
 
-inherit pypi setuptools3
+inherit pypi python_flit_core
 
 # MD5 hash for the wheel
 SRC_URI[md5sum] = "1ffce54aca3d568ab18ee921d479274f"
@@ -16,6 +16,9 @@ PYPI_PACKAGE = "blinker"
 RDEPENDS:${PN} += " \
     ${PYTHON_PN}-core \
 "
+
+# Include all installed files in the package
+FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}/*"
 
 # This package requires Python 3.9 or newer
 PYTHON_BASEVERSION = "3.9"

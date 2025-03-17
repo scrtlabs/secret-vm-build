@@ -4,7 +4,7 @@ HOMEPAGE = "https://pypi.org/project/secret-sdk/"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3966467009164958d9b246c45bfbd060"
 
-inherit pypi setuptools3
+inherit pypi python_poetry_core
 
 # MD5 hash for the package
 SRC_URI[md5sum] = "d968c4491fda27ff6c2e349773f1acc2"

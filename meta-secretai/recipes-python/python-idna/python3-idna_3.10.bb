@@ -4,7 +4,7 @@ HOMEPAGE = "https://pypi.org/project/idna/"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=204c0612e40a4dd46012a78d02c80fb1"
 
-inherit pypi setuptools3
+inherit pypi python_setuptools_build_meta
 
 # MD5 hash for the wheel
 SRC_URI[md5sum] = "28448b00665099117b6daa9887812cc4"
@@ -16,7 +16,3 @@ PYPI_PACKAGE = "idna"
 RDEPENDS:${PN} += " \
     ${PYTHON_PN}-core \
 "
-
-# This package requires Python 3.6 or newer
-PYTHON_BASEVERSION = "3.6"
-PYTHON_MAJMIN = "3.6"

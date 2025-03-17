@@ -4,7 +4,7 @@ HOMEPAGE = "https://pypi.org/project/Werkzeug/"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=5dc88300786f1c214c1e9827a5229462"
 
-inherit pypi setuptools3
+inherit pypi python_flit_core
 
 # MD5 hash for the wheel
 SRC_URI[md5sum] = "b6005d403d01d08b9fe2330a0cfea05a"
@@ -17,6 +17,9 @@ RDEPENDS:${PN} += " \
     ${PYTHON_PN}-core \
     python3-markupsafe \
 "
+
+# Include all installed files in the package
+FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}/*"
 
 # This package requires Python 3.9 or newer
 PYTHON_BASEVERSION = "3.9"
