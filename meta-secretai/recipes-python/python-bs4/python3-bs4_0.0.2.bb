@@ -1,15 +1,12 @@
-SUMMARY = "Python bs4 module"
+SUMMARY = "Dummy package for Beautiful Soup (beautifulsoup4)"
 HOMEPAGE = "https://pypi.org/project/bs4/"
-# Update this with the actual license
-LICENSE = "CLOSED"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-inherit pypi setuptools3
+inherit python3-dir
 
-# Replace with actual md5sum
-SRC_URI[md5sum] = "c631ce2af9d7405ad2f8eccf1bb45a77"
-# Replace with actual sha256sum
-SRC_URI[sha256sum] = "a48685c58f50fe127722417bae83fe6badf500d54b55f7e39ffe43b798653925"
+# This is a dummy/virtual package that depends on beautifulsoup4
+RDEPENDS:${PN} = "python3-beautifulsoup4"
 
-PYPI_PACKAGE = "bs4"
-
-RDEPENDS:${PN} += "    ${PYTHON_PN}-core "
+# Allow empty package as this is just a dependency provider
+ALLOW_EMPTY:${PN} = "1"

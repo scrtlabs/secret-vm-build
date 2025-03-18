@@ -13,7 +13,11 @@ SRC_URI[sha256sum] = "81d5af29e61b9c8348e876d442253723928dce6433e0e76cd925cd83f1
 
 PYPI_PACKAGE = "frozenlist"
 
-DEPENDS += "python3-expandvars-native"
+# Add Cython as a build dependency
+DEPENDS += " \
+    python3-cython-native \
+    python3-expandvars-native \
+"
 
 RDEPENDS:${PN} += " \
     ${PYTHON_PN}-core \
@@ -21,3 +25,6 @@ RDEPENDS:${PN} += " \
 
 # Include all installed files in the package
 FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}/*"
+
+# Allow network access during build for pip operations
+do_compile[network] = "1"
