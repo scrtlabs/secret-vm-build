@@ -7,8 +7,8 @@ PV = "3.0.6"
 
 inherit pypi python_pep517
 
-SRC_URI[md5sum] = "b6005d403d01d08b9fe2330a0cfea05a"
-SRC_URI[sha256sum] = "60723ce945c19328679790e3282cc758aa4a6040e4bb330f53d30fa546d44746"
+SRC_URI[md5sum] = "0d13f3dbe9b08aecdebe3d9b61cc58aa"
+SRC_URI[sha256sum] = "a8dd59d4de28ca70471a34cba79bed5f7ef2e036a76b3ab0835474246eb41f8d"
 
 PYPI_PACKAGE = "werkzeug"
 
