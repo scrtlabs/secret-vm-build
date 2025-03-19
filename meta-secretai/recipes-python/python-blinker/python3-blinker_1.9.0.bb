@@ -11,7 +11,7 @@ S = "${WORKDIR}/git"
 inherit setuptools3 pypi
 
 PV = "1.9.0"
-SRC_URI[sha256sum] = "a2c6199365e01e7b2f5c3c5e992f7c4f06e6cf8b1b6bb3de786991c973bdff82"
+SRC_URI[sha256sum] = "b4ce2265a7abece45e7cc896e98dbebe6cead56bcf805a3d23136d145f5445bf"
 
 RDEPENDS_${PN} += "python3-core python3-setuptools"
 
