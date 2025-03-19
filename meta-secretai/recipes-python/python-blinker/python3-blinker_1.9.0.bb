@@ -1,15 +1,18 @@
-SUMMARY = "Fast, simple object-to-object and broadcast signaling"
-DESCRIPTION = "Blinker provides a fast dispatching system that allows any number of interested parties to subscribe to events, or 'signals'."
-HOMEPAGE = "https://pythonhosted.org/blinker/"
+SUMMARY = "Fast Python signaling library"
+HOMEPAGE = "https://github.com/jek/blinker"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=8ca5206fbd00026e7da477f6e5298733"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=9fd5a9352e49ee34a6f8f31724dfdfbc"
 
-SRC_URI[sha256sum] = "b4ce2265a7abece45e7cc896e98dbebe6cead56bcf805a3d23136d145f5445bf"
+SRC_URI = "gitsm://github.com/jek/blinker.git;branch=master;protocol=https"
+SRCREV = "48db99a8f7c28d3883dcd573bba14ea73c04a240"
 
-inherit pypi setuptools3
+S = "${WORKDIR}/git"
 
-# Fix FILES_${PN} to include all files
-FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}/*"
+inherit setuptools3 pypi
 
-# Ensure cross-compilation works correctly
-BBCLASSEXTEND = "native nativesdk"
+PV = "1.9.0"
+SRC_URI[sha256sum] = "a2c6199365e01e7b2f5c3c5e992f7c4f06e6cf8b1b6bb3de786991c973bdff82"
+
+RDEPENDS_${PN} += "python3-core python3-setuptools"
+
+FILES_${PN} += "${PYTHON_SITEPACKAGES_DIR}/blinker"
