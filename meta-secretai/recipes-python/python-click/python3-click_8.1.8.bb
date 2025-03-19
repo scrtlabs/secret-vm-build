@@ -1,7 +1,7 @@
 SUMMARY = "Python click module"
 HOMEPAGE = "https://pypi.org/project/click/"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE.rst;md5=1fa98232fd645608937a0fdc82e999b8"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=1fa98232fd645608937a0fdc82e999b8"
 
 inherit pypi python_flit_core
 

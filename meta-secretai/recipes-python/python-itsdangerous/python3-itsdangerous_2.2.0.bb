@@ -1,7 +1,7 @@
 SUMMARY = "Python itsdangerous module"
 HOMEPAGE = "https://pypi.org/project/itsdangerous/"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE.rst;md5=4dae3272b2679dabe5d375ab3eb59089"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=4dae3272b2679dabe5d375ab3eb59089"
 
 inherit pypi python_flit_core
 

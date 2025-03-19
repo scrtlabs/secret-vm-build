@@ -1,7 +1,7 @@
 SUMMARY = "PyTorch Tensorboard Visualization Support"
 HOMEPAGE = "https://github.com/lanpa/tensorboardX"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=c9a8aeaaaa12b3df847595a0a6fb1dfb"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=43cd57f6635eb3467ba9041a2d7a0c94"
 
 inherit pypi setuptools3
 

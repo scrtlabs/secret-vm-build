@@ -1,7 +1,7 @@
 SUMMARY = "The Swiss Army knife of Python web development"
 HOMEPAGE = "https://werkzeug.palletsprojects.com/"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=3ea6657e09a296fab6b49d02929fb8bc"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=5dc88300786f1c214c1e9827a5229462"
 
 PV = "3.0.6"
 
