@@ -20,5 +20,11 @@ RDEPENDS:${PN} = "\
     ${@bb.utils.contains('PYTHON_VERSION', '3.9', 'python3-importlib-metadata', '', d)} \
 "
 
+# Fix FILES_${PN} to include Python site-packages
+FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}/* ${bindir}/*"
+
+# Add BBCLASSEXTEND to support cross, native and SDK
+BBCLASSEXTEND = "native nativesdk"
+
 CLEANBROKEN = "1"
 S = "${WORKDIR}/flask-${PV}"
