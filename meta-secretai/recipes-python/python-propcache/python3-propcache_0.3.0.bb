@@ -7,7 +7,7 @@ SRC_URI[sha256sum] = "a8fd93de4e1d278046345f49e2238cdb298589325849b2645d4a94c53f
 
 PYPI_PACKAGE = "propcache"
 
-inherit pypi setuptools
+inherit pypi setuptools3
 
 RDEPENDS:${PN} = "python3-core python3-expandvars"
 
