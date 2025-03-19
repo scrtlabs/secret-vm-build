@@ -3,6 +3,7 @@
 
 SRC_URI += " \
     crate://crates.io/aho-corasick/1.1.2 \
+    crate://crates.io/itoa/1.0.10 \
     crate://crates.io/asn1_derive/0.20.0 \
     crate://crates.io/asn1/0.20.0 \
     crate://crates.io/autocfg/1.1.0 \
@@ -70,3 +71,4 @@ SRC_URI[target-lexicon-0.12.14.sha256sum] = "e1fc403891a21bcfb7c37834ba66a547a8f
 SRC_URI[unicode-ident-1.0.12.sha256sum] = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
 SRC_URI[vcpkg-0.2.15.sha256sum] = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
 SRC_URI[asn1_derive-0.20.0.sha256sum] = "a200809d0138620b3dba989f1d08d0620e76248bc1e62a2ec1b2df5eb1ee08ad"
+SRC_URI[itoa-1.0.10.sha256sum] = "b1a46d1a171d865aa5f83f92695765caa047a9b4cbae2cbf37dbd613a793fd4c"

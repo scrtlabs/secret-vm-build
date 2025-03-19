@@ -21,4 +21,3 @@ RDEPENDS:${PN} = "\
 "
 
 CLEANBROKEN = "1"
-S = "${WORKDIR}/flask-${PV}"
