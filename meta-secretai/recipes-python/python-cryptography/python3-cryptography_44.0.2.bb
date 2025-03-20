@@ -41,3 +41,4 @@ EOCFG
 
 # Allow network access during compilation
 do_compile[network] = "1"
+do_fetch[network] = "1"
