@@ -8,7 +8,7 @@ SRCREV = "b757408f2c13121b52d215fe922f13fc17a69bea"
 
 S = "${WORKDIR}/git"
 
-inherit pypi poetry-core
+inherit pyproject-build-system
 
 PV = "1.9.0"
 
