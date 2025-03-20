@@ -1,22 +1,18 @@
-SUMMARY = "Fast, simple object-to-object and broadcast signaling"
-HOMEPAGE = "https://pypi.org/project/blinker/"
-# License is MIT according to classifiers
+SUMMARY = "Fast Python signaling library"
+HOMEPAGE = "https://github.com/jek/blinker"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE.rst;md5=42cd19c88fc13d1307a4efd7982bc2e3"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=9fd5a9352e49ee34a6f8f31724dfdfbc"
 
-inherit pypi setuptools3
+SRC_URI = "gitsm://github.com/jek/blinker.git;branch=master;protocol=https"
+SRCREV = "48db99a8f7c28d3883dcd573bba14ea73c04a240"
 
-# MD5 hash for the wheel
-SRC_URI[md5sum] = "26605819b98a22f8bc46ee0eb2e0d4d2"
-# SHA256 hash for the wheel
-SRC_URI[sha256sum] = "ba0efaa9080b619ff2f3459d1d500c57bddea4a6b424b60a91141db6fd2f08bc"
+S = "${WORKDIR}/git"
 
-PYPI_PACKAGE = "blinker"
+inherit setuptools3 pypi
 
-RDEPENDS:${PN} += " \
-    ${PYTHON_PN}-core \
-"
+PV = "1.9.0"
+SRC_URI[sha256sum] = "b4ce2265a7abece45e7cc896e98dbebe6cead56bcf805a3d23136d145f5445bf"
 
-# This package requires Python 3.9 or newer
-PYTHON_BASEVERSION = "3.9"
-PYTHON_MAJMIN = "3.9"
+RDEPENDS_${PN} += "python3-core python3-setuptools"
+
+FILES_${PN} += "${PYTHON_SITEPACKAGES_DIR}/blinker"

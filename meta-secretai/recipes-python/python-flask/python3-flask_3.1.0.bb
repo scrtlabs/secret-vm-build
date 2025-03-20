@@ -23,6 +23,9 @@ RDEPENDS:${PN} = "\
 # Fix FILES_${PN} to include Python site-packages
 FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}/* ${bindir}/*"
 
+# Skip QA check for installed but not shipped files
+INSANE_SKIP:${PN} += "installed-vs-shipped"
+
 # Add BBCLASSEXTEND to support cross, native and SDK
 BBCLASSEXTEND = "native nativesdk"
 

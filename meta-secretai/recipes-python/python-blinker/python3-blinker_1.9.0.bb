@@ -1,18 +1,17 @@
-SUMMARY = "Fast Python signaling library"
+SUMMARY = "Fast, simple object-to-object and broadcast signaling"
 HOMEPAGE = "https://github.com/jek/blinker"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=9fd5a9352e49ee34a6f8f31724dfdfbc"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=42cd19c88fc13d1307a4efd64ee90e4e"
 
-SRC_URI = "gitsm://github.com/jek/blinker.git;branch=master;protocol=https"
-SRCREV = "48db99a8f7c28d3883dcd573bba14ea73c04a240"
+SRC_URI = "gitsm://github.com/jek/blinker.git;branch=main;protocol=https"
+SRCREV = "b757408f2c13121b52d215fe922f13fc17a69bea"
 
 S = "${WORKDIR}/git"
 
-inherit setuptools3 pypi
+inherit setuptools3
 
 PV = "1.9.0"
-SRC_URI[sha256sum] = "b4ce2265a7abece45e7cc896e98dbebe6cead56bcf805a3d23136d145f5445bf"
 
-RDEPENDS_${PN} += "python3-core python3-setuptools"
+RDEPENDS:${PN} += "python3-core python3-setuptools python3-multiprocessing"
 
-FILES_${PN} += "${PYTHON_SITEPACKAGES_DIR}/blinker"
+BBCLASSEXTEND = "native nativesdk"
