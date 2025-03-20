@@ -11,9 +11,7 @@ PACKAGE_INSTALL = "base-files \
                    systemd \
                    openssh \
                    packagegroup-python \
-                   kms-tool \
                    caddy \
-                   rest-server \
                    user-config \
                    docker-compose"
 
