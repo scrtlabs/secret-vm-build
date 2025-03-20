@@ -10,7 +10,6 @@ PACKAGE_INSTALL = "base-files \
                    busybox \
                    systemd \
                    openssh \
-                   packagegroup-python \
                    caddy \
                    user-config \
                    docker-compose"

@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Builder <builder@example.com>
+Date: Thu, 20 Mar 2025 12:00:00 +0200
+Subject: [PATCH] Update acmez imports to v2
+
+This patch updates the imports from github.com/mholt/acmez/v3 to github.com/mholt/acmez/v2
+to resolve dependency version conflicts in the build.
+
+Signed-off-by: Builder <builder@example.com>
+---
+ src/github.com/caddyserver/caddy/v2/modules/caddytls/acmeissuer.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/github.com/caddyserver/caddy/v2/modules/caddytls/acmeissuer.go b/src/github.com/caddyserver/caddy/v2/modules/caddytls/acmeissuer.go
+index xxxxxxx..xxxxxxx 100644
+--- a/src/github.com/caddyserver/caddy/v2/modules/caddytls/acmeissuer.go
++++ b/src/github.com/caddyserver/caddy/v2/modules/caddytls/acmeissuer.go
+@@ -33,7 +33,7 @@ import (
+ 
+ 	"github.com/caddyserver/certmagic"
+ 	"github.com/caddyserver/zerossl"
+-	"github.com/mholt/acmez/v3/acme"
++	"github.com/mholt/acmez/v2/acme"
+ 	"go.uber.org/zap"
+ 	"go.uber.org/zap/zapcore"
+ 
+-- 
+2.25.1
