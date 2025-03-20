@@ -8,10 +8,10 @@ SRCREV = "b757408f2c13121b52d215fe922f13fc17a69bea"
 
 S = "${WORKDIR}/git"
 
-inherit setuptools3
+inherit pypi poetry-core
 
 PV = "1.9.0"
 
-RDEPENDS:${PN} += "python3-core python3-setuptools python3-multiprocessing"
+RDEPENDS_${PN} += "python3-core python3-poetry-core"
 
-BBCLASSEXTEND = "native nativesdk"
+FILES_${PN} += "${PYTHON_SITEPACKAGES_DIR}/blinker"
