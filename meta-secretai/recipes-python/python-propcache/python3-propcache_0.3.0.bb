@@ -1,17 +1,19 @@
-SUMMARY = "Python property caching"
-HOMEPAGE = "https://pypi.org/project/propcache/"
+SUMMARY = "Fast property caching"
+HOMEPAGE = "https://github.com/aio-libs/propcache"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Apache-2.0;md5=89aea4e17d99a7cacdbeed46a0096b10"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-SRC_URI = "https://files.pythonhosted.org/packages/source/p/propcache/propcache-0.3.0.tar.gz"
 SRC_URI[sha256sum] = "a8fd93de4e1d278046345f49e2238cdb298589325849b2645d4a94c53faeffc5"
 
-PYPI_PACKAGE = "propcache"
+inherit pypi python_setuptools_build_meta ptest-python-pytest cython
 
-inherit pypi setuptools3
+DEPENDS += " \
+	python3-expandvars-native \
+"
 
-RDEPENDS:${PN} = "python3-core python3-expandvars"
-
-FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}"
-
-INSANE_SKIP:${PN} += "already-stripped"
+RDEPENDS:${PN}-ptest += " \
+	python3-pytest-codspeed \
+	python3-pytest-xdist \
+	python3-rich \
+	python3-statistics \
+"
