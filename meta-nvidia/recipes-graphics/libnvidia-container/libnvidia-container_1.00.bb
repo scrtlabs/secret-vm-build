@@ -23,6 +23,8 @@ do_configure:append() {
     touch ${S}/deps/src/nvidia-modprobe-${NVIDIA_MODPROBE_VERSION}/.download_stamp
 }
 
+do_compile[network] = "1"
+
 do_compile:prepend() {
     # Ensure the copied bmake is used during the build
     export PATH=${WORKDIR}:$PATH
@@ -47,7 +49,7 @@ do_install() {
     # install -m 0644 ${S}/src/${GO_IMPORT}/config/config.toml.ubuntu ${D}${sysconfdir}/nvidia-container-runtime/config.toml
     # sed -i -e's,ldconfig\.real,ldconfig,' ${D}${sysconfdir}/nvidia-container-runtime/config.toml
     # sed -i -e's,mode = "auto",mode = "legacy",' ${D}${sysconfdir}/nvidia-container-runtime/config.toml
-    ln -sf nvidia-container-runtime-hook ${D}${bindir}/nvidia-container-toolkit
+    #ln -sf nvidia-container-runtime-hook ${D}${bindir}/nvidia-container-toolkit
 }
 
 FILES_${PN} += "/usr/local/bin /usr/local/lib"
