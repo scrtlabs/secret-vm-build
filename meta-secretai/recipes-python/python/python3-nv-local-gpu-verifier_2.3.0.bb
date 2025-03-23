@@ -5,12 +5,11 @@ LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=a411985ae7288e79d526516ccb65f9ed"
 
 SRCREV = "368b9f95cf6a33e161ca8c0aac8a4c9528ea6ae7"
-SRC_URI = "https://github.com/NVIDIA/nvtrust/archive/${SRCREV}.tar.gz"
-SRC_URI[sha256sum] = "974ac5d4641c47b41426310f382823d2813e93421ca514c37f0be6a4d1aef236"
+SRC_URI = "git://github.com/NVIDIA/nvtrust.git;protocol=https;branch=main"
 
-S = "${WORKDIR}/nvtrust-${SRCREV}/guest_tools/gpu_verifiers/local_gpu_verifier"
+S = "${WORKDIR}/git/guest_tools/gpu_verifiers/local_gpu_verifier"
 
-inherit setuptools3 python_poetry_core
+inherit python_poetry_core
 
 DEPENDS += "\
     python3-cryptography-native \
@@ -36,9 +35,6 @@ RDEPENDS:${PN} += "\
 # Skip sanity checks to avoid errors related to dependencies
 INSANE_SKIP:${PN} += "installed-vs-shipped src-uri-bad"
 
-# Adding more metadata based on pyproject.toml
-PYPI_PACKAGE = "nv-local-gpu-verifier"
-
 do_install:append() {
     # Install license file
     install -d ${D}${datadir}/licenses/${BPN}
@@ -49,3 +45,5 @@ do_install:append() {
 FILES:${PN} += "\
     ${datadir}/licenses/${BPN} \
 "
+
+BBCLASSEXTEND = "native nativesdk"

@@ -1,15 +1,16 @@
+BBCLASSEXTEND = "native nativesdk"
 SUMMARY = "NVIDIA Attestation SDK"
 DESCRIPTION = "Python-based SDK that interacts with the NV Attestation Platform"
 HOMEPAGE = "https://github.com/NVIDIA/nvtrust"
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=1337f8e27a840e3c16f50442a5bba639"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=6aeb846e84938ab20e7310fedd9a1217"
 
 SRC_URI = "git://github.com/NVIDIA/nvtrust.git;protocol=https;branch=main"
-SRCREV = "7ecea55c3f07e5ded191d5aecff6fcbc3d47e2c5"
+SRCREV = "368b9f95cf6a33e161ca8c0aac8a4c9528ea6ae7"
 
 S = "${WORKDIR}/git/guest_tools/attestation_sdk"
 
-inherit setuptools3 python_poetry_core
+inherit python_poetry_core
 
 DEPENDS += "\
     python3-cryptography-native \
@@ -39,13 +40,10 @@ RDEPENDS:${PN} += "\
 # Skip sanity checks to avoid errors related to dependencies
 INSANE_SKIP:${PN} += "installed-vs-shipped"
 
-# Adding more metadata based on pyproject.toml
-PYPI_PACKAGE = "nv-attestation-sdk"
-
 do_install:append() {
     # Install license file
     install -d ${D}${datadir}/licenses/${BPN}
-    install -m 0644 ${S}/LICENSE.txt ${D}${datadir}/licenses/${BPN}/
+    install -m 0644 ${S}/LICENSE ${D}${datadir}/licenses/${BPN}/
 }
 
 # The package is zip-safe but might require specific file handling
