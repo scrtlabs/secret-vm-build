@@ -34,5 +34,5 @@ qemu-system-x86_64 \
                    -device pcie-root-port,id=pci.1,bus=pcie.0 \
                    -device vhost-vsock-pci,guest-cid=10 \
                    -fw_cfg name=opt/ovmf/X-PciMmio64,string=262144 \
-                   -virtfs local,path=$ROOT_DIR/config,security_model=mapped,readonly=on,mount_tag=guest_config
+                   -virtfs local,path=$ROOT_DIR/config,security_model=mapped,readonly=on,mount_tag=guest_config \
                    -device vfio-pci,host=${NVIDIA_DEV_ID},bus=pci.1,iommufd=iommufd0 \
