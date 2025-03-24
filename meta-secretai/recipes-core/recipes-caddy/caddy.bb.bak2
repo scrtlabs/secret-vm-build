@@ -1,0 +1,52 @@
+SUMMARY = "Caddy - The modern web server with automatic HTTPS"
+HOMEPAGE = "https://caddyserver.com/"
+LICENSE = "Apache-2.0"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
+
+SRC_URI = "https://github.com/caddyserver/caddy/archive/v${PV}.tar.gz;downloadfilename=caddy-${PV}.tar.gz"
+SRC_URI[sha256sum] = "beb52478dfb34ad29407003520d94ee0baccbf210d1af72cebf430d6d7dd7b63"
+
+PV = "2.9.1"
+
+inherit go
+
+GO_IMPORT = "github.com/caddyserver/caddy"
+
+S = "${WORKDIR}/caddy-${PV}"
+
+# Specify that offline mode should be used for builds
+EXTRA_OEMAKE:append = " GO111MODULE=on"
+
+# Configure the Go environment
+do_configure() {
+    # Set up the Go environment
+    mkdir -p ${B}/src/github.com/caddyserver
+    ln -sf ${S} ${B}/src/github.com/caddyserver/caddy
+    
+    # Use offline mode - don't try to download modules
+    export GOPROXY=off
+    export GOSUMDB=off
+    export GO111MODULE=on
+
+    # Create temporary Go home directory to avoid polluting build
+    export GOCACHE=${WORKDIR}/go-cache
+    mkdir -p ${GOCACHE}
+}
+
+do_compile() {
+    # Set up Go environment - continue offline mode
+    export GOPROXY=off
+    export GOSUMDB=off
+    export GO111MODULE=on
+    export GOCACHE=${WORKDIR}/go-cache
+    
+    cd ${S}/cmd/caddy
+    ${GO} build -mod=mod -o ${B}/caddy
+}
+
+do_install() {
+    install -d ${D}${bindir}
+    install -m 0755 ${B}/caddy ${D}${bindir}/caddy
+}
+
+RDEPENDS:${PN} += "ca-certificates"

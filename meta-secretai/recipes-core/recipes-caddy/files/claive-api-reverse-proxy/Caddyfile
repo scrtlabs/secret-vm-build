@@ -1,0 +1,17 @@
+{
+    debug                         # Enables debug mode, providing detailed logs for troubleshooting.
+    order claive_reverse_proxy first  # Ensures the claive_reverse_proxy middleware is executed before other handlers.
+}
+
+:8080 {
+    # tls localhost.pem localhost-key.pem
+    handle {
+        claive_reverse_proxy {
+          #  API_MASTER_KEY DEFAULT_API_MASTER_KEY
+        }
+        # Reverse proxy for ai1.myclaive.com
+        reverse_proxy https://localhost:11343 {
+            header_up Host ai1.myclaive.com  # Sets the Host header to ai1.myclaive.com for the backend request.
+        }
+    }
+}

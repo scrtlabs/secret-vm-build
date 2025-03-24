@@ -1,0 +1,73 @@
+{
+  # Global options
+  admin off
+  auto_https off
+  log {
+        output file /var/log/caddy.log
+  }
+}
+
+# Add the default port 80 for IPv4 addresses
+:80 {
+  # Necessary for Let's Encrypt wildcard certificates
+  acme_server
+
+  # Reverse proxy to Secret Network API Server
+  handle /api/* {
+    uri strip_prefix /api
+    reverse_proxy https://127.0.0.1:26657 {
+      header_up Host {upstream_hostport}
+      transport http {
+        tls_insecure_skip_verify
+      }
+    }
+  }
+
+  # Reverse proxy to Secret Network API Server
+  handle /rpc/* {
+    uri strip_prefix /rpc
+    reverse_proxy https://127.0.0.1:26657 {
+      header_up Host {upstream_hostport}
+      transport http {
+        tls_insecure_skip_verify
+      }
+    }
+  }
+
+  # Reverse proxy to Secret Network LCD
+  handle /lcd/* {
+    uri strip_prefix /lcd
+    reverse_proxy https://127.0.0.1:1317 {
+      header_up Host {upstream_hostport}
+      transport http {
+        tls_insecure_skip_verify
+      }
+    }
+  }
+
+  # Reverse proxy to the rest api server
+  # The /verify/ and /v1/ endpoints are from the rest server
+  handle /verify* {
+    reverse_proxy https://127.0.0.1:50051 {
+      header_up Host {upstream_hostport}
+      transport http {
+        tls_insecure_skip_verify
+      }
+    }
+  }
+
+  handle /v1* {
+    reverse_proxy https://127.0.0.1:50051 {
+      header_up Host {upstream_hostport}
+      transport http {
+        tls_insecure_skip_verify
+      }
+    }
+  }
+
+  # Default
+  handle {
+    respond "SecretAI Reverse Proxy" 200
+  }
+}
+

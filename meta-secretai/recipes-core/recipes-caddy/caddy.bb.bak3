@@ -1,0 +1,59 @@
+SUMMARY = "Caddy - Fast, extensible web server written in Go"
+DESCRIPTION = "Caddy is a powerful, enterprise-ready, open source web server with automatic HTTPS."
+HOMEPAGE = "https://caddyserver.com/"
+LICENSE = "Apache-2.0"
+#LIC_FILES_CHKSUM = "file://LICENSE;md5=443b743cbca026c6f0a8ed2d82f39f19"
+LIC_FILES_CHKSUM = "file://src/github.com/caddyserver/caddy/v2/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
+
+# SRC_URI = "git://github.com/caddyserver/caddy.git;branch=master;protocol=https"
+# SRCREV = "0e570e0cc717f02cf3800ae741df70cd074c7275"
+
+SRC_URI = "git://github.com/caddyserver/caddy.git;branch=master;protocol=https"
+#SRCREV = "c993d4f02217eb617e1a6839a0be5097c928e6a4" 
+SRCREV = "f11c3c9f5a1be082450d64369853e1dacda22dde"
+
+PV = "2.7.6"
+S = "${WORKDIR}/git"
+
+inherit go
+
+# Required to work with Go modules
+GO_IMPORT = "github.com/caddyserver/caddy/v2"
+GO_INSTALL = "${GO_IMPORT}/cmd/caddy"
+
+do_compile[network] = "1"
+
+do_compile() {
+    export GO111MODULE=on
+    export GOPROXY=off
+    export GOSUMDB=off
+    export CGO_ENABLED=0
+
+    #cd ${S}
+    cd ${S}/src/github.com/caddyserver/caddy/v2
+    
+    # ✅ Override go version to something supported (e.g., 1.20)
+    #sed -i 's/^go 1\.23/go 1.20/' go.mod
+
+    # 🔧 Downgrade declared version in go.mod
+    sed -i 's/^go 1\.23/go 1.20/' go.mod
+
+    # 🔧 Add replace directives to override any indirect modules requesting go 1.23+
+    grep -q "replace golang.org/dl/go1.23.0" go.mod || \
+        echo 'replace golang.org/dl/go1.23.0 => /dev/null' >> go.mod
+
+
+
+
+    go build -o caddy ${GO_INSTALL}
+}
+
+do_install() {
+    install -d ${D}${bindir}
+    install -m 0755 ${S}/src/github.com/caddyserver/caddy/v2/caddy ${D}${bindir}/caddy
+}
+
+#do_install() {
+#    install -d ${D}${bindir}
+#    install -m 0755 ${S}/caddy ${D}${bindir}/caddy
+#}
