@@ -24,7 +24,7 @@ setup() {
 }
 
 build() {
-	DISTRO=secretai bitbake secretai-initramfs secretai-rootfs virtual/kernel
+	DISTRO=secretai bitbake secretai-initramfs secretai-rootfs virtual/kernel secretai-ovmf
 }
 
 install() {
@@ -33,6 +33,7 @@ install() {
 	cp -L $IMAGES_DIR/bzImage $ARTIFACTS_DIR/bzImage
 	cp -L $IMAGES_DIR/secretai-rootfs-qemux86-64.rootfs.cpio $ARTIFACTS_DIR/rootfs.cpio
 	cp -L $IMAGES_DIR/secretai-initramfs-qemux86-64.rootfs.cpio.gz $ARTIFACTS_DIR/initramfs.cpio.gz
+	cp -L $IMAGES_DIR/ovmf.fd $ARTIFACTS_DIR/ovmf.fd
 	$SCRIPTS_DIR/cpio_to_qcow2.sh $ARTIFACTS_DIR/rootfs.cpio $ARTIFACTS_DIR
 }
 

@@ -25,14 +25,14 @@ qemu-system-x86_64 \
                    -device virtio-blk-pci,drive=virtio-disk0 \
                    -pidfile /tmp/$VM_NAME.pid \
                    -device vhost-vsock-pci,guest-cid=7 \
-                   -bios /shared/custom/tdx-linux/edk2/OVMF-c4c99e41-574b-44b2-88f5-8ae904b6aa1b.fd \
                    -kernel $ARTIFACTS_DIR/bzImage \
                    -initrd $ARTIFACTS_DIR/initramfs.cpio.gz \
                    -append "console=ttyS0 loglevel=7 clearcpuid=mtrr,rtmr ro" \
+                   -bios $ARTIFACTS_DIR/ovmf.fd \
                    -serial mon:stdio \
                    -object iommufd,id=iommufd0 \
                    -device pcie-root-port,id=pci.1,bus=pcie.0 \
                    -device vhost-vsock-pci,guest-cid=10 \
-                   -device vfio-pci,host=${NVIDIA_DEV_ID},bus=pci.1,iommufd=iommufd0 \
                    -fw_cfg name=opt/ovmf/X-PciMmio64,string=262144 \
                    -virtfs local,path=$ROOT_DIR/config,security_model=mapped,readonly=on,mount_tag=guest_config
+                   -device vfio-pci,host=${NVIDIA_DEV_ID},bus=pci.1,iommufd=iommufd0 \
