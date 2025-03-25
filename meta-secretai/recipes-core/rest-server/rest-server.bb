@@ -6,9 +6,9 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 inherit systemd python3-dir
 
 SRC_URI = "file://server.py \
-           file://env.py \
-           file://config.py \
-           file://attest_tool \
+          file://env.py \
+          file://config.py \
+          file://attest_tool \
 "
 
 S = "${WORKDIR}"
@@ -29,6 +29,7 @@ RDEPENDS:${PN} += " \
     python3-werkzeug \
     python3-wheel \
     python3-core \
+    bash \
 "
 
 # Install the application files
@@ -77,4 +78,3 @@ SYSTEMD_SERVICE:${PN} = "rest-server.service"
 SYSTEMD_AUTO_ENABLE = "enable"
 
 FILES:${PN} += "${bindir}/rest-server/* ${sysconfdir}/rest-server/*"
-
