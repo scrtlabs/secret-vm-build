@@ -13,7 +13,6 @@ setup() {
 	mkdir $ARTIFACTS_DIR
 
 	source $POKY_DIR/oe-init-build-env $BUILD_DIR
-	bitbake-layers add-layer $ROOT_DIR/meta-secretai
 	bitbake-layers add-layer $ROOT_DIR/meta-nvidia
 	bitbake-layers add-layer $ROOT_DIR/meta-rust-bin
 	bitbake-layers add-layer $ROOT_DIR/meta-openembedded/meta-oe
@@ -21,6 +20,7 @@ setup() {
 	bitbake-layers add-layer $ROOT_DIR/meta-openembedded/meta-networking
 	bitbake-layers add-layer $ROOT_DIR/meta-openembedded/meta-filesystems
 	bitbake-layers add-layer $ROOT_DIR/meta-virtualization
+	bitbake-layers add-layer $ROOT_DIR/meta-secretai
 }
 
 build() {
