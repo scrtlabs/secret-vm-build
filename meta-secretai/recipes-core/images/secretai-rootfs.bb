@@ -11,7 +11,6 @@ IMAGE_INSTALL = "base-files \
                  openssh \
                  caddy \
                  user-config \
-                 secret-vm-scripts\
                  docker-compose \
                  python3 \
                  python3-nv-attestation-sdk \
