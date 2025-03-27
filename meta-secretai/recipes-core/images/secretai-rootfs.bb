@@ -8,15 +8,8 @@ IMAGE_INSTALL = "base-files \
                  crypt-tool \
                  busybox \
                  systemd \
-                 openssh \
-                 caddy \
-                 user-config \
+                 secretai-attest-rest-server \
                  docker-compose \
-                 python3 \
-                 python3-nv-attestation-sdk \
-                 python3-nv-local-gpu-verifier \
-                 python3-nvidia-ml-py \
-                 python3-signxml \
                  acpid \
                  nvidia \
                  nvidia-firmware \
