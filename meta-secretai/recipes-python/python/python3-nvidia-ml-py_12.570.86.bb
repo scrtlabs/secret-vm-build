@@ -10,8 +10,6 @@ SRC_URI[sha256sum] = "58907de35a845abd13dcb227f18298f3b5dd94a72d04c9e594e77711e9
 
 inherit setuptools3
 
-DEPENDS += "python3-pip-native"
-
 # This is a wheel package - need to setup the wheel installation
 do_compile() {
     :
@@ -25,9 +23,3 @@ do_install() {
     # Remove unneeded files from extraction
     find ${D}${PYTHON_SITEPACKAGES_DIR} -name "*.dist-info" -type d -prune -exec rm -rf {} \;
 }
-
-BBCLASSEXTEND = "native nativesdk"
-
-RDEPENDS:${PN} += "\
-    python3-core \
-"

@@ -14,9 +14,5 @@ inherit setuptools3
 
 RDEPENDS:${PN} += " \
     python3-lxml \
-    python3-cryptography \
     python3-certifi \
-    python3-core \
 "
-
-BBCLASSEXTEND = "native nativesdk"

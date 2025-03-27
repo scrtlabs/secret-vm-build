@@ -3,13 +3,15 @@
 set -ex
 
 # Activate Miniconda environment
-source /home/claive/miniconda3/bin/activate
+#source /home/claive/miniconda3/bin/activate
 
 # ssl cert creation routines
 source secretai_generate_cert.sh
 
 #set nvidia system ready flag for confidential computing
-sudo nvidia-smi conf-compute -srs 1
+nvidia-smi conf-compute -srs 1
+nvidia-ctk runtime configure --runtime=docker
+nvidia-ctk config --set nvidia-container-cli.no-cgroups --in-place
 
 CERT_DIR=/mnt/secure/cert
 CERT_NAME=secretai2

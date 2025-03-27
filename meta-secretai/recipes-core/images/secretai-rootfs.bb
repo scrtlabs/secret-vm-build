@@ -4,11 +4,10 @@ LICENSE = "MIT"
 inherit core-image
 
 IMAGE_INSTALL = "base-files \
-                 attest-tool \
-                 crypt-tool \
                  busybox \
                  systemd \
                  secretai-attest-rest-server \
+                 secret-vm-scripts \
                  docker-compose \
                  acpid \
                  nvidia \

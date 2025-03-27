@@ -24,7 +24,6 @@ ROOTFS_HASH=$(cat mnt/rootfs_hash)
 echo "DOCKER_COMPOSE_HASH=$DOCKER_COMPOSE_HASH"
 echo "ROOTFS_HASH=$ROOTFS_HASH"
 
-attest_tool report
 attest_tool extendrt 3 $DOCKER_COMPOSE_HASH
 attest_tool extendrt 3 $ROOTFS_HASH
 attest_tool report
@@ -37,7 +36,10 @@ ip route add default via 10.0.2.2
 
 mount /dev/vda1 /root
 
-mount --move /mnt /root/mnt
+mkdir -p /root/mnt/secure
+mkdir -p /root/mnt/config
+
+mount --move /mnt /root/mnt/config
 mount --move /sys /root/sys
 mount --move /proc /root/proc
 mount --move /dev /root/dev

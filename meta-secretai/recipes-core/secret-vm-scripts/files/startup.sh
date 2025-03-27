@@ -52,7 +52,7 @@ get_master_secret()
     # get attestation with this pubkey as report data
     echo "Getting initial attestation..."
 
-    local quote=$(sudo $ATTEST_TOOL attest $pubkey)
+    local quote=$($ATTEST_TOOL attest $pubkey)
     if ! test_valid_hex_data "quote"; then
         return 1
     fi
@@ -99,29 +99,29 @@ mount_secret_fs()
 
 #    if [ -f $fs_container_path ]; then
 #        echo "Opening existing encrypted file system..."
-#        echo -n $fs_passwd | sudo cryptsetup luksOpen $fs_container_path encrypted_volume2
+#        echo -n $fs_passwd | cryptsetup luksOpen $fs_container_path encrypted_volume2
 #    else
 #        echo "Creating encrypted file system..."
-#        sudo dd if=/dev/zero of=$fs_container_path bs=1M count=$size_mbs
-#        echo -n $fs_passwd | sudo cryptsetup luksFormat --pbkdf pbkdf2 $fs_container_path
-#        echo -n $fs_passwd | sudo cryptsetup luksOpen $fs_container_path encrypted_volume2
-#        sudo mkfs.ext4 /dev/mapper/encrypted_volume2
+#        dd if=/dev/zero of=$fs_container_path bs=1M count=$size_mbs
+#        echo -n $fs_passwd | cryptsetup luksFormat --pbkdf pbkdf2 $fs_container_path
+#        echo -n $fs_passwd | cryptsetup luksOpen $fs_container_path encrypted_volume2
+#        mkfs.ext4 /dev/mapper/encrypted_volume2
 #    fi
 #
     echo "Opening existing encrypted file system..."
-    echo -n $fs_passwd | sudo cryptsetup luksOpen $fs_container_path encrypted_volume2
+    echo -n $fs_passwd | cryptsetup luksOpen $fs_container_path encrypted_volume2
     if [ $? -ne 0 ]; then
         echo "Creating encrypted file system..."
-        echo -n $fs_passwd | sudo cryptsetup luksFormat --pbkdf pbkdf2 $fs_container_path
-        echo -n $fs_passwd | sudo cryptsetup luksOpen $fs_container_path encrypted_volume2
-        sudo mkfs.ext4 /dev/mapper/encrypted_volume2
+        echo -n $fs_passwd | cryptsetup luksFormat --pbkdf pbkdf2 $fs_container_path
+        echo -n $fs_passwd | cryptsetup luksOpen $fs_container_path encrypted_volume2
+        mkfs.ext4 /dev/mapper/encrypted_volume2
     fi
 
     echo "Mounting encrypted file system..."
-    sudo mkdir -p $SECURE_MNT
-    sudo mount /dev/mapper/encrypted_volume2 $SECURE_MNT
+    mkdir -p $SECURE_MNT
+    mount /dev/mapper/encrypted_volume2 $SECURE_MNT
 
-    sudo chown $USER $SECURE_MNT
+    chown $USER $SECURE_MNT
 }
 
 safe_remove_outdated()
@@ -167,7 +167,7 @@ finalize()
         return 1
     fi
 
-    local quote=$(sudo $ATTEST_TOOL attest $report_data)
+    local quote=$($ATTEST_TOOL attest $report_data)
     if ! test_valid_hex_data "quote"; then
         return 1
     fi
@@ -193,9 +193,9 @@ if [ -n "$1" ]; then
     else
 
         if [ $1 = "clear" ]; then
-            sudo umount $SECURE_MNT
-            sudo rmdir $SECURE_MNT
-            sudo cryptsetup luksClose encrypted_volume2
+            umount $SECURE_MNT
+            rmdir $SECURE_MNT
+            cryptsetup luksClose encrypted_volume2
 
         else
             echo "Invalid argument"
@@ -218,6 +218,6 @@ else
 
     safe_remove_outdated
 
-    sudo $ATTEST_TOOL report > $SECURE_MNT/self_report.txt
+    $ATTEST_TOOL report > $SECURE_MNT/self_report.txt
 fi
 
