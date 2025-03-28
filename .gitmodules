@@ -11,5 +11,5 @@
 	branch = scarthgap
 [submodule "meta-virtualization"]
 	path = meta-virtualization
-	url = https://git.yoctoproject.org/meta-virtualization
-	branch = scarthgap
+	url = https://github.com/Dstack-TEE/meta-virtualization
+	branch = reproducible
