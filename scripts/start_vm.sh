@@ -7,32 +7,35 @@ ROOT_DIR=$(realpath $SCRIPTS_DIR/..)
 ARTIFACTS_DIR=$ROOT_DIR/artifacts
 VM_NAME=${VM_NAME:-secretai-vm}
 NVIDIA_DEV_ID=44:00.0
+MEM_SIZE=128G
+MAC_ADDRESS=9c:93:4c:b8:fc:e5
 
-qemu-system-x86_64 \
-                   -enable-kvm \
-                   -cpu host \
-                   -m 16G \
-                   -smp cores=16,threads=2,sockets=2 \
-                   -nographic \
-                   -vga none \
-                   -nodefaults \
-                   -object '{"qom-type":"tdx-guest","id":"tdx","quote-generation-socket":{"type": "vsock", "cid":"2","port":"4050"}}' \
-                   -machine q35,kernel_irqchip=split,confidential-guest-support=tdx,hpet=off \
-                   -name $VM_NAME,process=$VM_NAME,debug-threads=on \
-                   -device virtio-net-pci,netdev=nic0_td,mac=02:6a:df:9e:e2:ee \
-                   -netdev user,id=nic0_td,hostfwd=tcp::2230-:22 \
-                   -drive file=$ARTIFACTS_DIR/rootfs.qcow2,if=none,id=virtio-disk0 \
-                   -device virtio-blk-pci,drive=virtio-disk0 \
-                   -pidfile /tmp/$VM_NAME.pid \
-                   -device vhost-vsock-pci,guest-cid=7 \
-                   -kernel $ARTIFACTS_DIR/bzImage \
+qemu-system-x86_64 -D ${VM_NAME}.log \
+                   -trace enable=tdx* -D tdx_trace.log \
                    -initrd $ARTIFACTS_DIR/initramfs.cpio.gz \
+                   -kernel $ARTIFACTS_DIR/bzImage \
                    -append "console=ttyS0 loglevel=7 clearcpuid=mtrr,rtmr ro" \
+                   -enable-kvm \
+                   -name ${VM_NAME},process=${VM_NAME},debug-threads=on \
                    -bios $ARTIFACTS_DIR/ovmf.fd \
+                   -drive file=$ARTIFACTS_DIR/rootfs.qcow2,if=virtio \
+                   -drive file=$ARTIFACTS_DIR/encryptedfs.qcow2,if=virtio \
+                   -smp cores=16,threads=2,sockets=2 \
+                   -m ${MEM_SIZE} \
+                   -cpu host \
+                   -object '{"qom-type":"tdx-guest","id":"tdx","quote-generation-socket":{"type": "vsock", "cid":"2","port":"4050"}}' \
+                   -nographic \
                    -serial mon:stdio \
+                   -object memory-backend-ram,id=mem0,size=${MEM_SIZE} \
+                   -machine q35,kernel-irqchip=split,confidential-guest-support=tdx,hpet=off,memory-backend=mem0 \
+                   -nodefaults \
                    -object iommufd,id=iommufd0 \
                    -device pcie-root-port,id=pci.1,bus=pcie.0 \
                    -device vhost-vsock-pci,guest-cid=10 \
                    -fw_cfg name=opt/ovmf/X-PciMmio64,string=262144 \
                    -virtfs local,path=$ROOT_DIR/config,security_model=mapped,readonly=on,mount_tag=guest_config \
                    -device vfio-pci,host=${NVIDIA_DEV_ID},bus=pci.1,iommufd=iommufd0 \
+		   -device virtio-net-pci,netdev=nic0_td,mac=02:6a:df:9e:e2:ee \
+		   -netdev user,id=nic0_td,hostfwd=tcp::2230-:22
+                   #-device virtio-net-pci,netdev=nic1_td,mac=${MAC_ADDRESS} \
+                   #-netdev tap,id=nic1_td,ifname=tap1,script=no,downscript=no \

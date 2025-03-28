@@ -35,6 +35,7 @@ install() {
 	cp -L $IMAGES_DIR/secretai-initramfs-qemux86-64.rootfs.cpio.gz $ARTIFACTS_DIR/initramfs.cpio.gz
 	cp -L $IMAGES_DIR/ovmf.fd $ARTIFACTS_DIR/ovmf.fd
 	$SCRIPTS_DIR/cpio_to_qcow2.sh $ARTIFACTS_DIR/rootfs.cpio $ARTIFACTS_DIR
+	qemu-img create -f qcow2 $ARTIFACTS_DIR/encryptedfs.qcow2 200G
 }
 
 calculate_rootfs_hash() {
