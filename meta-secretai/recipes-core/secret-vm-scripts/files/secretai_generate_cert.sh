@@ -102,6 +102,7 @@ generate_cert() {
 
     # Request certificate using certbot in standalone mode
     if ! $CERTBOT certonly --standalone \
+	--staging \
         --non-interactive \
         --agree-tos \
         --email "${email}" \
