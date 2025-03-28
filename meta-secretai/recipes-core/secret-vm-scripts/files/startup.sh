@@ -1,15 +1,16 @@
 #!/bin/bash
 
-set -ex
+set -xe
 
 # Startup script
-ATTEST_TOOL=./attest_tool
+ATTEST_TOOL=attest_tool
 #COLLATERAL_TOOL=./dcap_collateral_tool
-CRYPT_TOOL=./crypt_tool
+CRYPT_TOOL=crypt-tool
 
-KMS_SERVICE_ID=0
+#KMS_SERVICE_ID=0
 SECURE_MNT=/mnt/secure
 SECURE_FS_SIZE_MB=200480 # 200 GB
+#SECURE_FS_SIZE_MB=50 
 
 PATH_ATTESTATION_TDX=$SECURE_MNT/tdx_attestation.txt
 PATH_ATTESTATION_GPU_1=$SECURE_MNT/gpu_attestation.txt
@@ -67,7 +68,10 @@ get_master_secret()
     # Query kms contract
     echo "Querying KMS..."
 
-    local kms_res=$(python3 kms_query.py $KMS_SERVICE_ID $quote $collateral)
+    echo "Setting up Go dependencies..."
+    go mod tidy
+
+    local kms_res=$(go run kms_query.go $KMS_SERVICE_ID $quote $collateral)
 
     # the result must consist of 2 lines, which are encrypted master secret and the export pubkey respectively. Parse it.
     kms_res=$(echo "$kms_res" | xargs) # strip possible leading and trailing spaces
@@ -96,18 +100,16 @@ mount_secret_fs()
     local fs_container_path="$2"
     local size_mbs="$3"
 
+    # Check the type of the path of the container image
+    if [ -b "$fs_container_path" ]; then
+        echo "FS container is a block device."
+    elif [ -f "$fs_container_path" ]; then
+        echo "FS container is a file."
+    else
+        echo "Creating an FS container file."
+        dd if=/dev/zero of=$fs_container_path bs=1M count=$size_mbs
+    fi
 
-#    if [ -f $fs_container_path ]; then
-#        echo "Opening existing encrypted file system..."
-#        echo -n $fs_passwd | cryptsetup luksOpen $fs_container_path encrypted_volume2
-#    else
-#        echo "Creating encrypted file system..."
-#        dd if=/dev/zero of=$fs_container_path bs=1M count=$size_mbs
-#        echo -n $fs_passwd | cryptsetup luksFormat --pbkdf pbkdf2 $fs_container_path
-#        echo -n $fs_passwd | cryptsetup luksOpen $fs_container_path encrypted_volume2
-#        mkfs.ext4 /dev/mapper/encrypted_volume2
-#    fi
-#
     echo "Opening existing encrypted file system..."
     echo -n $fs_passwd | cryptsetup luksOpen $fs_container_path encrypted_volume2
     if [ $? -ne 0 ]; then
@@ -206,14 +208,27 @@ else
 
     echo "Performing startup sequence..."
 
-    if get_master_secret; then
+    if [ -z "${KMS_SERVICE_ID}" ]; then
 
-	#mount_secret_fs $master_secret "./encrypted_fs.img" $SECURE_FS_SIZE_MB
-	mount_secret_fs $master_secret /dev/vdb $SECURE_FS_SIZE_MB
-	echo "$master_secret" > $SECURE_MNT/master_secret.txt
+        echo "KMS service ID not set, using non-persistent encrypted fs"
+
+        nonce=$($CRYPT_TOOL rand)
+        if ! test_valid_hex_data "nonce"; then
+            return 1
+        fi
+
+        mount_secret_fs $nonce /dev/vdb $SECURE_FS_SIZE_MB
+
     else
-        echo "Couldn't get master secret: $g_Error"
-        mount_secret_fs "12345" "./encrypted_dummy.img" 2
+
+        if get_master_secret; then
+            mount_secret_fs $master_secret /dev/vdb $SECURE_FS_SIZE_MB
+            echo "$master_secret" > $SECURE_MNT/master_secret.txt
+        else
+            echo "Couldn't get master secret: $g_Error"
+            mount_secret_fs "12345" "./encrypted_dummy.img" 2
+        fi
+
     fi
 
     safe_remove_outdated

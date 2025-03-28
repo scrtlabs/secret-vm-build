@@ -19,12 +19,12 @@ CERT_PATH=$CERT_DIR/"$CERT_NAME"_cert.pem
 DOMAIN_NAME=tee-demo2.scrtlabs.com
 DOMAIN_EMAIL=info@scrtlabs.com
 
-./startup.sh
+startup.sh
 
 if [ ! -e $CERT_PATH ]; then
     echo "SSL certificate not ready yet. Attempting to generate..."
     generate_cert $CERT_NAME $CERT_DIR $DOMAIN_NAME $DOMAIN_EMAIL
 fi
 
-./startup.sh finalize $CERT_PATH
+startup.sh finalize $CERT_PATH
 

@@ -64,14 +64,19 @@ generate_cert() {
     local domain="${3:-secretai.scrtlabs.com}"  # Domain name, with default
     local email="${4:-secretai@scrtlabs.com}"   # Email for Let's Encrypt notifications
 
+    local CERTBOT='docker run --rm
+		    -v /etc/letsencrypt:/etc/letsencrypt
+		    -v /var/lib/letsencrypt:/var/lib/letsencrypt
+		    certbot/certbot'
+
     # Ensure certbot and openssl are installed
-    if ! command -v certbot &> /dev/null; then
-        echo "ERROR: certbot not found. Installing certbot..."
-        if ! apt-get update && apt-get install -y certbot; then
-            echo "ERROR: Failed to install certbot. Please install it manually."
-            exit 1
-        fi
-    fi
+    #if ! command -v certbot &> /dev/null; then
+        #echo "ERROR: certbot not found. Installing certbot..."
+        #if ! apt-get update && apt-get install -y certbot; then
+            #echo "ERROR: Failed to install certbot. Please install it manually."
+            #exit 1
+        #fi
+    #fi
 
     if ! command -v openssl &> /dev/null; then
         echo "ERROR: openssl not found. Installing openssl..."
@@ -96,7 +101,7 @@ generate_cert() {
     echo "Requesting Let's Encrypt certificate for domain: ${domain}"
 
     # Request certificate using certbot in standalone mode
-    if ! certbot certonly --standalone \
+    if ! $CERTBOT certonly --standalone \
         --non-interactive \
         --agree-tos \
         --email "${email}" \
