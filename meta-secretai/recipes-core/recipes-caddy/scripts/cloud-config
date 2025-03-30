@@ -1,9 +1,0 @@
-write_files:
-  - path: /usr/local/bin/secretai_attest_service.sh
-    permissions: '0755'
-    content: |
-      #!/bin/bash
-      # Your installation script content here
-
-runcmd:
-  - [ sh, -c, "test ! -f /etc/secretai-attest/.initialized && /usr/local/bin/secretai_attest_service.sh && mkdir -p /etc/secretai-attest && touch /etc/secretai-attest/.initialized" ]

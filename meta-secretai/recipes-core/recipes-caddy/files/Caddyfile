@@ -1,8 +1,0 @@
-# Default Caddyfile
-:80 {
-    root * /var/www/html
-    file_server
-    log {
-        output file /var/log/caddy/access.log
-    }
-}

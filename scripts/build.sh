@@ -20,19 +20,19 @@ setup() {
 	bitbake-layers add-layer $ROOT_DIR/meta-openembedded/meta-networking
 	bitbake-layers add-layer $ROOT_DIR/meta-openembedded/meta-filesystems
 	bitbake-layers add-layer $ROOT_DIR/meta-virtualization
-	bitbake-layers add-layer $ROOT_DIR/meta-secretai
+	bitbake-layers add-layer $ROOT_DIR/meta-secret-vm
 }
 
 build() {
-	DISTRO=secretai bitbake secretai-initramfs secretai-rootfs virtual/kernel secretai-ovmf
+	DISTRO=secret-vm bitbake secret-vm-initramfs secret-vm-rootfs virtual/kernel secret-vm-ovmf
 }
 
 install() {
 	DEPLOY_DIR=$(find $BUILD_DIR -maxdepth 2 -name deploy)
 	IMAGES_DIR=$DEPLOY_DIR/images/qemux86-64
 	cp -L $IMAGES_DIR/bzImage $ARTIFACTS_DIR/bzImage
-	cp -L $IMAGES_DIR/secretai-rootfs-qemux86-64.rootfs.cpio $ARTIFACTS_DIR/rootfs.cpio
-	cp -L $IMAGES_DIR/secretai-initramfs-qemux86-64.rootfs.cpio.gz $ARTIFACTS_DIR/initramfs.cpio.gz
+	cp -L $IMAGES_DIR/secret-vm-rootfs-qemux86-64.rootfs.cpio $ARTIFACTS_DIR/rootfs.cpio
+	cp -L $IMAGES_DIR/secret-vm-initramfs-qemux86-64.rootfs.cpio.gz $ARTIFACTS_DIR/initramfs.cpio.gz
 	cp -L $IMAGES_DIR/ovmf.fd $ARTIFACTS_DIR/ovmf.fd
 	$SCRIPTS_DIR/cpio_to_qcow2.sh $ARTIFACTS_DIR/rootfs.cpio $ARTIFACTS_DIR
 	qemu-img create -f qcow2 $ARTIFACTS_DIR/encryptedfs.qcow2 200G
