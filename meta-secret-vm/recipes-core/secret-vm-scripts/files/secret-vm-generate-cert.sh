@@ -67,6 +67,7 @@ generate_cert() {
     local CERTBOT='docker run --rm
 		    -v /etc/letsencrypt:/etc/letsencrypt
 		    -v /var/lib/letsencrypt:/var/lib/letsencrypt
+		    -p 80:80
 		    certbot/certbot'
 
     # Ensure certbot and openssl are installed
@@ -114,7 +115,7 @@ generate_cert() {
         exit 1
     fi
 
-    chmod -R a+wr "etc/letsencrypt"
+    chmod -R a+wr "/etc/letsencrypt"
     # Certbot directory where certificates are stored
     local latest_dir=$(find /etc/letsencrypt/live/ -type d -name "${prefix}*" | sort -V | tail -1)
     local certbot_dir="${latest_dir}"
