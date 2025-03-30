@@ -21,16 +21,16 @@ inherit systemd
 
 do_install() {
     install -d ${D}${bindir}
-    install -m 0700 ${S}/startup.sh ${D}${bindir}/
-    install -m 0700 ${S}/rtmr-ext.sh ${D}${bindir}/
-    install -m 0700 ${S}/secret-vm-start.sh ${D}${bindir}/
-    install -m 0700 ${S}/secret-vm-generate-cert.sh ${D}${bindir}/
-    install -m 0700 ${S}/gpu-attest.py ${D}${bindir}/gpu-attest
+    install -m 0744 ${S}/startup.sh ${D}${bindir}/
+    install -m 0744 ${S}/rtmr-ext.sh ${D}${bindir}/
+    install -m 0744 ${S}/secret-vm-start.sh ${D}${bindir}/
+    install -m 0744 ${S}/secret-vm-generate-cert.sh ${D}${bindir}/
+    install -m 0744 ${S}/gpu-attest.py ${D}${bindir}/gpu-attest
 
     install -d ${D}${systemd_unitdir}/system
-    install -m 0600 ${S}/secret-vm-attest-rest.service ${D}${systemd_unitdir}/system/
-    install -m 0600 ${S}/secret-vm-docker-start.service ${D}${systemd_unitdir}/system/
-    install -m 0600 ${S}/secret-vm-startup.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${S}/secret-vm-attest-rest.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${S}/secret-vm-docker-start.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${S}/secret-vm-startup.service ${D}${systemd_unitdir}/system/
 
     install -d ${D}${systemd_unitdir}/network
     install -m 0644 ${S}/10-enp.network ${D}${systemd_unitdir}/network
