@@ -35,7 +35,5 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -fw_cfg name=opt/ovmf/X-PciMmio64,string=262144 \
                    -virtfs local,path=$ROOT_DIR/config,security_model=mapped,readonly=on,mount_tag=guest_config \
                    -device vfio-pci,host=${NVIDIA_DEV_ID},bus=pci.1,iommufd=iommufd0 \
-		   -device virtio-net-pci,netdev=nic0_td,mac=02:6a:df:9e:e2:ee \
-		   -netdev user,id=nic0_td,hostfwd=tcp::2230-:22
-                   #-device virtio-net-pci,netdev=nic1_td,mac=${MAC_ADDRESS} \
-                   #-netdev tap,id=nic1_td,ifname=tap1,script=no,downscript=no \
+                   -device virtio-net-pci,netdev=nic1_td,mac=${MAC_ADDRESS} \
+                   -netdev tap,id=nic1_td,ifname=tap1,script=no,downscript=no
