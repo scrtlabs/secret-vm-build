@@ -123,6 +123,12 @@ mount_secret_fs()
     mkdir -p $SECURE_MNT
     mount /dev/mapper/encrypted_volume2 $SECURE_MNT
 
+    # setting docker working dir to the mounted fs
+    systemctl stop docker
+    mkdir -p /etc/docker
+    echo '{ "data-root": "/mnt/secure" }' > /etc/docker/daemon.json
+    systemctl start docker
+
     chown $USER $SECURE_MNT
 }
 
