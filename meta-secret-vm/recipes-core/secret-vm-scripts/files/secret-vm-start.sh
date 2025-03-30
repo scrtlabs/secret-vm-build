@@ -7,8 +7,6 @@ source secret-vm-generate-cert.sh
 
 # set nvidia system ready flag for confidential computing
 nvidia-smi conf-compute -srs 1
-nvidia-ctk runtime configure --runtime=docker
-nvidia-ctk config --set nvidia-container-cli.no-cgroups --in-place
 
 CERT_DIR=/mnt/secure/cert
 CERT_NAME=secret_vm
@@ -24,3 +22,7 @@ if [ ! -e $CERT_PATH ]; then
 fi
 
 startup.sh finalize $CERT_PATH
+
+nvidia-ctk runtime configure --runtime=docker
+nvidia-ctk config --set nvidia-container-cli.no-cgroups --in-place
+systemctl restart docker
