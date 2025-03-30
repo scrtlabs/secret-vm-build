@@ -9,8 +9,8 @@ POKY_DIR=$ROOT_DIR/poky
 ARTIFACTS_DIR=$ROOT_DIR/artifacts
 
 setup() {
-	rm -rf $ARTIFACTS_DIR
-	mkdir $ARTIFACTS_DIR
+	#rm -rf $ARTIFACTS_DIR
+	mkdir -p $ARTIFACTS_DIR
 
 	source $POKY_DIR/oe-init-build-env $BUILD_DIR
 	bitbake-layers add-layer $ROOT_DIR/meta-nvidia
@@ -35,6 +35,7 @@ install() {
 	cp -L $IMAGES_DIR/secret-vm-initramfs-qemux86-64.rootfs.cpio.gz $ARTIFACTS_DIR/initramfs.cpio.gz
 	cp -L $IMAGES_DIR/ovmf.fd $ARTIFACTS_DIR/ovmf.fd
 	$SCRIPTS_DIR/cpio_to_qcow2.sh $ARTIFACTS_DIR/rootfs.cpio $ARTIFACTS_DIR
+	mv $ARTIFACTS_DIR/rootfs.qcow2{,.golden}
 	qemu-img create -f qcow2 $ARTIFACTS_DIR/encryptedfs.qcow2 200G
 }
 

@@ -10,6 +10,9 @@ NVIDIA_DEV_ID=44:00.0
 MEM_SIZE=128G
 MAC_ADDRESS=9c:93:4c:b8:fc:e5
 
+# execute vm each time from immutable rootfs
+cp -p $ARTIFACTS_DIR/rootfs.qcow2.golden $ARTIFACTS_DIR/rootfs.qcow2
+
 qemu-system-x86_64 -D ${VM_NAME}.log \
                    -trace enable=tdx* -D tdx_trace.log \
                    -initrd $ARTIFACTS_DIR/initramfs.cpio.gz \
