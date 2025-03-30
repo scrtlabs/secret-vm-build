@@ -19,7 +19,7 @@ modprobe tdx-guest
 mount -t 9p -o trans=virtio guest_config mnt -oversion=9p2000.L
 
 DOCKER_COMPOSE_HASH=$(sha256sum mnt/docker-compose.yaml | cut -f 1 -d ' ')
-ROOTFS_HASH=$(cat mnt/rootfs_hash)
+ROOTFS_HASH=$(sha256sum /dev/vda1 | cut -f 1 -d ' ')
 
 echo "DOCKER_COMPOSE_HASH=$DOCKER_COMPOSE_HASH"
 echo "ROOTFS_HASH=$ROOTFS_HASH"

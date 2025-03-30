@@ -39,13 +39,8 @@ install() {
 	qemu-img create -f qcow2 $ARTIFACTS_DIR/encryptedfs.qcow2 200G
 }
 
-calculate_rootfs_hash() {
-	sha256sum $ARTIFACTS_DIR/rootfs.cpio | cut -f 1 -d ' ' > $ROOT_DIR/config/rootfs_hash
-}
-
 pushd .
 setup
 build
 install
-calculate_rootfs_hash
 popd
