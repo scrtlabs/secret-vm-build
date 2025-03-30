@@ -19,6 +19,12 @@ RDEPENDS:${PN} += "systemd \
 
 inherit systemd
 
+SYSTEMD_PACKAGES = "${PN}"
+SYSTEMD_SERVICE:${PN} = "secret-vm-attest-rest.service \
+                         secret-vm-docker-start.service \
+                         secret-vm-startup.service"
+SYSTEMD_AUTO_ENABLE:${PN} = "enable"
+
 do_install() {
     install -d ${D}${bindir}
     install -m 0744 ${S}/startup.sh ${D}${bindir}/
@@ -34,10 +40,14 @@ do_install() {
 
     install -d ${D}${systemd_unitdir}/network
     install -m 0644 ${S}/10-enp.network ${D}${systemd_unitdir}/network
+
+    install -d ${D}${sysconfdir}/
+    install -m 0644 ${S}/tdx-attest.conf ${D}${sysconfdir}/
 }
 
 FILES:${PN} += "${bindir} \
                 ${systemd_unitdir}/system/secret-vm-attest-rest.service \
                 ${systemd_unitdir}/system/secret-vm-docker-start.service \
                 ${systemd_unitdir}/system/secret-vm-startup.service \
-                ${systemd_unitdir}/network/10-enp.network"
+                ${systemd_unitdir}/network/10-enp.network \
+                ${sysconfdir}/tdx-attest.conf"
