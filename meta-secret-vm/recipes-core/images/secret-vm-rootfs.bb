@@ -9,6 +9,7 @@ IMAGE_INSTALL = "base-files \
                  secret-vm-attest-rest-server \
                  secret-vm-scripts \
                  docker-compose \
+                 intel-sgx-primitives \
                  acpid \
                  nvidia \
                  nvidia-firmware \
