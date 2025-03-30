@@ -1,5 +1,5 @@
 [Match]
-Name=enp0s1
+Name=enp*
 
 [Network]
 LinkLocalAddressing=ipv6
