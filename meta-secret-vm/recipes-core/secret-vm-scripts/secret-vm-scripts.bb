@@ -31,9 +31,13 @@ do_install() {
     install -m 0600 ${S}/secret-vm-attest-rest.service ${D}${systemd_unitdir}/system/
     install -m 0600 ${S}/secret-vm-docker-start.service ${D}${systemd_unitdir}/system/
     install -m 0600 ${S}/secret-vm-startup.service ${D}${systemd_unitdir}/system/
+
+    install -d ${D}${systemd_unitdir}/network
+    install -m 0644 ${S}/10-enp.network ${D}${systemd_unitdir}/network
 }
 
 FILES:${PN} += "${bindir} \
                 ${systemd_unitdir}/system/secret-vm-attest-rest.service \
                 ${systemd_unitdir}/system/secret-vm-docker-start.service \
-                ${systemd_unitdir}/system/secret-vm-startup.service"
+                ${systemd_unitdir}/system/secret-vm-startup.service \
+                ${systemd_unitdir}/network/10-enp.network"

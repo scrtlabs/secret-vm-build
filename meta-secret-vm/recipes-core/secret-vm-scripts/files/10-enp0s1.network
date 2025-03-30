@@ -1,0 +1,12 @@
+[Match]
+Name=enp0s1
+
+[Network]
+LinkLocalAddressing=ipv6
+Address=72.10.166.69/29
+DNS=1.1.1.1
+DNS=8.8.8.8
+
+[Route]
+Destination=0.0.0.0/0
+Gateway=72.10.166.65
