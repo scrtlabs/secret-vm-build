@@ -25,7 +25,8 @@ RUN apt update && apt install -y \
     locales \
     git \
     git-lfs \
-    xorriso
+    xorriso \
+    qemu-utils
 
 # Generate locale for bitbake
 RUN locale-gen en_US.UTF-8
