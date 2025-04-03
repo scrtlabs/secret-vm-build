@@ -15,8 +15,6 @@ mkdir -p $TMP_PATH/rootfs
 cd $TMP_PATH/rootfs
 cpio -idmv < $CPIO_IMG_ABSOLUTE_PATH
 
-find . -maxdepth 1 -not -path . | LC_ALL=C sort > pathlist
-
 xorriso \
     -preparer_id xorriso \
     -volume_date 'all' "=$SOURCE_DATE_EPOCH" \
@@ -28,8 +26,8 @@ xorriso \
     -full-iso9660-filenames \
     -uid 0 \
     -gid 0 \
-    -path-list pathlist \
-    -output $DESTINATION_DIR/$FILENAME
+    -output $DESTINATION_DIR/$FILENAME \
+    .
 
 rm -rf $TMP_PATH
 
