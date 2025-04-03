@@ -18,7 +18,7 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -enable-kvm \
                    -name ${VM_NAME},process=${VM_NAME},debug-threads=on \
                    -bios $ARTIFACTS_DIR/ovmf.fd \
-                   -drive file=$ARTIFACTS_DIR/rootfs-gpu.qcow2,if=virtio \
+                   -cdrom $ARTIFACTS_DIR/rootfs-gpu.iso \
                    -drive file=$ARTIFACTS_DIR/encryptedfs.qcow2,if=virtio \
                    -smp cores=16,threads=2,sockets=2 \
                    -m ${MEM_SIZE} \

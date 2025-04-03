@@ -225,12 +225,12 @@ else
             return 1
         fi
 
-        mount_secret_fs $nonce /dev/vdb $SECURE_FS_SIZE_MB
+        mount_secret_fs $nonce /dev/vda $SECURE_FS_SIZE_MB
 
     else
 
         if get_master_secret; then
-            mount_secret_fs $master_secret /dev/vdb $SECURE_FS_SIZE_MB
+            mount_secret_fs $master_secret /dev/vda $SECURE_FS_SIZE_MB
             echo "$master_secret" > $SECURE_MNT/master_secret.txt
         else
             echo "Couldn't get master secret: $g_Error"

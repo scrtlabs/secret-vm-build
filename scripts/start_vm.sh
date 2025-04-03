@@ -9,9 +9,6 @@ VM_NAME=${VM_NAME:-secretai-vm}
 MEM_SIZE=128G
 MAC_ADDRESS=9c:93:4c:b8:fc:e5
 
-# execute vm each time from immutable rootfs
-cp -p $ARTIFACTS_DIR/rootfs.qcow2.golden $ARTIFACTS_DIR/rootfs.qcow2
-
 qemu-system-x86_64 -D ${VM_NAME}.log \
                    -trace enable=tdx* -D tdx_trace.log \
                    -initrd $ARTIFACTS_DIR/initramfs.cpio.gz \
@@ -20,13 +17,14 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -enable-kvm \
                    -name ${VM_NAME},process=${VM_NAME},debug-threads=on \
                    -bios $ARTIFACTS_DIR/ovmf.fd \
-                   -drive file=$ARTIFACTS_DIR/rootfs.qcow2,if=virtio \
+                   -cdrom $ARTIFACTS_DIR/rootfs.iso \
                    -drive file=$ARTIFACTS_DIR/encryptedfs.qcow2,if=virtio \
                    -smp cores=16,threads=2,sockets=2 \
                    -m ${MEM_SIZE} \
                    -cpu host \
                    -object '{"qom-type":"tdx-guest","id":"tdx","quote-generation-socket":{"type": "vsock", "cid":"2","port":"4050"}}' \
                    -nographic \
+                   -nodefaults \
                    -serial mon:stdio \
                    -object memory-backend-ram,id=mem0,size=${MEM_SIZE} \
                    -machine q35,kernel-irqchip=split,confidential-guest-support=tdx,hpet=off,memory-backend=mem0 \
