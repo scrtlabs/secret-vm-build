@@ -35,8 +35,8 @@ install() {
 	cp -L $IMAGES_DIR/secret-vm-rootfs-gpu-qemux86-64.rootfs.cpio $ARTIFACTS_DIR/rootfs-gpu.cpio
 	cp -L $IMAGES_DIR/secret-vm-initramfs-qemux86-64.rootfs.cpio.gz $ARTIFACTS_DIR/initramfs.cpio.gz
 	cp -L $IMAGES_DIR/ovmf.fd $ARTIFACTS_DIR/ovmf.fd
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/rootfs.cpio $ARTIFACTS_DIR rootfs
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/rootfs-gpu.cpio $ARTIFACTS_DIR rootfs-gpu
+	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/rootfs.cpio $ARTIFACTS_DIR rootfs.iso
+	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/rootfs-gpu.cpio $ARTIFACTS_DIR rootfs-gpu.iso
 	qemu-img create -f qcow2 $ARTIFACTS_DIR/encryptedfs.qcow2 300G
 }
 
