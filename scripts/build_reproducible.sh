@@ -7,6 +7,8 @@ BUILD_DIR=$ROOT_DIR/build
 POKY_DIR=$ROOT_DIR/poky
 ARTIFACTS_DIR=$ROOT_DIR/artifacts
 
+mkdir -p $ARTIFACTS_DIR $BUILD_DIR
+
 docker build --platform linux/amd64 -t secret-vm-build -f $SCRIPTS_DIR/docker/Dockerfile .
 
 docker run --platform linux/amd64 --rm \
