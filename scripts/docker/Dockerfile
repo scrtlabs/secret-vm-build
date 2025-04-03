@@ -24,7 +24,8 @@ RUN apt update && apt install -y \
     python3 \
     locales \
     git \
-    git-lfs
+    git-lfs \
+    xorriso
 
 # Generate locale for bitbake
 RUN locale-gen en_US.UTF-8
