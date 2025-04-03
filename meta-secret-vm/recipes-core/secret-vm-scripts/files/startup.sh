@@ -150,25 +150,27 @@ finalize()
         return 1
     fi
 
-    # get random 32 bytes
-    local gpu_nonce=$($CRYPT_TOOL rand)
-    if ! test_valid_hex_data "gpu_nonce"; then
-        return 1
-    fi
-
     safe_remove_outdated
 
-    gpu-attest secret-vm $gpu_nonce $PATH_ATTESTATION_GPU_1 $PATH_ATTESTATION_GPU_2
-
-    if [ ! -e $PATH_ATTESTATION_GPU_1 ] || [ ! -e $PATH_ATTESTATION_GPU_2 ]; then
-        echo "GPU attestation not created"
-        return 1
-    fi
-
     echo "SSL certificate fingerprint: $ssl_fingerprint"
-    echo "GPU attestation nonce: $gpu_nonce"
+    local report_data="${ssl_fingerprint}"
 
-    local report_data="${ssl_fingerprint}${gpu_nonce}"
+    if [ -n "$GPU_MODE" ]; then
+        # get random 32 bytes
+        local gpu_nonce=$($CRYPT_TOOL rand)
+        if ! test_valid_hex_data "gpu_nonce"; then
+            return 1
+        fi
+
+        gpu-attest secret-vm $gpu_nonce $PATH_ATTESTATION_GPU_1 $PATH_ATTESTATION_GPU_2
+
+        if [ ! -e $PATH_ATTESTATION_GPU_1 ] || [ ! -e $PATH_ATTESTATION_GPU_2 ]; then
+            echo "GPU attestation not created"
+            return 1
+        fi
+        echo "GPU attestation nonce: $gpu_nonce"
+	report_data="${report_data}${gpu_nonce}"
+    fi
 
     if [ ${#report_data} -gt 128 ]; then
         g_Error=$(echo "reportdata length: ${#report_data}")

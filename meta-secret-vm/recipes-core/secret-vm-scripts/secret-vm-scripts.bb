@@ -6,16 +6,19 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 SRC_URI = "file://${THISDIR}/files"
 S = "${WORKDIR}/${THISDIR}/files"
 
+PACKAGES += "${PN}-gpu"
+
 RDEPENDS:${PN} += "systemd \
                    bash \
-                   python3 \
-                   python3-nv-attestation-sdk \
                    curl \
                    openssl \
                    cryptsetup \
                    e2fsprogs \
                    attest-tool \
                    crypt-tool"
+
+RDEPENDS:${PN}-gpu += "python3 \
+                       python3-nv-attestation-sdk"
 
 inherit systemd
 
@@ -27,10 +30,10 @@ SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install() {
     install -d ${D}${bindir}
-    install -m 0744 ${S}/startup.sh ${D}${bindir}/
-    install -m 0744 ${S}/rtmr-ext.sh ${D}${bindir}/
-    install -m 0744 ${S}/secret-vm-start.sh ${D}${bindir}/
-    install -m 0744 ${S}/secret-vm-generate-cert.sh ${D}${bindir}/
+    install -m 0744 ${S}/startup.sh ${D}${bindir}/startup.sh
+    install -m 0744 ${S}/rtmr-ext.sh ${D}${bindir}/rtmr-ext.sh
+    install -m 0744 ${S}/secret-vm-start.sh ${D}${bindir}/secret-vm-start.sh
+    install -m 0744 ${S}/secret-vm-generate-cert.sh ${D}${bindir}/secret-vm-generate-cert.sh
     install -m 0744 ${S}/gpu-attest.py ${D}${bindir}/gpu-attest
 
     install -d ${D}${systemd_unitdir}/system
@@ -45,9 +48,13 @@ do_install() {
     install -m 0644 ${S}/tdx-attest.conf ${D}${sysconfdir}/
 }
 
-FILES:${PN} += "${bindir} \
+FILES:${PN} = "${bindir}/startup.sh \
+                ${bindir}/rtmr-ext.sh \
+                ${bindir}/secret-vm-start.sh \
+                ${bindir}/secret-vm-generate-cert.sh \
                 ${systemd_unitdir}/system/secret-vm-attest-rest.service \
                 ${systemd_unitdir}/system/secret-vm-docker-start.service \
                 ${systemd_unitdir}/system/secret-vm-startup.service \
                 ${systemd_unitdir}/network/10-enp.network \
                 ${sysconfdir}/tdx-attest.conf"
+FILES:${PN}-gpu = "${bindir}/gpu-attest"

@@ -24,7 +24,7 @@ setup() {
 }
 
 build() {
-	DISTRO=secret-vm bitbake secret-vm-initramfs secret-vm-rootfs virtual/kernel secret-vm-ovmf
+	DISTRO=secret-vm bitbake secret-vm-initramfs secret-vm-rootfs secret-vm-rootfs-gpu  virtual/kernel secret-vm-ovmf
 }
 
 install() {
@@ -32,6 +32,7 @@ install() {
 	IMAGES_DIR=$DEPLOY_DIR/images/qemux86-64
 	cp -L $IMAGES_DIR/bzImage $ARTIFACTS_DIR/bzImage
 	cp -L $IMAGES_DIR/secret-vm-rootfs-qemux86-64.rootfs.cpio $ARTIFACTS_DIR/rootfs.cpio
+	cp -L $IMAGES_DIR/secret-vm-rootfs-gpu-qemux86-64.rootfs.cpio $ARTIFACTS_DIR/rootfs-gpu.cpio
 	cp -L $IMAGES_DIR/secret-vm-initramfs-qemux86-64.rootfs.cpio.gz $ARTIFACTS_DIR/initramfs.cpio.gz
 	cp -L $IMAGES_DIR/ovmf.fd $ARTIFACTS_DIR/ovmf.fd
 	$SCRIPTS_DIR/cpio_to_qcow2.sh $ARTIFACTS_DIR/rootfs.cpio $ARTIFACTS_DIR
