@@ -1,7 +1,5 @@
 # Secret VM Build System
 
-[![Build Status](https://github.com/your-org/secret-vm-build/workflows/CI/badge.svg)](https://github.com/your-org/secret-vm-build/actions)
-[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://docs.your-org.com/secret-vm-build)
 ## Project Overview
 The Secret VM Build System is a specialized Yocto-based build system designed for creating secure virtual machines, primarily used within the Secret Network ecosystem. This build system enables the creation of secure, attestable virtual machine images that form the foundation for confidential computing environments.
 
@@ -9,11 +7,6 @@ Built for the Secret Network, a privacy-first blockchain platform, this system e
 
 > **Security Note**: This build system is designed for production-grade secure environments. Proper handling of attestation keys and secure configurations is critical for maintaining the security guarantees.
 
-## Documentation
-- [Detailed Build Guide](https://docs.your-org.com/secret-vm-build/guide)
-- [Security Model](https://docs.your-org.com/secret-vm-build/security)
-- [Configuration Reference](https://docs.your-org.com/secret-vm-build/config)
-- [API Documentation](https://docs.your-org.com/secret-vm-build/api)
 ## Repository Structure
 
 ### Meta Layers
