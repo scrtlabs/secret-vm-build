@@ -45,14 +45,14 @@ Built for the Secret Network, a privacy-first blockchain platform, this system e
    cd secret-vm-build
    ```
 
-2. Launch the build environment:
+2. Initializes and updates all submodules:
    ```bash
-   ./scripts/launch-docker.sh
+   git submodule update --init
    ```
 
-3. Initialize the build environment:
+3. Build:
    ```bash
-   source ./oe-init-build-env
+   scripts/build_reproducible.sh
    ```
 
 ### Build Commands
@@ -77,7 +77,7 @@ Build artifacts are located in `build/tmp/deploy/images/secret-vm/`:
 - `secret-vm.qcow2`: Main VM image
 - `bzImage`: Linux kernel
 - `initramfs.cpio.gz`: Initial RAM filesystem
-- `OVMF.fd`: UEFI firmware image
+- `ovmf.fd`: UEFI firmware image
 
 ## Usage Instructions
 
@@ -96,13 +96,6 @@ Build artifacts are located in `build/tmp/deploy/images/secret-vm/`:
 1. Enable IOMMU in your host system
 2. Configure PCI pass-through in your VM launch script
 3. Use GPU-enabled image build
-
-### Attestation Setup
-> **Important**: Attestation keys are critical security components. Never commit them to version control or share them through insecure channels. Use proper key management systems in production environments.
-
-1. Configure attestation service endpoints
-2. Generate attestation keys
-3. Start attestation services before VM launch
 
 ## Development and Contributing
 
