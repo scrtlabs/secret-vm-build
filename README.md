@@ -41,7 +41,7 @@ Built for the Secret Network, a privacy-first blockchain platform, this system e
 ### Environment Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-org/secret-vm-build.git
+   git clone https://github.com/scrtlabs/secret-vm-build.git
    cd secret-vm-build
    ```
 
