@@ -55,29 +55,15 @@ Built for the Secret Network, a privacy-first blockchain platform, this system e
    scripts/build_reproducible.sh
    ```
 
-### Build Commands
-- Basic VM image build:
-  ```bash
-  bitbake secret-vm-image
-  ```
-
-- GPU-enabled image build:
-  ```bash
-  MACHINE=secret-vm-gpu bitbake secret-vm-image
-  ```
-
-### Available Build Targets
-- `secret-vm-image`: Standard VM image
-- `secret-vm-image-gpu`: GPU-enabled VM image
-- `secret-vm-image-dev`: Development VM image with additional tools
-
 ## Output Artifacts
 
 Build artifacts are located in `build/tmp/deploy/images/secret-vm/`:
-- `secret-vm.qcow2`: Main VM image
+- `rootfs.cpio`, `rootfs.iso`: Root file system for VMs without GPU
+- `rootfs-gpu.cpio`. `rootfs-gpu.iso`: Root file system for VMs with GPU
 - `bzImage`: Linux kernel
 - `initramfs.cpio.gz`: Initial RAM filesystem
 - `ovmf.fd`: UEFI firmware image
+- `encryptedfs.qcow2`: empty image for the encrypted file system
 
 ## Usage Instructions
 
@@ -90,6 +76,9 @@ Build artifacts are located in `build/tmp/deploy/images/secret-vm/`:
 2. Launch the VM using the provided script:
    ```bash
    ./start_vm.sh
+   ```
+      ```bash
+   ./start_vm_gpu.sh
    ```
 
 ### GPU Pass-through Configuration
