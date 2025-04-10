@@ -7,7 +7,7 @@ ROOT_DIR=$(realpath $SCRIPTS_DIR/..)
 ARTIFACTS_DIR=$ROOT_DIR/artifacts
 VM_NAME=${VM_NAME:-secretai-vm}
 NVIDIA_DEV_ID=44:00.0
-MEM_SIZE=128G
+MEM_SIZE=2G
 MAC_ADDRESS=9c:93:4c:b8:fc:e5
 
 qemu-system-x86_64 -D ${VM_NAME}.log \
@@ -20,7 +20,7 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -bios $ARTIFACTS_DIR/ovmf.fd \
                    -cdrom $ARTIFACTS_DIR/rootfs-gpu.iso \
                    -drive file=$ARTIFACTS_DIR/encryptedfs.qcow2,if=virtio \
-                   -smp cores=16,threads=2,sockets=2 \
+                   -smp cores=1,threads=1,sockets=1 \
                    -m ${MEM_SIZE} \
                    -cpu host \
                    -object '{"qom-type":"tdx-guest","id":"tdx","quote-generation-socket":{"type": "vsock", "cid":"2","port":"4050"}}' \

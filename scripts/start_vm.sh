@@ -6,7 +6,7 @@ SCRIPTS_DIR=$(realpath $(dirname ${BASH_SOURCE[0]}))
 ROOT_DIR=$(realpath $SCRIPTS_DIR/..)
 ARTIFACTS_DIR=$ROOT_DIR/artifacts
 VM_NAME=${VM_NAME:-secretai-vm}
-MEM_SIZE=128G
+MEM_SIZE=2G
 MAC_ADDRESS=9c:93:4c:b8:fc:e5
 
 qemu-system-x86_64 -D ${VM_NAME}.log \
@@ -19,7 +19,7 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -bios $ARTIFACTS_DIR/ovmf.fd \
                    -cdrom $ARTIFACTS_DIR/rootfs.iso \
                    -drive file=$ARTIFACTS_DIR/encryptedfs.qcow2,if=virtio \
-                   -smp cores=16,threads=2,sockets=2 \
+                   -smp cores=1,threads=1,sockets=1 \
                    -m ${MEM_SIZE} \
                    -cpu host \
                    -object '{"qom-type":"tdx-guest","id":"tdx","quote-generation-socket":{"type": "vsock", "cid":"2","port":"4050"}}' \
@@ -29,7 +29,6 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -object memory-backend-ram,id=mem0,size=${MEM_SIZE} \
                    -machine q35,kernel-irqchip=split,confidential-guest-support=tdx,hpet=off,memory-backend=mem0 \
                    -nodefaults \
-                   -object iommufd,id=iommufd0 \
                    -device pcie-root-port,id=pci.1,bus=pcie.0 \
                    -device vhost-vsock-pci,guest-cid=10 \
                    -fw_cfg name=opt/ovmf/X-PciMmio64,string=262144 \
