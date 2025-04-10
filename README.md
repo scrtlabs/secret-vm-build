@@ -7,35 +7,12 @@ Built for the Secret Network, a privacy-first blockchain platform, this system e
 
 > **Security Note**: This build system is designed for production-grade secure environments. Proper handling of attestation keys and secure configurations is critical for maintaining the security guarantees.
 
-## Repository Structure
-
-### Meta Layers
-- **meta-secret-vm**: Core layer containing Secret Network specific configurations and recipes
-- **meta-secretai**: Layer for AI-specific optimizations and configurations
-- **poky**: The reference distribution of the Yocto Project
-- **meta-rust-bin**: Support for Rust programming language and toolchain
-- **meta-openembedded**: Collection of layers providing additional recipes and configurations
-- **meta-virtualization**: Support for virtualization technologies
-
-### Key Directories
-- **config**: Contains build configurations and template files
-- **scripts**: Utility scripts for building and managing the environment
-
-## Build System Components
-
-### Key Recipes in meta-secret-vm
-- Attestation tools for secure enclave verification
-- Cryptographic tools and libraries
-- OVMF firmware configurations
-- Custom kernel modifications for security
-- Root filesystem configurations and customizations
-
 ## Build Instructions
 
 ### Prerequisites
 - Docker
 - Git
-- 50GB+ free disk space
+- 120GB+ free disk space
 - Linux host system (recommended: Ubuntu 20.04 or later)
 
 ### Environment Setup
@@ -57,7 +34,7 @@ Built for the Secret Network, a privacy-first blockchain platform, this system e
 
 ## Output Artifacts
 
-Build artifacts are located in `build/tmp/deploy/images/secret-vm/`:
+Build artifacts are located in `./artifacts`:
 - `rootfs.cpio`, `rootfs.iso`: Root file system for VMs without GPU
 - `rootfs-gpu.cpio`. `rootfs-gpu.iso`: Root file system for VMs with GPU
 - `bzImage`: Linux kernel
@@ -68,50 +45,16 @@ Build artifacts are located in `build/tmp/deploy/images/secret-vm/`:
 ## Usage Instructions
 
 ### Starting the VM
-1. Navigate to the deployment directory:
+1. Without GPU:
    ```bash
-   cd build/tmp/deploy/images/secret-vm/
+   scripts/start_vm.sh
    ```
-
-2. Launch the VM using the provided script:
+2. With GPU:
    ```bash
-   ./start_vm.sh
-   ```
-      ```bash
-   ./start_vm_gpu.sh
+   sudo scripts/start_vm_gpu.sh
    ```
 
 ### GPU Pass-through Configuration
 1. Enable IOMMU in your host system
 2. Configure PCI pass-through in your VM launch script
 3. Use GPU-enabled image build
-
-## Development and Contributing
-
-### Customizing the Build System
-1. Create a new layer:
-   ```bash
-   bitbake-layers create-layer meta-custom
-   ```
-
-2. Add custom recipes to your layer:
-   ```
-   meta-custom/
-   ├── conf/
-   │   └── layer.conf
-   └── recipes-example/
-       └── example/
-           └── example_1.0.bb
-   ```
-
-### Contributing Guidelines
-1. Fork the repository
-2. Create a feature branch
-3. Submit a Pull Request with:
-   - Clear description of changes
-   - Test results
-   - Documentation updates
-   - Signed-off commits
-
-For issues and feature requests, please use the GitHub Issues tracker.
-
