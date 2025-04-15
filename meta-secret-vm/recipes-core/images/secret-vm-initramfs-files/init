@@ -26,6 +26,13 @@ echo "ROOTFS_HASH=$ROOTFS_HASH"
 
 attest-tool extendrt 3 $DOCKER_COMPOSE_HASH
 attest-tool extendrt 3 $ROOTFS_HASH
+
+if [ -f mnt/docker-files.tar ]; then
+    DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
+    echo "DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
+    attest-tool extendrt 3 $DOCKER_FILES_HASH
+fi
+
 attest-tool report
 
 mkdir -p /cdrom

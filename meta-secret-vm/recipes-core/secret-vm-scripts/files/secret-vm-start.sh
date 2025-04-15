@@ -27,6 +27,15 @@ fi
 
 startup.sh finalize $CERT_PATH
 
+mkdir -p /mnt/secure/docker_wd
+cp /mnt/config/docker-compose.yaml /mnt/secure/docker_wd
+
+pushd .
+cd /mnt/secure/docker_wd
+# this file is optional
+cp /mnt/config/docker-files.tar . && tar xvf ./docker-files.tar || true 
+popd
+
 if [ -n "$GPU_MODE" ]; then 
     nvidia-ctk runtime configure --runtime=docker
     nvidia-ctk config --set nvidia-container-cli.no-cgroups --in-place
