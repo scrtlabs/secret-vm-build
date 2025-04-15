@@ -15,6 +15,7 @@ RDEPENDS:${PN} += "systemd \
                    cryptsetup \
                    e2fsprogs \
                    attest-tool \
+                   kms-query \
                    crypt-tool"
 
 RDEPENDS:${PN}-gpu += "python3 \

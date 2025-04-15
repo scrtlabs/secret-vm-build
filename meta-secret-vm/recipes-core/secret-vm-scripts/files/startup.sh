@@ -68,10 +68,7 @@ get_master_secret()
     # Query kms contract
     echo "Querying KMS..."
 
-    echo "Setting up Go dependencies..."
-    go mod tidy
-
-    local kms_res=$(go run kms_query.go $KMS_SERVICE_ID $quote $collateral)
+    local kms_res=$(kms-query $KMS_SERVICE_ID $quote $collateral)
 
     # the result must consist of 2 lines, which are encrypted master secret and the export pubkey respectively. Parse it.
     kms_res=$(echo "$kms_res" | xargs) # strip possible leading and trailing spaces
