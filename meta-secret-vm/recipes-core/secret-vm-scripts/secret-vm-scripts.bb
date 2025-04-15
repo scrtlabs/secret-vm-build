@@ -11,6 +11,7 @@ PACKAGES += "${PN}-gpu"
 RDEPENDS:${PN} += "systemd \
                    bash \
                    curl \
+                   jq \
                    openssl \
                    cryptsetup \
                    e2fsprogs \

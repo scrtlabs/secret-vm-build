@@ -15,7 +15,7 @@ test -n "$GPU_MODE" && nvidia-smi conf-compute -srs 1
 CERT_DIR=/mnt/secure/cert
 CERT_NAME=secret_vm
 CERT_PATH=$CERT_DIR/"$CERT_NAME"_cert.pem
-DOMAIN_NAME=tee-demo2.scrtlabs.com
+DOMAIN_NAME=$(cat /mnt/config/secret-vm.json | jq -r '.domain_name')
 DOMAIN_EMAIL=info@scrtlabs.com
 
 startup.sh
