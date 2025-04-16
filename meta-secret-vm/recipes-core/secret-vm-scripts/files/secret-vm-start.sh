@@ -17,6 +17,13 @@ CERT_NAME=secret_vm
 CERT_PATH=$CERT_DIR/"$CERT_NAME"_cert.pem
 DOMAIN_NAME=$(cat /mnt/config/secret-vm.json | jq -r '.domain_name')
 DOMAIN_EMAIL=info@scrtlabs.com
+IP_ADDR=$(cat /mnt/config/secret-vm.json | jq -r '.ip_addr')
+GATEWAY=$(cat /mnt/config/secret-vm.json | jq -r '.gateway')
+
+# set up network
+sed -i "s%IP_ADDR_PLACEHOLDER%$IP_ADDR%" /usr/lib/systemd/network/10-enp.network
+sed -i "s%GATEWAY_PLACEHOLDER%$GATEWAY%" /usr/lib/systemd/network/10-enp.network
+systemctl restart systemd-networkd
 
 startup.sh
 
