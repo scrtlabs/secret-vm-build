@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+" # Push events to matching v*, i.e. v1.0, v20.15.10
+      - "v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+" # Push events to matching alpha releases
+      - "v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+" # Push events to matching beta releases
+      - "v[0-9]+.[0-9]+.[0-9]+-patch.[0-9]+" # Push events to matching beta releases
+      - "v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+" # Push events to matching rc releases
+
+jobs:
+  build:
+    runs-on: secret-vm-build-runner
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build
+        run: scripts/build_reproducible.sh
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          prerelease: true
+          files: |
+            artifacts/rootfs.iso
+            artifacts/rootfs-gpu.iso
+            artifacts/ovmf.fd
+            artifacts/bzImage
+            artifacts/initramfs.cpio.gz
