@@ -32,31 +32,29 @@ SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install() {
     install -d ${D}${bindir}
-    install -m 0744 ${S}/startup.sh ${D}${bindir}/startup.sh
-    install -m 0744 ${S}/rtmr-ext.sh ${D}${bindir}/rtmr-ext.sh
-    install -m 0744 ${S}/secret-vm-start.sh ${D}${bindir}/secret-vm-start.sh
-    install -m 0744 ${S}/secret-vm-generate-cert.sh ${D}${bindir}/secret-vm-generate-cert.sh
-    install -m 0744 ${S}/gpu-attest.py ${D}${bindir}/gpu-attest
+    install -m 0744 ${S}/scripts/secret-vm-start.sh ${D}${bindir}/secret-vm-start.sh
+    install -m 0744 ${S}/scripts/secret-vm-generate-cert.sh ${D}${bindir}/secret-vm-generate-cert.sh
+    install -m 0744 ${S}/scripts/gpu-attest.py ${D}${bindir}/gpu-attest
+    install -m 0744 ${S}/scripts/utils.sh ${D}${bindir}/utils.sh
 
     install -d ${D}${systemd_unitdir}/system
-    install -m 0644 ${S}/secret-vm-attest-rest.service ${D}${systemd_unitdir}/system/
-    install -m 0644 ${S}/secret-vm-docker-start.service ${D}${systemd_unitdir}/system/
-    install -m 0644 ${S}/secret-vm-startup.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${S}/services/secret-vm-attest-rest.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${S}/services/secret-vm-docker-start.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${S}/services/secret-vm-startup.service ${D}${systemd_unitdir}/system/
 
     install -d ${D}${systemd_unitdir}/network
-    install -m 0644 ${S}/10-enp.network ${D}${systemd_unitdir}/network
+    install -m 0644 ${S}/configs/10-enp.network ${D}${systemd_unitdir}/network
 
     install -d ${D}${sysconfdir}/
-    install -m 0644 ${S}/tdx-attest.conf ${D}${sysconfdir}/
+    install -m 0644 ${S}/configs/tdx-attest.conf ${D}${sysconfdir}/
 }
 
-FILES:${PN} = "${bindir}/startup.sh \
-                ${bindir}/rtmr-ext.sh \
-                ${bindir}/secret-vm-start.sh \
-                ${bindir}/secret-vm-generate-cert.sh \
-                ${systemd_unitdir}/system/secret-vm-attest-rest.service \
-                ${systemd_unitdir}/system/secret-vm-docker-start.service \
-                ${systemd_unitdir}/system/secret-vm-startup.service \
-                ${systemd_unitdir}/network/10-enp.network \
-                ${sysconfdir}/tdx-attest.conf"
+FILES:${PN} = "${bindir}/secret-vm-start.sh \
+               ${bindir}/secret-vm-generate-cert.sh \
+               ${bindir}/utils.sh \
+               ${systemd_unitdir}/system/secret-vm-attest-rest.service \
+               ${systemd_unitdir}/system/secret-vm-docker-start.service \
+               ${systemd_unitdir}/system/secret-vm-startup.service \
+               ${systemd_unitdir}/network/10-enp.network \
+               ${sysconfdir}/tdx-attest.conf"
 FILES:${PN}-gpu = "${bindir}/gpu-attest"

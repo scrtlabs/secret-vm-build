@@ -15,30 +15,6 @@
 # Note: For production use, ensure secure master secret generation
 #==============================================================================
 
-# Generates a deterministic master secret based on system UUID
-#
-# This function creates a deterministic secret by hashing the system's UUID
-# obtained via dmidecode. If dmidecode fails, it uses a fallback UUID value.
-# The resulting hash serves as a seed for key generation.
-#
-# Returns:
-#   SHA-256 hash of the system UUID as a hex string
-#
-set -ex
-
-get_master_secret() {
-    local secret_file="/mnt/secure/master_secret.txt"
-    
-    # Check if the file exists
-    if [ -f "$secret_file" ]; then
-        # Read the content of the file (trimming any whitespace)
-        cat "$secret_file" | tr -d '[:space:]'
-    else
-        echo "Error: Master secret file not found at $secret_file" >&2
-        return 1
-    fi
-}
-
 # Generates a Let's Encrypt signed certificate with private and public keys
 #
 # This function obtains a properly signed certificate from Let's Encrypt
@@ -64,7 +40,7 @@ generate_cert() {
     local domain="${3:-secretvm.scrtlabs.com}"  # Domain name, with default
     local email="${4:-secretvm@scrtlabs.com}"   # Email for Let's Encrypt notifications
 
-    local CERTBOT='docker run --rm
+    local certbot='docker run --rm
 		    -v /etc/letsencrypt:/etc/letsencrypt
 		    -v /var/lib/letsencrypt:/var/lib/letsencrypt
 		    -p 80:80
@@ -102,7 +78,7 @@ generate_cert() {
     echo "Requesting Let's Encrypt certificate for domain: ${domain}"
 
     # Request certificate using certbot in standalone mode
-    if ! $CERTBOT certonly --standalone \
+    if ! $certbot certonly --standalone \
 	--staging \
         --non-interactive \
         --agree-tos \
@@ -194,4 +170,3 @@ generate_cert() {
     echo "openssl x509 -in ${prefix}_cert.pem -pubkey -noout -outform PEM | sha256sum"
     echo "The above commands should produce the same hash if the keys match."
 }
-

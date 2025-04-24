@@ -7,7 +7,7 @@ ROOT_DIR=$(realpath $SCRIPTS_DIR/..)
 ARTIFACTS_DIR=$ROOT_DIR/artifacts
 VM_NAME=${VM_NAME:-secretai-vm}
 MEM_SIZE=2G
-MAC_ADDRESS=9c:93:4c:b8:fc:e5
+MAC_ADDRESS=C4:6A:8D:91:55:50
 
 qemu-system-x86_64 -D ${VM_NAME}.log \
                    -trace enable=tdx* -D tdx_trace.log \
@@ -34,4 +34,4 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -fw_cfg name=opt/ovmf/X-PciMmio64,string=262144 \
                    -virtfs local,path=$ROOT_DIR/config,security_model=mapped,readonly=on,mount_tag=guest_config \
                    -device virtio-net-pci,netdev=nic1_td,mac=${MAC_ADDRESS} \
-                   -netdev tap,id=nic1_td,ifname=tap1,script=no,downscript=no
+                   -netdev tap,id=nic1_td,ifname=tap2,script=no,downscript=no
