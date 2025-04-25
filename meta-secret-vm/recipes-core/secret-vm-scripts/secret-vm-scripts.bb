@@ -3,8 +3,9 @@ DESCRIPTION = "SecretVM scripts"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
-SRC_URI = "file://${THISDIR}/files"
-S = "${WORKDIR}/${THISDIR}/files"
+SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
+SRCREV = "294038d7c6e358cbddb4aa12ac785e4f0daec714"
+S = "${WORKDIR}/git"
 
 PACKAGES += "${PN}-gpu"
 

@@ -1,21 +1,23 @@
 SUMMARY = "KMS query tool for SecretVM"
 DESCRIPTION = "KMS query tool for SecretVM"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=0d6d1641f41b686243d013605f2fd8d3"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRC_URI = "file://${THISDIR}/files/"
-S = "${WORKDIR}/${THISDIR}/files"
+SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
+SRCREV = "4924e7638412ff8567cb1a9f26353cb39ed75721"
+S = "${WORKDIR}/git"
+GO_IMPORT = "${S}"
 
 inherit go
 
 do_compile[network] = "1"
 
 do_compile() {
-    cd ${S}
+    cd ${S}/kms_query
     go build -o kms-query
 }
 
 do_install() {
     install -d ${D}${bindir}
-    install -m 0755 ${S}/kms-query ${D}${bindir}/
+    install -m 0755 ${S}/kms_query/kms-query ${D}${bindir}/
 }
