@@ -1,4 +1,4 @@
-include secret-vm-rootfs.inc
+include secret-vm-rootfs-common.inc
 
 IMAGE_INSTALL += "secret-vm-scripts-gpu \
                   acpid \

@@ -8,8 +8,7 @@ IMAGE_INSTALL = "base-files \
                  systemd \
                  secret-vm-attest-rest-server \
                  secret-vm-scripts \
-                 docker-compose \
-                 intel-sgx-primitives"
+                 docker-compose"
 
 IMAGE_FSTYPES = "cpio"
 

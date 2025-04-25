@@ -1,2 +1,2 @@
-include secret-vm-rootfs.inc
-include secret-vm-rootfs-prod.inc
+include secret-vm-rootfs-common.inc
+include secret-vm-rootfs-common-prod.inc

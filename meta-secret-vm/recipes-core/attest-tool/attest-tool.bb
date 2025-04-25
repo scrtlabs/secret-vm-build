@@ -7,6 +7,7 @@ SRC_URI = "file://${THISDIR}/files"
 S = "${WORKDIR}/${THISDIR}/files"
 
 DEPENDS += "intel-sgx-primitives"
+RDEPENDS:${PN} += "intel-sgx-primitives"
 
 do_compile() {
     ${CC} ${LDFLAGS} -O2 attest_tool.cpp -ltdx_attest -o attest-tool

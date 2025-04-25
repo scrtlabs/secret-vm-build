@@ -30,7 +30,7 @@
 #
 # Outputs:
 #   - {dest_dir}/{prefix}_private.pem: Private key file in PEM format
-#p   - {dest_dir}/{prefix}_cert.pem: Let's Encrypt signed X.509 certificate in PEM format
+#   - {dest_dir}/{prefix}_cert.pem: Let's Encrypt signed X.509 certificate in PEM format
 #   - {dest_dir}/{prefix}_public.pem: Public key extracted from the certificate in PEM format
 #   - {dest_dir}/{prefix}_chain.pem: Certificate chain in PEM format
 #
@@ -41,10 +41,10 @@ generate_cert() {
     local email="${4:-secretvm@scrtlabs.com}"   # Email for Let's Encrypt notifications
 
     local certbot='docker run --rm
-		    -v /etc/letsencrypt:/etc/letsencrypt
-		    -v /var/lib/letsencrypt:/var/lib/letsencrypt
-		    -p 80:80
-		    certbot/certbot'
+                       -v /etc/letsencrypt:/etc/letsencrypt
+                       -v /var/lib/letsencrypt:/var/lib/letsencrypt
+                       -p 80:80
+                       certbot/certbot'
 
     # Ensure certbot and openssl are installed
     #if ! command -v certbot &> /dev/null; then
@@ -77,9 +77,14 @@ generate_cert() {
 
     echo "Requesting Let's Encrypt certificate for domain: ${domain}"
 
+    STAGING_FLAG=""
+    if [ -n "$DEBUG" ]; then
+        STAGING_FLAG="--staging"
+    fi
+
     # Request certificate using certbot in standalone mode
     if ! $certbot certonly --standalone \
-	--staging \
+        $STAGING_FLAG \
         --non-interactive \
         --agree-tos \
         --email "${email}" \
