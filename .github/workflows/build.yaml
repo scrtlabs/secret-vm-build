@@ -23,8 +23,10 @@ jobs:
         with:
           prerelease: true
           files: |
-            artifacts/rootfs.iso
-            artifacts/rootfs-gpu.iso
+            artifacts/rootfs-dev.iso
+            artifacts/rootfs-prod.iso
+            artifacts/rootfs-gpu-dev.iso
+            artifacts/rootfs-gpu-prod.iso
             artifacts/ovmf.fd
             artifacts/bzImage
             artifacts/initramfs.cpio.gz
