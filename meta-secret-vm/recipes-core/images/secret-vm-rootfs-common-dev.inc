@@ -1,3 +1,4 @@
+IMAGE_INSTALL += " sshd"
 ROOTFS_POSTPROCESS_COMMAND += "add_env;"
 
 add_env() {
