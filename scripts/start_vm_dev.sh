@@ -28,7 +28,6 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -serial mon:stdio \
                    -object memory-backend-ram,id=mem0,size=${MEM_SIZE} \
                    -machine q35,kernel-irqchip=split,confidential-guest-support=tdx,hpet=off,memory-backend=mem0 \
-                   -nodefaults \
                    -device pcie-root-port,id=pci.1,bus=pcie.0 \
                    -device vhost-vsock-pci,guest-cid=8 \
                    -fw_cfg name=opt/ovmf/X-PciMmio64,string=262144 \
