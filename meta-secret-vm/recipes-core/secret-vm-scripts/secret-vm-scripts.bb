@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "a15282db1df3dd140cf3775c7ccd0ebf1d83f38e"
+SRCREV = "56e7f8670408c02f0c1d1e87f6603af4c50af517"
 S = "${WORKDIR}/git"
 
 PACKAGES += "${PN}-gpu"
@@ -28,12 +28,14 @@ inherit systemd
 SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE:${PN} = "secret-vm-attest-rest.service \
                          secret-vm-docker-start.service \
-                         secret-vm-startup.service"
+                         secret-vm-startup.service \
+                         secret-vm-network-setup.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install() {
     install -d ${D}${bindir}
     install -m 0744 ${S}/scripts/secret-vm-start.sh ${D}${bindir}/secret-vm-start.sh
+    install -m 0744 ${S}/scripts/secret-vm-network-setup.sh ${D}${bindir}/secret-vm-network-setup.sh
     install -m 0744 ${S}/scripts/secret-vm-generate-cert.sh ${D}${bindir}/secret-vm-generate-cert.sh
     install -m 0744 ${S}/scripts/gpu-attest.py ${D}${bindir}/gpu-attest
     install -m 0744 ${S}/scripts/utils.sh ${D}${bindir}/utils.sh
@@ -42,6 +44,7 @@ do_install() {
     install -m 0644 ${S}/services/secret-vm-attest-rest.service ${D}${systemd_unitdir}/system/
     install -m 0644 ${S}/services/secret-vm-docker-start.service ${D}${systemd_unitdir}/system/
     install -m 0644 ${S}/services/secret-vm-startup.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${S}/services/secret-vm-network-setup.service ${D}${systemd_unitdir}/system/
 
     install -d ${D}${systemd_unitdir}/network
     install -m 0644 ${S}/configs/10-enp.network ${D}${systemd_unitdir}/network
@@ -51,11 +54,13 @@ do_install() {
 }
 
 FILES:${PN} = "${bindir}/secret-vm-start.sh \
+               ${bindir}/secret-vm-network-setup.sh \
                ${bindir}/secret-vm-generate-cert.sh \
                ${bindir}/utils.sh \
                ${systemd_unitdir}/system/secret-vm-attest-rest.service \
                ${systemd_unitdir}/system/secret-vm-docker-start.service \
                ${systemd_unitdir}/system/secret-vm-startup.service \
+               ${systemd_unitdir}/system/secret-vm-network-setup.service \
                ${systemd_unitdir}/network/10-enp.network \
                ${sysconfdir}/tdx-attest.conf"
 FILES:${PN}-gpu = "${bindir}/gpu-attest"
