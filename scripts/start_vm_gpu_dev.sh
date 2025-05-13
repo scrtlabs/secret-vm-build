@@ -25,7 +25,6 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -cpu host \
                    -object '{"qom-type":"tdx-guest","id":"tdx","quote-generation-socket":{"type": "vsock", "cid":"2","port":"4050"}}' \
                    -nographic \
-                   -nodefaults \
                    -serial mon:stdio \
                    -object memory-backend-ram,id=mem0,size=${MEM_SIZE} \
                    -machine q35,kernel-irqchip=split,confidential-guest-support=tdx,hpet=off,memory-backend=mem0 \
