@@ -18,6 +18,34 @@ jobs:
           submodules: recursive
       - name: Build
         run: scripts/build_reproducible.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-dev.iso
+          path: artifacts/rootfs-dev.iso
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-prod.iso
+          path: artifacts/rootfs-prod.iso
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-gpu-dev.iso
+          path: artifacts/rootfs-gpu-dev.iso
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-gpu-prod.iso
+          path: artifacts/rootfs-gpu-prod.iso
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ovmf.fd
+          path: artifacts/ovmf.fd
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bzImage
+          path: artifacts/bzImage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: initramfs.cpio.gz
+          path: artifacts/initramfs.cpio.gz
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
