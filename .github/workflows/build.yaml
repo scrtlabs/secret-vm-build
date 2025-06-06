@@ -62,10 +62,10 @@ jobs:
         with:
           prerelease: true
           files: |
-            artifacts/rootfs-dev.iso
-            artifacts/rootfs-prod.iso
-            artifacts/rootfs-gpu-dev.iso
-            artifacts/rootfs-gpu-prod.iso
-            artifacts/ovmf.fd
-            artifacts/bzImage
-            artifacts/initramfs.cpio.gz
+            artifacts/rootfs-dev-${{ steps.get_version.outputs.VERSION }}.iso
+            artifacts/rootfs-prod-${{ steps.get_version.outputs.VERSION }}.iso
+            artifacts/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}.iso
+            artifacts/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}.iso
+            artifacts/ovmf-${{ steps.get_version.outputs.VERSION }}.fd
+            artifacts/bzImage-${{ steps.get_version.outputs.VERSION }}
+            artifacts/initramfs-${{ steps.get_version.outputs.VERSION }}.cpio.gz
