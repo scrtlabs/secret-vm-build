@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "d5ef449dce2d73a496e1fd19b197e2fc4906218a"
+SRCREV = "30be4364030ad96e69ade34683a1fed07f37ec76"
 S = "${WORKDIR}/git"
 
 PACKAGES += "${PN}-gpu"
@@ -37,6 +37,7 @@ do_install() {
     install -m 0744 ${S}/scripts/secret-vm-start.sh ${D}${bindir}/secret-vm-start.sh
     install -m 0744 ${S}/scripts/secret-vm-network-setup.sh ${D}${bindir}/secret-vm-network-setup.sh
     install -m 0744 ${S}/scripts/secret-vm-generate-cert.sh ${D}${bindir}/secret-vm-generate-cert.sh
+    install -m 0744 ${S}/scripts/secret-vm-keygen.sh ${D}${bindir}/secret-vm-keygen.sh
     install -m 0744 ${S}/scripts/gpu-attest.py ${D}${bindir}/gpu-attest
     install -m 0744 ${S}/scripts/utils.sh ${D}${bindir}/utils.sh
 
@@ -56,6 +57,7 @@ do_install() {
 FILES:${PN} = "${bindir}/secret-vm-start.sh \
                ${bindir}/secret-vm-network-setup.sh \
                ${bindir}/secret-vm-generate-cert.sh \
+               ${bindir}/secret-vm-keygen.sh \
                ${bindir}/utils.sh \
                ${systemd_unitdir}/system/secret-vm-attest-rest.service \
                ${systemd_unitdir}/system/secret-vm-docker-start.service \
