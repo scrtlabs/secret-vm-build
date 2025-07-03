@@ -4,6 +4,7 @@ LICENSE = "MIT"
 inherit core-image
 
 IMAGE_INSTALL = "base-files \
+                 opa \
                  busybox \
                  systemd \
                  secret-vm-attest-rest-server \
