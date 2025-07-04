@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "37770daf878f6f020b008d1c731b8d88cd40ee54"
+SRCREV = "30dd0b7d1a8d55f2c2873cee80a49f69cc3bdf86"
 S = "${WORKDIR}/git/opa"
 
 do_install() {
