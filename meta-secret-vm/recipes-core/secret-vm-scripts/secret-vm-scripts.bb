@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "37770daf878f6f020b008d1c731b8d88cd40ee54"
+SRCREV = "834ed5ffdddd4fa509720ba66721de553e3328ba"
 S = "${WORKDIR}/git"
 
 PACKAGES += "${PN}-gpu"
@@ -34,10 +34,13 @@ SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install() {
     install -d ${D}${bindir}
+    install -m 0744 ${S}/scripts/secret-vm-functions.sh ${D}${bindir}/secret-vm-functions.sh
+    install -m 0744 ${S}/scripts/secret-vm-global-env.sh ${D}${bindir}/secret-vm-global-env.sh
     install -m 0744 ${S}/scripts/secret-vm-start.sh ${D}${bindir}/secret-vm-start.sh
     install -m 0744 ${S}/scripts/secret-vm-network-setup.sh ${D}${bindir}/secret-vm-network-setup.sh
     install -m 0744 ${S}/scripts/secret-vm-generate-cert.sh ${D}${bindir}/secret-vm-generate-cert.sh
     install -m 0744 ${S}/scripts/secret-vm-keygen.sh ${D}${bindir}/secret-vm-keygen.sh
+    install -m 0744 ${S}/scripts/renew-certificates.sh ${D}${bindir}/renew-certificates.sh
     install -m 0744 ${S}/scripts/gpu-attest.py ${D}${bindir}/gpu-attest
     install -m 0744 ${S}/scripts/utils.sh ${D}${bindir}/utils.sh
 
@@ -58,6 +61,9 @@ FILES:${PN} = "${bindir}/secret-vm-start.sh \
                ${bindir}/secret-vm-network-setup.sh \
                ${bindir}/secret-vm-generate-cert.sh \
                ${bindir}/secret-vm-keygen.sh \
+               ${bindir}/secret-vm-global-env.sh \
+               ${bindir}/secret-vm-functions.sh \
+               ${bindir}/renew-certificates.sh \
                ${bindir}/utils.sh \
                ${systemd_unitdir}/system/secret-vm-attest-rest.service \
                ${systemd_unitdir}/system/secret-vm-docker-start.service \
