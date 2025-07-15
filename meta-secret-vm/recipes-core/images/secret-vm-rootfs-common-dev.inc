@@ -1,4 +1,4 @@
-IMAGE_INSTALL += " sshd"
+IMAGE_INSTALL += " sshd git"
 ROOTFS_POSTPROCESS_COMMAND += "add_env; configure_dropbear;"
 
 add_env() {
