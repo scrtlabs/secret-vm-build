@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "59267262fe6f4f9b8a384b3e225581a1e064a7be"
+SRCREV = "0d8b892392a9f86ab53c390bf071c171aa824418"
 S = "${WORKDIR}/git"
 
 PACKAGES += "${PN}-gpu"
