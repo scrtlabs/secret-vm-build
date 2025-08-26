@@ -1,0 +1,24 @@
+From 20eca0e409ab83bcf4df26bd3fcb3782ff44f33a Mon Sep 17 00:00:00 2001
+From: alexh-scrt <alexh@scrtlabs.com>
+Date: Tue, 26 Aug 2025 17:39:09 +0000
+Subject: [PATCH] fix
+
+---
+ lib/luks2/luks2_keyslot_luks2.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/lib/luks2/luks2_keyslot_luks2.c b/lib/luks2/luks2_keyslot_luks2.c
+index 2c1f400..020a792 100644
+--- a/lib/luks2/luks2_keyslot_luks2.c
++++ b/lib/luks2/luks2_keyslot_luks2.c
+@@ -336,6 +336,10 @@ static int luks2_keyslot_get_key(struct crypt_device *cd,
+ 	if (r < 0)
+ 		return r;
+ 
++        /* Allow only empty passphrase with null cipher */
++        if (crypt_is_cipher_null(cipher) && passwordLen)
++                return -EPERM;
++
+ 	if (!json_object_object_get_ex(jobj_area, "key_size", &jobj2))
+ 		return -EINVAL;
+ 	keyslot_key_len = json_object_get_int(jobj2);
