@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-attest-rest-server.git;branch=master;protocol=https"
-SRCREV = "b0a795be7f3ea1bde51fa14a7b0a7c4b23471e0d"
+SRCREV = "2229de993bc4df700a2943ff7b310f3d82a10965"
 
 GO_IMPORT = "github.com/scrtlabs/secret-vm-attest-rest-server"
 GO_INSTALL = "${GO_IMPORT}"
