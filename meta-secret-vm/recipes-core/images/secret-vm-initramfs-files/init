@@ -35,14 +35,16 @@ fi
 
 attest-tool report
 
-mkdir -p /cdrom
-mount -t iso9660 /dev/sr0 /cdrom
-mount -t tmpfs none /root
-cp -r /cdrom/* /root
-umount /cdrom
+mkdir -p /root /lower /upper_work
+mount -r -t iso9660 /dev/sr0 /lower
+mount -t tmpfs tmpfs /upper_work
+mkdir /upper_work/upper /upper_work/work
+mount -t overlay overlay -o lowerdir=/lower,upperdir=/upper_work/upper,workdir=/upper_work/work /root
 
 mkdir -p /root/mnt/secure
+mkdir -p /root/mnt/secure
 mkdir -p /root/mnt/config
+mkdir -p /root/dev /root/sys /root/proc /root/run
 
 mount --move /mnt /root/mnt/config
 mount --move /sys /root/sys
