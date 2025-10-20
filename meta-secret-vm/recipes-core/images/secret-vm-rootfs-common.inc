@@ -5,6 +5,7 @@ inherit core-image
 
 IMAGE_INSTALL = "base-files \
                  opa \
+                 fluent-bit \
                  busybox \
                  systemd \
                  secret-vm-attest-rest-server \
