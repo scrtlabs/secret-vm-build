@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "28ee47609f20d40cf7ac31475fca45d4f57ab8cd"
+SRCREV = "292c24b86331962923e9b7f2e7ea67a35a3ebc2d"
 S = "${WORKDIR}/git"
 
 PACKAGES += "${PN}-gpu"
@@ -19,6 +19,7 @@ RDEPENDS:${PN} += "systemd \
                    attest-tool \
                    signing-server \
                    kms-query \
+                   gkms-utils \
                    crypt-tool"
 
 RDEPENDS:${PN}-gpu += "python3 \
