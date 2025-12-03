@@ -1,0 +1,66 @@
+#!/bin/sh
+
+mkdir -p /dev
+mkdir -p /proc
+mkdir -p /sys
+mkdir -p /run
+
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t tmpfs tmpfs /run
+mount -t devtmpfs devtmpfs /dev
+
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts
+
+mount -t 9p -o trans=virtio guest_config mnt -oversion=9p2000.L
+
+DOCKER_COMPOSE_HASH=$(sha256sum mnt/docker-compose.yaml | cut -f 1 -d ' ')
+ROOTFS_HASH=$(sha256sum /dev/sr0 | cut -f 1 -d ' ')
+
+EXPECTED_DOCKER_COMPOSE_HASH=$(sed -n 's/.*\bdocker_compose_hash=\([^ ]*\).*/\1/p' /proc/cmdline)
+EXPECTED_ROOTFS_HASH=$(sed -n 's/.*\brootfs_hash=\([^ ]*\).*/\1/p' /proc/cmdline)
+
+echo "Actual DOCKER_COMPOSE_HASH=$DOCKER_COMPOSE_HASH"
+echo "Expected DOCKER_COMPOSE_HASH=$EXPECTED_DOCKER_COMPOSE_HASH"
+if [ "$DOCKER_COMPOSE_HASH" != "$EXPECTED_DOCKER_COMPOSE_HASH" ]; then
+    echo "ERROR: DOCKER_COMPOSE_HASH mismatch."
+    exit 1
+fi
+
+echo "Actual ROOTFS_HASH=$ROOTFS_HASH"
+echo "Expected ROOTFS_HASH=$EXPECTED_ROOTFS_HASH"
+if [ "$ROOTFS_HASH" != "$EXPECTED_ROOTFS_HASH" ]; then
+    echo "ERROR: ROOTFS_HASH mismatch."
+    exit 1
+fi
+
+if [ -f mnt/docker-files.tar ]; then
+    DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
+    EXPECTED_DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
+    echo "Actual DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
+    echo "Expected DOCKER_FILES_HASH=$EXPECTED_DOCKER_FILES_HASH"
+    if [ "$DOCKER_FILES_HASH" != "$EXPECTED_DOCKER_FILES_HASH" ]; then
+        echo "ERROR: DOCKER_FILES_HASH mismatch."
+        exit 1
+    fi
+fi
+
+mkdir -p /root /lower /upper_work
+mount -r -t iso9660 /dev/sr0 /lower
+mount -t tmpfs tmpfs /upper_work
+mkdir /upper_work/upper /upper_work/work
+mount -t overlay overlay -o lowerdir=/lower,upperdir=/upper_work/upper,workdir=/upper_work/work /root
+
+mkdir -p /root/mnt/secure
+mkdir -p /root/mnt/secure
+mkdir -p /root/mnt/config
+mkdir -p /root/dev /root/sys /root/proc /root/run
+
+mount --move /mnt /root/mnt/config
+mount --move /sys /root/sys
+mount --move /proc /root/proc
+mount --move /dev /root/dev
+mount --move /run /root/run
+
+exec busybox switch_root /root /usr/sbin/init

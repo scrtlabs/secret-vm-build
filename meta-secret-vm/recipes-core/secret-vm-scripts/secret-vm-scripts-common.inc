@@ -3,11 +3,7 @@ DESCRIPTION = "SecretVM scripts"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
-SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "292c24b86331962923e9b7f2e7ea67a35a3ebc2d"
 S = "${WORKDIR}/git"
-
-PACKAGES += "${PN}-gpu"
 
 RDEPENDS:${PN} += "systemd \
                    bash \
@@ -16,14 +12,10 @@ RDEPENDS:${PN} += "systemd \
                    openssl \
                    cryptsetup \
                    e2fsprogs \
-                   attest-tool \
                    signing-server \
                    kms-query \
                    gkms-utils \
                    crypt-tool"
-
-RDEPENDS:${PN}-gpu += "python3 \
-                       python3-nv-attestation-sdk"
 
 inherit systemd
 
@@ -43,7 +35,6 @@ do_install() {
     install -m 0744 ${S}/scripts/secret-vm-generate-cert.sh ${D}${bindir}/secret-vm-generate-cert.sh
     install -m 0744 ${S}/scripts/secret-vm-keygen.sh ${D}${bindir}/secret-vm-keygen.sh
     install -m 0744 ${S}/scripts/renew-certificates.sh ${D}${bindir}/renew-certificates.sh
-    install -m 0744 ${S}/scripts/gpu-attest.py ${D}${bindir}/gpu-attest
     install -m 0744 ${S}/scripts/utils.sh ${D}${bindir}/utils.sh
 
     install -d ${D}${systemd_unitdir}/system
@@ -54,9 +45,6 @@ do_install() {
 
     install -d ${D}${systemd_unitdir}/network
     install -m 0644 ${S}/configs/10-enp.network ${D}${systemd_unitdir}/network
-
-    install -d ${D}${sysconfdir}/
-    install -m 0644 ${S}/configs/tdx-attest.conf ${D}${sysconfdir}/
 }
 
 FILES:${PN} = "${bindir}/secret-vm-start.sh \
@@ -71,6 +59,4 @@ FILES:${PN} = "${bindir}/secret-vm-start.sh \
                ${systemd_unitdir}/system/secret-vm-docker-start.service \
                ${systemd_unitdir}/system/secret-vm-startup.service \
                ${systemd_unitdir}/system/secret-vm-network-setup.service \
-               ${systemd_unitdir}/network/10-enp.network \
-               ${sysconfdir}/tdx-attest.conf"
-FILES:${PN}-gpu = "${bindir}/gpu-attest"
+               ${systemd_unitdir}/network/10-enp.network"

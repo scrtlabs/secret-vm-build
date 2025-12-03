@@ -1,6 +1,6 @@
 include secret-vm-rootfs-common.inc
 
-IMAGE_INSTALL += "secret-vm-scripts-gpu \
+IMAGE_INSTALL += "secret-vm-scripts-tdx-gpu \
                   acpid \
                   nvidia \
                   nvidia-firmware \

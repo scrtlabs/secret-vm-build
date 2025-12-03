@@ -5,8 +5,8 @@ inherit core-image
 
 PACKAGE_INSTALL = "base-files \
                    busybox \
-                   attest-tool \
-                   kernel-module-tdx-guest \
                    secret-vm-initramfs-files"
+
+PACKAGE_INSTALL:append:secret-vm-tdx = " attest-tool kernel-module-tdx-guest"
 
 IMAGE_FSTYPES = "${INITRAMFS_FSTYPES}"

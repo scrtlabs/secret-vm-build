@@ -6,6 +6,8 @@ LICENSE = "BSD-2-Clause-Patent"
 LICENSE:class-target = "${@bb.utils.contains('PACKAGECONFIG', 'secureboot', 'BSD-2-Clause-Patent & OpenSSL', 'BSD-2-Clause-Patent', d)}"
 LIC_FILES_CHKSUM = "file://OvmfPkg/License.txt;md5=06357ddc23f46577c2aeaeaf7b776d65"
 
+PROVIDES += "virtual/ovmf"
+
 # Enabling Secure Boot adds a dependency on OpenSSL and implies
 # compiling OVMF twice, so it is disabled by default. Distros
 # may change that default.
@@ -19,21 +21,9 @@ PACKAGECONFIG[tpm] = "-D TPM_ENABLE=TRUE,-D TPM_ENABLE=FALSE,,"
 #see https://src.fedoraproject.org/rpms/edk2/blob/rawhide/f/0032-Basetools-turn-off-gcc12-warning.patch
 BUILD_CFLAGS += "-Wno-error=stringop-overflow"
 
-SRC_URI = "gitsm://github.com/tianocore/edk2.git;branch=master;protocol=https \
-           file://0001-ovmf-update-path-to-native-BaseTools.patch \
-           file://0002-BaseTools-makefile-adjust-to-build-in-under-bitbake.patch \
-           file://0003-debug-prefix-map.patch \
-           file://0004-reproducible.patch \
-           file://0001-MdePkg-Fix-overflow-issue-in-BasePeCoffLib.patch \
-           file://0005-Declare-ProcessLibraryConstructorList.patch \
-           "
-
-PV = "edk2-3a3b12cb"
-SRCREV = "3a3b12cbdae2e89b0e365eb01c378891d0d9037c"
 UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>edk2-stable.*)"
 
 CVE_PRODUCT = "edk2"
-CVE_VERSION = "${@d.getVar('PV').split('-')[1]}"
 
 CVE_STATUS[CVE-2014-8271] = "fixed-version: Fixed in svn_16280, which is an unusual versioning breaking version comparison."
 CVE_STATUS[CVE-2014-4859] = "fixed-version: The CPE in the NVD database doesn't reflect correctly the vulnerable versions."

@@ -9,8 +9,11 @@ IMAGE_INSTALL = "base-files \
                  busybox \
                  systemd \
                  secret-vm-attest-rest-server \
-                 secret-vm-scripts \
                  docker-compose"
+
+IMAGE_INSTALL:append:secret-vm-tdx = " secret-vm-scripts-tdx"
+
+IMAGE_INSTALL:append:secret-vm-sev = " secret-vm-scripts-sev"
 
 IMAGE_FSTYPES = "cpio"
 
