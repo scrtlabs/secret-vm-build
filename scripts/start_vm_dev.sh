@@ -10,27 +10,26 @@ MEM_SIZE=2G
 MAC_ADDRESS=54:52:00:91:55:50
 
 qemu-system-x86_64 -D ${VM_NAME}.log \
-                   -trace enable=tdx* -D tdx_trace.log \
                    -initrd $ARTIFACTS_DIR/initramfs.cpio.gz \
                    -kernel $ARTIFACTS_DIR/bzImage \
-                   -append "console=ttyS0 loglevel=7 clearcpuid=mtrr,rtmr ro" \
+                   -append "console=ttyS0 loglevel=7 docker_compose_hash=11b588e50cb03b268af536297738861ffa32ddac42af9da29be1e527982ce0fe rootfs_hash=5ab0be75c391265d603b819f2b5e86a034991ed984773c45552f165803c5d9f1" \
                    -enable-kvm \
                    -name ${VM_NAME},process=${VM_NAME},debug-threads=on \
                    -bios $ARTIFACTS_DIR/ovmf.fd \
-                   -cdrom $ARTIFACTS_DIR/rootfs-dev.iso \
-                   -drive file=$ARTIFACTS_DIR/encryptedfs.qcow2,if=virtio \
+                   -drive file=$ARTIFACTS_DIR/encryptedfs.qcow2,if=none,id=disk0,format=qcow2 \
                    -smp cores=1,threads=1,sockets=1 \
                    -m ${MEM_SIZE} \
-                   -cpu host \
-                   -object '{"qom-type":"tdx-guest","id":"tdx","quote-generation-socket":{"type": "vsock", "cid":"2","port":"4050"}}' \
+                   -cpu EPYC \
+                   -object sev-snp-guest,id=sev0,cbitpos=51,reduced-phys-bits=1 \
                    -nographic \
                    -nodefaults \
                    -serial mon:stdio \
                    -object memory-backend-ram,id=mem0,size=${MEM_SIZE} \
-                   -machine q35,kernel-irqchip=split,confidential-guest-support=tdx,hpet=off,memory-backend=mem0 \
-                   -device pcie-root-port,id=pci.1,bus=pcie.0 \
-                   -device vhost-vsock-pci,guest-cid=8 \
-                   -fw_cfg name=opt/ovmf/X-PciMmio64,string=262144 \
+                   -machine q35,memory-encryption=sev0,vmport=off \
                    -virtfs local,path=$ROOT_DIR/config,security_model=mapped,readonly=on,mount_tag=guest_config \
-                   -device virtio-net-pci,netdev=nic1_td,mac=${MAC_ADDRESS} \
-                   -netdev tap,id=nic1_td,ifname=tap_dev,script=no,downscript=no
+                   -drive file=$ARTIFACTS_DIR/rootfs-dev.iso,if=none,id=cdrom0,format=raw,media=cdrom,readonly=on \
+                   -device virtio-scsi-pci,id=scsi0,disable-legacy=on,iommu_platform=on \
+                   -device scsi-hd,drive=disk0 \
+                   -device scsi-cd,drive=cdrom0 \
+                   -device virtio-net-pci,netdev=net0,mac=${MAC_ADDRESS} \
+                   -netdev tap,id=net0,ifname=tap_dev,script=no,downscript=no

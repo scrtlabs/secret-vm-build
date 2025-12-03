@@ -10,6 +10,7 @@ IMAGE_INSTALL = "base-files \
                  systemd \
                  secret-vm-attest-rest-server \
                  secret-vm-scripts \
+                 snpguest \
                  docker-compose"
 
 IMAGE_FSTYPES = "cpio"

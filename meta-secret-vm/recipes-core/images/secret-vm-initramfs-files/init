@@ -13,27 +13,38 @@ mount -t devtmpfs devtmpfs /dev
 mkdir -p /dev/pts
 mount -t devpts devpts /dev/pts
 
-depmod -a
-modprobe tdx-guest
-
 mount -t 9p -o trans=virtio guest_config mnt -oversion=9p2000.L
 
 DOCKER_COMPOSE_HASH=$(sha256sum mnt/docker-compose.yaml | cut -f 1 -d ' ')
 ROOTFS_HASH=$(sha256sum /dev/sr0 | cut -f 1 -d ' ')
 
-echo "DOCKER_COMPOSE_HASH=$DOCKER_COMPOSE_HASH"
-echo "ROOTFS_HASH=$ROOTFS_HASH"
+EXPECTED_DOCKER_COMPOSE_HASH=$(sed -n 's/.*\bdocker_compose_hash=\([^ ]*\).*/\1/p' /proc/cmdline)
+EXPECTED_ROOTFS_HASH=$(sed -n 's/.*\brootfs_hash=\([^ ]*\).*/\1/p' /proc/cmdline)
 
-attest-tool extendrt 3 $DOCKER_COMPOSE_HASH
-attest-tool extendrt 3 $ROOTFS_HASH
+echo "Actual DOCKER_COMPOSE_HASH=$DOCKER_COMPOSE_HASH"
+echo "Expected DOCKER_COMPOSE_HASH=$EXPECTED_DOCKER_COMPOSE_HASH"
+if [ "$DOCKER_COMPOSE_HASH" != "$EXPECTED_DOCKER_COMPOSE_HASH" ]; then
+    echo "ERROR: DOCKER_COMPOSE_HASH mismatch."
+    exit 1
+fi
+
+echo "Actual ROOTFS_HASH=$ROOTFS_HASH"
+echo "Expected ROOTFS_HASH=$EXPECTED_ROOTFS_HASH"
+if [ "$ROOTFS_HASH" != "$EXPECTED_ROOTFS_HASH" ]; then
+    echo "ERROR: ROOTFS_HASH mismatch."
+    exit 1
+fi
 
 if [ -f mnt/docker-files.tar ]; then
     DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
-    echo "DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
-    attest-tool extendrt 3 $DOCKER_FILES_HASH
+    EXPECTED_DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
+    echo "Actual DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
+    echo "Expected DOCKER_FILES_HASH=$EXPECTED_DOCKER_FILES_HASH"
+    if [ "$DOCKER_FILES_HASH" != "$EXPECTED_DOCKER_FILES_HASH" ]; then
+        echo "ERROR: DOCKER_FILES_HASH mismatch."
+        exit 1
+    fi
 fi
-
-attest-tool report
 
 mkdir -p /root /lower /upper_work
 mount -r -t iso9660 /dev/sr0 /lower
