@@ -11,13 +11,13 @@ MAC_ADDRESS=C4:6A:8D:91:55:50
 
 qemu-system-x86_64 -D ${VM_NAME}.log \
                    -trace enable=tdx* -D tdx_trace.log \
-                   -initrd $ARTIFACTS_DIR/initramfs.cpio.gz \
-                   -kernel $ARTIFACTS_DIR/bzImage \
+                   -initrd $ARTIFACTS_DIR/tdx/initramfs.cpio.gz \
+                   -kernel $ARTIFACTS_DIR/tdx/bzImage \
                    -append "console=ttyS0 loglevel=7 clearcpuid=mtrr,rtmr ro" \
                    -enable-kvm \
                    -name ${VM_NAME},process=${VM_NAME},debug-threads=on \
-                   -bios $ARTIFACTS_DIR/ovmf.fd \
-                   -cdrom $ARTIFACTS_DIR/rootfs-prod.iso \
+                   -bios $ARTIFACTS_DIR/tdx/ovmf.fd \
+                   -cdrom $ARTIFACTS_DIR/tdx/rootfs-prod.iso \
                    -drive file=$ARTIFACTS_DIR/encryptedfs.qcow2,if=virtio \
                    -smp cores=1,threads=1,sockets=1 \
                    -m ${MEM_SIZE} \
