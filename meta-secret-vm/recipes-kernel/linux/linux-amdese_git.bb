@@ -15,9 +15,10 @@ LINUX_VERSION_EXTENSION = "-sev-snp-guest"
 SRCREV = "038d61fd642278bab63ee8ef722c50d10ab01e8f"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 S = "${WORKDIR}/git"
-DEPENDS += "openssl-native util-linux-native"
+
+DEPENDS += "openssl-native util-linux-native bison-native flex-native"
 
 do_configure:prepend() {
+    cp ${WORKDIR}/defconfig ${B}/.config
     ${S}/scripts/kconfig/merge_config.sh -m -O ${B} ${B}/.config ${WORKDIR}/secret-vm-sev.cfg
-    oe_runmake -C ${S} O=${B} olddefconfig
 }
