@@ -3,6 +3,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI += "file://secret-vm.scc"
 
 KERNEL_FEATURES:append = " secret-vm.scc"
+KERNEL_FEATURES:append = " cfg/sound.scc cfg/paravirt_kvm.scc"
 
 COMPATIBLE_MACHINE:secret-vm-tdx = "secret-vm-tdx"
 COMPATIBLE_MACHINE:secret-vm-sev = "secret-vm-sev"
