@@ -22,50 +22,83 @@ jobs:
       - name: Build
         run: |
           scripts/build_reproducible.sh
-          mv -v artifacts/rootfs-dev{,-${{ steps.get_version.outputs.VERSION }}}.iso
-          mv -v artifacts/rootfs-prod{,-${{ steps.get_version.outputs.VERSION }}}.iso
-          mv -v artifacts/rootfs-gpu-dev{,-${{ steps.get_version.outputs.VERSION }}}.iso
-          mv -v artifacts/rootfs-gpu-prod{,-${{ steps.get_version.outputs.VERSION }}}.iso
-          mv -v artifacts/ovmf{,-${{ steps.get_version.outputs.VERSION }}}.fd
-          mv -v artifacts/bzImage{,-${{ steps.get_version.outputs.VERSION }}}
-          mv -v artifacts/initramfs{,-${{ steps.get_version.outputs.VERSION }}}.cpio.gz
+          mv -v artifacts/tdx/rootfs-dev{,-${{ steps.get_version.outputs.VERSION }}-tdx}.iso
+          mv -v artifacts/tdx/rootfs-prod{,-${{ steps.get_version.outputs.VERSION }}-tdx}.iso
+          mv -v artifacts/tdx/rootfs-gpu-dev{,-${{ steps.get_version.outputs.VERSION }}-tdx}.iso
+          mv -v artifacts/tdx/rootfs-gpu-prod{,-${{ steps.get_version.outputs.VERSION }}-tdx}.iso
+          mv -v artifacts/tdx/ovmf{,-${{ steps.get_version.outputs.VERSION }}-tdx}.fd
+          mv -v artifacts/tdx/bzImage{,-${{ steps.get_version.outputs.VERSION }}-tdx}
+          mv -v artifacts/tdx/initramfs{,-${{ steps.get_version.outputs.VERSION }}-tdx}.cpio.gz
+
+          mv -v artifacts/sev/rootfs-dev{,-${{ steps.get_version.outputs.VERSION }}-sev}.iso
+          mv -v artifacts/sev/rootfs-prod{,-${{ steps.get_version.outputs.VERSION }}-sev}.iso
+          mv -v artifacts/sev/ovmf{,-${{ steps.get_version.outputs.VERSION }}-sev}.fd
+          mv -v artifacts/sev/bzImage{,-${{ steps.get_version.outputs.VERSION }}-sev}
+          mv -v artifacts/sev/initramfs{,-${{ steps.get_version.outputs.VERSION }}-sev}.cpio.gz
+
       - uses: actions/upload-artifact@v4
         with:
-          name: rootfs-dev-${{ steps.get_version.outputs.VERSION }}.iso
-          path: artifacts/rootfs-dev-${{ steps.get_version.outputs.VERSION }}.iso
+          name: rootfs-dev-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+          path: artifacts/tdx/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-tdx.iso
       - uses: actions/upload-artifact@v4
         with:
-          name: rootfs-prod-${{ steps.get_version.outputs.VERSION }}.iso
-          path: artifacts/rootfs-prod-${{ steps.get_version.outputs.VERSION }}.iso
+          name: rootfs-prod-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+          path: artifacts/tdx/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-tdx.iso
       - uses: actions/upload-artifact@v4
         with:
-          name: rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}.iso
-          path: artifacts/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}.iso
+          name: rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+          path: artifacts/tdx/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}-tdx.iso
       - uses: actions/upload-artifact@v4
         with:
-          name: rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}.iso
-          path: artifacts/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}.iso
+          name: rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+          path: artifacts/tdx/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}-tdx.iso
       - uses: actions/upload-artifact@v4
         with:
-          name: ovmf-${{ steps.get_version.outputs.VERSION }}.fd
-          path: artifacts/ovmf-${{ steps.get_version.outputs.VERSION }}.fd
+          name: ovmf-${{ steps.get_version.outputs.VERSION }}-tdx.fd
+          path: artifacts/tdx/ovmf-${{ steps.get_version.outputs.VERSION }}-tdx.fd
       - uses: actions/upload-artifact@v4
         with:
-          name: bzImage-${{ steps.get_version.outputs.VERSION }}
-          path: artifacts/bzImage-${{ steps.get_version.outputs.VERSION }}
+          name: bzImage-${{ steps.get_version.outputs.VERSION }}-tdx
+          path: artifacts/tdx/bzImage-${{ steps.get_version.outputs.VERSION }}-tdx
       - uses: actions/upload-artifact@v4
         with:
-          name: initramfs-${{ steps.get_version.outputs.VERSION }}.cpio.gz
-          path: artifacts/initramfs-${{ steps.get_version.outputs.VERSION }}.cpio.gz
+          name: initramfs-${{ steps.get_version.outputs.VERSION }}-tdx.cpio.gz
+          path: artifacts/tdx/initramfs-${{ steps.get_version.outputs.VERSION }}-tdx.cpio.gz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
+          path: artifacts/sev/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
+          path: artifacts/sev/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ovmf-${{ steps.get_version.outputs.VERSION }}-sev.fd
+          path: artifacts/sev/ovmf-${{ steps.get_version.outputs.VERSION }}-sev.fd
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bzImage-${{ steps.get_version.outputs.VERSION }}-sev
+          path: artifacts/sev/bzImage-${{ steps.get_version.outputs.VERSION }}-sev
+      - uses: actions/upload-artifact@v4
+        with:
+          name: initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz
+          path: artifacts/sev/initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           prerelease: true
           files: |
-            artifacts/rootfs-dev-${{ steps.get_version.outputs.VERSION }}.iso
-            artifacts/rootfs-prod-${{ steps.get_version.outputs.VERSION }}.iso
-            artifacts/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}.iso
-            artifacts/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}.iso
-            artifacts/ovmf-${{ steps.get_version.outputs.VERSION }}.fd
-            artifacts/bzImage-${{ steps.get_version.outputs.VERSION }}
-            artifacts/initramfs-${{ steps.get_version.outputs.VERSION }}.cpio.gz
+            artifacts/tdx/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+            artifacts/tdx/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+            artifacts/tdx/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+            artifacts/tdx/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+            artifacts/tdx/ovmf-${{ steps.get_version.outputs.VERSION }}-tdx.fd
+            artifacts/tdx/bzImage-${{ steps.get_version.outputs.VERSION }}-tdx
+            artifacts/tdx/initramfs-${{ steps.get_version.outputs.VERSION }}-tdx.cpio.gz
+            artifacts/sev/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/ovmf-${{ steps.get_version.outputs.VERSION }}-sev.fd
+            artifacts/sev/bzImage-${{ steps.get_version.outputs.VERSION }}-sev
+            artifacts/sev/initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz
