@@ -9,10 +9,13 @@ VM_NAME=${VM_NAME:-secretai-vm}
 MEM_SIZE=2G
 MAC_ADDRESS=54:52:00:91:55:50
 
+DOCKER_COMPOSE_HASH=$(sha256sum $ROOT_DIR/config/docker-compose.yaml)
+ROOTFS_HASH=$(sha256sum $ARTIFACTS_DIR/sev/rootfs-dev.iso)
+
 qemu-system-x86_64 -D ${VM_NAME}.log \
                    -initrd $ARTIFACTS_DIR/sev/initramfs.cpio.gz \
                    -kernel $ARTIFACTS_DIR/sev/bzImage \
-                   -append "console=ttyS0 loglevel=7 docker_compose_hash=11b588e50cb03b268af536297738861ffa32ddac42af9da29be1e527982ce0fe rootfs_hash=5ab0be75c391265d603b819f2b5e86a034991ed984773c45552f165803c5d9f1" \
+                   -append "console=ttyS0 loglevel=7 docker_compose_hash=$DOCKER_COMPOSE_HASH rootfs_hash=$ROOTFS_HASH" \
                    -enable-kvm \
                    -name ${VM_NAME},process=${VM_NAME},debug-threads=on \
                    -bios $ARTIFACTS_DIR/sev/ovmf.fd \
