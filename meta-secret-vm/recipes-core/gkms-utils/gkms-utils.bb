@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 SRC_URI = "git://github.com/scrtlabs/gkms-utils.git;branch=master;protocol=https"
-SRCREV = "4e0dd3d7be9ef99dcc9a4df4a6d364d1f2432d1c"
+SRCREV = "88a2edc4f4619b744eb1f678fb3460bb9e5dd289"
 S = "${WORKDIR}/git"
 GO_IMPORT = "${S}"
 
