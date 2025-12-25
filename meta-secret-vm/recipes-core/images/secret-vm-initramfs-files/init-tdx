@@ -18,22 +18,37 @@ modprobe tdx-guest
 
 mount -t 9p -o trans=virtio guest_config mnt -oversion=9p2000.L
 
+KMS=$(jq -r '.KMS // "contract"' mnt/secret-vm.json)
+
 DOCKER_COMPOSE_HASH=$(sha256sum mnt/docker-compose.yaml | cut -f 1 -d ' ')
 ROOTFS_HASH=$(sha256sum /dev/sr0 | cut -f 1 -d ' ')
 
 echo "DOCKER_COMPOSE_HASH=$DOCKER_COMPOSE_HASH"
 echo "ROOTFS_HASH=$ROOTFS_HASH"
 
-attest-tool extendrt 3 $DOCKER_COMPOSE_HASH
-attest-tool extendrt 3 $ROOTFS_HASH
+if [ "$KMS" = "dstack" ]; then
+    APPID=$(jq -r '.dstack_app_id // ""' mnt/secret-vm.json)
+    dstack-util extend --event compose-hash --payload "$DOCKER_COMPOSE_HASH"
+    dstack-util extend --event app-id --payload "$APPID"
+    dstack-util extend --event os-image-hash --payload "$ROOTFS_HASH"
+    if [ -f mnt/docker-files.tar ]; then
+        DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
+        echo "DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
+        dstack-util extend --event docker-files-hash --payload $DOCKER_FILES_HASH
+    fi
+    dstack-util show
+else 
+    attest-tool extendrt 3 $DOCKER_COMPOSE_HASH
+    attest-tool extendrt 3 $ROOTFS_HASH
 
-if [ -f mnt/docker-files.tar ]; then
-    DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
-    echo "DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
-    attest-tool extendrt 3 $DOCKER_FILES_HASH
+    if [ -f mnt/docker-files.tar ]; then
+        DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
+        echo "DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
+        attest-tool extendrt 3 $DOCKER_FILES_HASH
+    fi
+
+    attest-tool report
 fi
-
-attest-tool report
 
 mkdir -p /root /lower /upper_work
 mount -r -t iso9660 /dev/sr0 /lower
