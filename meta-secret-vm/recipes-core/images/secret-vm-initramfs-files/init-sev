@@ -15,6 +15,13 @@ mount -t devpts devpts /dev/pts
 
 mount -t 9p -o trans=virtio guest_config mnt -oversion=9p2000.L
 
+KMS=$(jq -r '.KMS // "contract"' mnt/secret-vm.json)
+
+if [ "$KMS" = "dstack" ]; then
+    echo "ERROR: DStack KMS is not supported for AMD platform"
+    exit 1
+fi
+
 DOCKER_COMPOSE_HASH=$(sha256sum mnt/docker-compose.yaml | cut -f 1 -d ' ')
 ROOTFS_HASH=$(sha256sum /dev/sr0 | cut -f 1 -d ' ')
 
