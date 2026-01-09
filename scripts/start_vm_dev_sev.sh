@@ -23,7 +23,7 @@ qemu-system-x86_64 -D ${VM_NAME}.log \
                    -smp cores=1,threads=1,sockets=1 \
                    -m ${MEM_SIZE} \
                    -cpu EPYC \
-                   -object sev-snp-guest,id=sev0,cbitpos=51,reduced-phys-bits=1 \
+                   -object sev-snp-guest,id=sev0,cbitpos=51,reduced-phys-bits=1,kernel-hashes=on \
                    -nographic \
                    -nodefaults \
                    -serial mon:stdio \
