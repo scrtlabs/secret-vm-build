@@ -23,6 +23,7 @@ RUN apt update && apt install -y \
     zstd \
     python3 \
     locales \
+    libclang-dev \
     git \
     git-lfs \
     xorriso \
