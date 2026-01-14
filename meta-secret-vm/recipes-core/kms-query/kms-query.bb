@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "0a986afb98fe01c53496cf8414d1f263571162e8"
+SRCREV = "2b758510b48b8b661092ec62b7e2428a536efe06"
 S = "${WORKDIR}/git"
 GO_IMPORT = "${S}"
 

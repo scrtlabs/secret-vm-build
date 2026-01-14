@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "4924e7638412ff8567cb1a9f26353cb39ed75721"
+SRCREV = "2b758510b48b8b661092ec62b7e2428a536efe06"
 S = "${WORKDIR}/git/crypt_tool"
 
 inherit cargo_bin
