@@ -44,7 +44,7 @@ fi
 
 if [ -f mnt/docker-files.tar ]; then
     DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
-    EXPECTED_DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
+    EXPECTED_DOCKER_FILES_HASH=$(sed -n 's/.*\bdocker_additional_files_hash=\([^ ]*\).*/\1/p' /proc/cmdline)
     echo "Actual DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
     echo "Expected DOCKER_FILES_HASH=$EXPECTED_DOCKER_FILES_HASH"
     if [ "$DOCKER_FILES_HASH" != "$EXPECTED_DOCKER_FILES_HASH" ]; then
