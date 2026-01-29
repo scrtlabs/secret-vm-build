@@ -36,7 +36,6 @@ if [ "$KMS" = "dstack" ]; then
         echo "DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
         dstack-util extend --event docker-files-hash --payload $DOCKER_FILES_HASH
     fi
-    dstack-util show
 else 
     attest-tool extendrt 3 $DOCKER_COMPOSE_HASH
     attest-tool extendrt 3 $ROOTFS_HASH
@@ -46,9 +45,8 @@ else
         echo "DOCKER_FILES_HASH=$DOCKER_FILES_HASH"
         attest-tool extendrt 3 $DOCKER_FILES_HASH
     fi
-
-    attest-tool report
 fi
+attest-tool report
 
 mkdir -p /root /lower /upper_work
 mount -r -t iso9660 /dev/sr0 /lower
