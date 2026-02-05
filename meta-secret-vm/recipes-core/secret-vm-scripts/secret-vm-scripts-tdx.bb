@@ -1,7 +1,7 @@
 include secret-vm-scripts-common.inc
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "2b758510b48b8b661092ec62b7e2428a536efe06"
+SRCREV = "82587c36c0c8bd1141a059b45af3b1b5ffa139fa"
 
 PACKAGES += "${PN}-gpu"
 

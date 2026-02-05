@@ -26,10 +26,10 @@ ROOTFS_HASH=$(sha256sum /dev/sr0 | cut -f 1 -d ' ')
 echo "DOCKER_COMPOSE_HASH=$DOCKER_COMPOSE_HASH"
 echo "ROOTFS_HASH=$ROOTFS_HASH"
 
-if [ "$KMS" = "dstack" ]; then
+if [ "$KMS" = "dstack" -o "$KMS" = "gramine" ]; then
     APPID=$(jq -r '.dstack_app_id // ""' mnt/secret-vm.json)
-    dstack-util extend --event compose-hash --payload "$DOCKER_COMPOSE_HASH"
     dstack-util extend --event app-id --payload "$APPID"
+    dstack-util extend --event compose-hash --payload "$DOCKER_COMPOSE_HASH"
     dstack-util extend --event os-image-hash --payload "$ROOTFS_HASH"
     if [ -f mnt/docker-files.tar ]; then
         DOCKER_FILES_HASH=$(sha256sum mnt/docker-files.tar | cut -f 1 -d ' ')
