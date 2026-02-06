@@ -11,7 +11,7 @@ IMAGE_INSTALL = "base-files \
                  secret-vm-attest-rest-server \
                  docker-compose"
 
-IMAGE_INSTALL:append:secret-vm-tdx = " secret-vm-scripts-tdx"
+IMAGE_INSTALL:append:secret-vm-tdx = " secret-vm-scripts-tdx dstack-util"
 
 IMAGE_INSTALL:append:secret-vm-sev = " secret-vm-scripts-sev"
 
