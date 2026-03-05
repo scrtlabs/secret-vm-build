@@ -17,8 +17,8 @@ mount -t 9p -o trans=virtio guest_config mnt -oversion=9p2000.L
 
 KMS=$(jq -r '.KMS // "contract"' mnt/secret-vm.json)
 
-if [ "$KMS" = "dstack" ]; then
-    echo "ERROR: DStack KMS is not supported for AMD platform"
+if [ "$KMS" = "dstack" -o "$KMS" = "gramine" ]; then
+    echo "ERROR: DStack and Gramine KMS are not supported for AMD platform"
     exit 1
 fi
 
