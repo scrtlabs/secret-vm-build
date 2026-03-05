@@ -16,6 +16,7 @@ IMAGE_INSTALL:append:secret-vm-tdx = " secret-vm-scripts-tdx"
 IMAGE_INSTALL:append:secret-vm-sev = " secret-vm-scripts-sev"
 
 IMAGE_FSTYPES = "cpio"
+IMAGE_FSTYPES:append:secret-vm-tdx = " wic"
 
 ROOTFS_POSTPROCESS_COMMAND += "symlink_lib64;"
 ROOTFS_POSTPROCESS_COMMAND += "remove_sysvinit_files;"

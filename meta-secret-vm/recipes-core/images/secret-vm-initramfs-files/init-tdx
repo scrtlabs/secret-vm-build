@@ -9,19 +9,20 @@ mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 mount -t tmpfs tmpfs /run
 mount -t devtmpfs devtmpfs /dev
+mount -t configfs none /sys/kernel/config
 
 mkdir -p /dev/pts
 mount -t devpts devpts /dev/pts
 
-depmod -a
-modprobe tdx-guest
+CONFIG_DEV=$(blkid | grep 'LABEL="GUEST_CONFIG"' | cut -d: -f1 | head -n 1)
+ROOT_DEV=$(blkid | grep 'LABEL="root"' | cut -d: -f1 | head -n 1)
 
-mount -t 9p -o trans=virtio guest_config mnt -oversion=9p2000.L
+mount $CONFIG_DEV mnt
 
 KMS=$(jq -r '.KMS // "contract"' mnt/secret-vm.json)
 
 DOCKER_COMPOSE_HASH=$(sha256sum mnt/docker-compose.yaml | cut -f 1 -d ' ')
-ROOTFS_HASH=$(sha256sum /dev/sr0 | cut -f 1 -d ' ')
+ROOTFS_HASH=$(sha256sum $ROOT_DEV | cut -f 1 -d ' ')
 
 echo "DOCKER_COMPOSE_HASH=$DOCKER_COMPOSE_HASH"
 echo "ROOTFS_HASH=$ROOTFS_HASH"
@@ -49,7 +50,7 @@ fi
 attest-tool report
 
 mkdir -p /root /lower /upper_work
-mount -r -t iso9660 /dev/sr0 /lower
+mount -r $ROOT_DEV /lower
 mount -t tmpfs tmpfs /upper_work
 mkdir /upper_work/upper /upper_work/work
 mount -t overlay overlay -o lowerdir=/lower,upperdir=/upper_work/upper,workdir=/upper_work/work /root
