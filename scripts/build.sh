@@ -30,18 +30,31 @@ setup() {
 	echo 'MACHINE = "secret-vm-sev"' > $BUILD_DIR/conf/multiconfig/sev.conf
 	echo 'TMPDIR = "${TOPDIR}/tmp-sev"' >> $BUILD_DIR/conf/multiconfig/sev.conf
 
+	echo 'MACHINE = "secret-vm-gcp-tdx"' > $BUILD_DIR/conf/multiconfig/gcp-tdx.conf
+	echo 'TMPDIR = "${TOPDIR}/tmp-gcp-tdx"' >> $BUILD_DIR/conf/multiconfig/gcp-tdx.conf
+
 	if ! grep -q "BBMULTICONFIG" $BUILD_DIR/conf/local.conf; then
-		echo 'BBMULTICONFIG = "tdx sev"' >> $BUILD_DIR/conf/local.conf
+		echo 'BBMULTICONFIG = "tdx sev gcp-tdx"' >> $BUILD_DIR/conf/local.conf
 	fi
 }
 
 build() {
 	DISTRO=secret-vm bitbake \
+		mc:gcp-tdx:secret-vm-initramfs mc:gcp-tdx:secret-vm-rootfs-dev mc:gcp-tdx:secret-vm-rootfs-prod mc:gcp-tdx:virtual/kernel \
 		mc:tdx:secret-vm-initramfs mc:tdx:secret-vm-rootfs-dev mc:tdx:secret-vm-rootfs-prod mc:tdx:secret-vm-rootfs-gpu-dev mc:tdx:secret-vm-rootfs-gpu-prod mc:tdx:virtual/kernel mc:tdx:virtual/ovmf \
 		mc:sev:secret-vm-initramfs mc:sev:secret-vm-rootfs-dev mc:sev:secret-vm-rootfs-prod mc:sev:virtual/kernel mc:sev:virtual/ovmf
 }
 
 install() {
+	GCP_TDX_DEPLOY=$BUILD_DIR/tmp-gcp-tdx-glibc/deploy/images/secret-vm-gcp-tdx
+	mkdir -p $ARTIFACTS_DIR/gcp-tdx
+	cp -L $GCP_TDX_DEPLOY/secret-vm-rootfs-prod-secret-vm-gcp-tdx.rootfs.wic $ARTIFACTS_DIR/gcp-tdx/disk.raw
+	tar czvf $ARTIFACTS_DIR/gcp-tdx/secret-vm-rootfs-prod.wic.tar.gz -C $ARTIFACTS_DIR/gcp-tdx disk.raw
+	rm -fv $ARTIFACTS_DIR/gcp-tdx/disk.raw
+	cp -L $GCP_TDX_DEPLOY/secret-vm-rootfs-dev-secret-vm-gcp-tdx.rootfs.wic $ARTIFACTS_DIR/gcp-tdx/disk.raw
+	tar czvf $ARTIFACTS_DIR/gcp-tdx/secret-vm-rootfs-dev.wic.tar.gz -C $ARTIFACTS_DIR/gcp-tdx disk.raw
+	rm -fv $ARTIFACTS_DIR/gcp-tdx/disk.raw
+
 	TDX_DEPLOY=$BUILD_DIR/tmp-tdx-glibc/deploy/images/secret-vm-tdx
 	mkdir -p $ARTIFACTS_DIR/tdx
 	cp -L $TDX_DEPLOY/bzImage $ARTIFACTS_DIR/tdx/bzImage
