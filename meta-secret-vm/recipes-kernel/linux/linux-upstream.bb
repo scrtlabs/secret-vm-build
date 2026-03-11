@@ -9,6 +9,7 @@ LINUX_VERSION ?= "6.16.12"
 
 SRC_URI = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${LINUX_VERSION}.tar.gz \
            file://defconfig \
+           file://nvidia.cfg \
            file://secret-vm.cfg"
 
 SRC_URI[sha256sum] = "ffc6af80b014ddebd55e116aa29a9f7a5256c87a29a8a9dd97270b6d49625109"
@@ -21,5 +22,5 @@ DEPENDS += "openssl-native util-linux-native bison-native flex-native elfutils-n
 
 do_configure:prepend() {
     cp ${WORKDIR}/defconfig ${B}/.config
-    ${S}/scripts/kconfig/merge_config.sh -m -O ${B} ${B}/.config ${WORKDIR}/secret-vm.cfg
+    ${S}/scripts/kconfig/merge_config.sh -m -O ${B} ${B}/.config ${WORKDIR}/secret-vm.cfg ${WORKDIR}/nvidia.cfg
 }
