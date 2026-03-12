@@ -17,7 +17,8 @@ IMAGE_INSTALL:append:secret-vm-sev = " secret-vm-scripts-sev"
 
 IMAGE_FSTYPES = "cpio"
 
-IMAGE_FSTYPES:secret-vm-gcp-tdx = "wic"
+IMAGE_FSTYPES:secret-vm-gcp-tdx = " wic"
+WKS_FILE_DEPENDS:append:secret-vm-gcp-tdx = " secret-vm-initramfs"
 
 ROOTFS_POSTPROCESS_COMMAND += "symlink_lib64;"
 ROOTFS_POSTPROCESS_COMMAND += "remove_sysvinit_files;"
