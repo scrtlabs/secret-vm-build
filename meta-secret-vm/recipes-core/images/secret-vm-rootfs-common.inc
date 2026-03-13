@@ -13,6 +13,8 @@ IMAGE_INSTALL = "base-files \
 
 IMAGE_INSTALL:append:secret-vm-tdx = " secret-vm-scripts-tdx dstack-util"
 
+IMAGE_INSTALL:append:secret-vm-gcp-tdx = " secret-vm-scripts-tdx dstack-util"
+
 IMAGE_INSTALL:append:secret-vm-sev = " secret-vm-scripts-sev"
 
 IMAGE_FSTYPES = "cpio"
