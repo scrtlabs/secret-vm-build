@@ -9,10 +9,12 @@ mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 mount -t tmpfs tmpfs /run
 mount -t devtmpfs devtmpfs /dev
-mount -t configfs none /sys/kernel/config
 
 mkdir -p /dev/pts
 mount -t devpts devpts /dev/pts
+
+depmod -a
+modprobe tdx-guest
 
 mount -t 9p -o trans=virtio guest_config mnt -oversion=9p2000.L
 

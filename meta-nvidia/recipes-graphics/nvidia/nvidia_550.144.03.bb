@@ -1,14 +1,14 @@
 SUMMARY = "NVidia Graphics Driver"
 LICENSE = "NVIDIA-Proprietary"
-LIC_FILES_CHKSUM = "file://../LICENSE;md5=92aa2e2af6aa0bcba1c3fe49da021937"
+LIC_FILES_CHKSUM = "file://../LICENSE;md5=01c5e23f445259a6d1b4867efec45d22"
 
 NVIDIA_ARCHIVE_NAME = "NVIDIA-Linux-${TARGET_ARCH}-${PV}"
 NVIDIA_SRC = "${WORKDIR}/${NVIDIA_ARCHIVE_NAME}"
 SRC_URI = " \
 	https://us.download.nvidia.com/tesla/${PV}/${NVIDIA_ARCHIVE_NAME}.run \
 "
-SRC_URI[md5sum] = "7644d59c537041a5bbaa2212ac6619df"
-SRC_URI[sha256sum] = "b9e2f80693781431cc87f4cd29109e133dcecb50a50d6b68d4b3bf2d696bd689"
+SRC_URI[md5sum] = "474f5fe69676f588634b856dd34705ef"
+SRC_URI[sha256sum] = "6a4838e2cdb26e4c0e07367ac0d3bcf799d56b5286f68fa201be3d3ddb88aac4"
 
 do_unpack() {
 	chmod +x ${DL_DIR}/${NVIDIA_ARCHIVE_NAME}.run

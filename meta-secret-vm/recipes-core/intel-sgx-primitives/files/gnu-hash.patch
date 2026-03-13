@@ -1,0 +1,13 @@
+diff --git a/QuoteGeneration/buildenv.mk b/QuoteGeneration/buildenv.mk
+index 0b677db..e3c27ad 100644
+--- a/QuoteGeneration/buildenv.mk
++++ b/QuoteGeneration/buildenv.mk
+@@ -220,7 +220,7 @@ CFLAGS   += $(COMMON_FLAGS)
+ CXXFLAGS += $(COMMON_FLAGS)
+
+ # Enable the security flags
+-COMMON_LDFLAGS := -Wl,-z,relro,-z,now,-z,noexecstack
++COMMON_LDFLAGS := -Wl,-z,relro,-z,now,-z,noexecstack -Wl,--hash-style=gnu
+
+ # Enable build static library
+ GEN_STATIC ?= 0
