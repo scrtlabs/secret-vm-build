@@ -9,8 +9,23 @@ VM_NAME=${VM_NAME:-secretai-vm}
 MEM_SIZE=2G
 MAC_ADDRESS=54:52:00:91:55:50
 
-DOCKER_COMPOSE_HASH=$(sha256sum $ROOT_DIR/config/docker-compose.yaml)
-ROOTFS_HASH=$(sha256sum $ARTIFACTS_DIR/sev/rootfs-dev.iso)
+DOCKER_COMPOSE_HASH=$(sha256sum $ROOT_DIR/config/docker-compose.yaml | cut -f1 -d' ')
+ROOTFS_HASH=$(sha256sum $ARTIFACTS_DIR/sev/rootfs-dev.iso | cut -f1 -d' ')
+
+# Compute image fingerprints and write them to the config directory.
+KERNEL_HASH=$(sha256sum $ARTIFACTS_DIR/sev/bzImage | cut -f1 -d' ')
+INITRD_HASH=$(sha256sum $ARTIFACTS_DIR/sev/initramfs.cpio.gz | cut -f1 -d' ')
+mkdir -p $ROOT_DIR/config
+cat > $ROOT_DIR/config/sev_image_fingerprints.json <<EOF
+{"kernel_hash":"$KERNEL_HASH","initrd_hash":"$INITRD_HASH","vcpus":1,"vcpu_type":"EPYC","guest_features":1}
+EOF
+
+# Extract OVMF metadata (ovmf_hash, sev_hashes_table_gpa, sev_es_reset_eip,
+# ovmf_sections) so the KMS can verify MEASUREMENT without the OVMF file.
+OVMF_INFO=$(python3 "$SCRIPTS_DIR/extract_ovmf_info.py" "$ARTIFACTS_DIR/sev/ovmf.fd")
+TMP_FP=$(mktemp)
+jq --argjson ovmf "$OVMF_INFO" '. + $ovmf' "$ROOT_DIR/config/sev_image_fingerprints.json" > "$TMP_FP"
+mv "$TMP_FP" "$ROOT_DIR/config/sev_image_fingerprints.json"
 
 qemu-system-x86_64 -D ${VM_NAME}.log \
                    -initrd $ARTIFACTS_DIR/sev/initramfs.cpio.gz \
