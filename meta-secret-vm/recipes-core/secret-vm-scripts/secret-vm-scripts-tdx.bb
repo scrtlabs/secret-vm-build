@@ -1,11 +1,9 @@
 include secret-vm-scripts-common.inc
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=master;protocol=https"
-SRCREV = "75a77d6cb4e1db10600aad128d6eed9c90c7fcaf"
+SRCREV = "ffb420af38f083d6ecef5f12cb6dc8b02971aa42"
 
 PACKAGES += "${PN}-gpu"
-
-RDEPENDS:${PN} += "attest-tool"
 
 RDEPENDS:${PN}-gpu += "python3 \
                        python3-nv-attestation-sdk"

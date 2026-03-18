@@ -36,6 +36,9 @@ jobs:
           mv -v artifacts/sev/bzImage{,-${{ steps.get_version.outputs.VERSION }}-sev}
           mv -v artifacts/sev/initramfs{,-${{ steps.get_version.outputs.VERSION }}-sev}.cpio.gz
 
+          mv -v artifacts/gcp-tdx/rootfs-dev{,-${{ steps.get_version.outputs.VERSION }}-gcp-tdx}.wic.tar.gz
+          mv -v artifacts/gcp-tdx/rootfs-prod{,-${{ steps.get_version.outputs.VERSION }}-gcp-tdx}.wic.tar.gz
+
       - uses: actions/upload-artifact@v4
         with:
           name: rootfs-dev-${{ steps.get_version.outputs.VERSION }}-tdx.iso
@@ -85,6 +88,14 @@ jobs:
         with:
           name: initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz
           path: artifacts/sev/initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-dev-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
+          path: artifacts/gcp-tdx/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-prod-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
+          path: artifacts/gcp-tdx/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -102,3 +113,5 @@ jobs:
             artifacts/sev/ovmf-${{ steps.get_version.outputs.VERSION }}-sev.fd
             artifacts/sev/bzImage-${{ steps.get_version.outputs.VERSION }}-sev
             artifacts/sev/initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz
+            artifacts/gcp-tdx/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
+            artifacts/gcp-tdx/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz

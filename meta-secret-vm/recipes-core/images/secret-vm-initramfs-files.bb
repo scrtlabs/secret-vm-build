@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 inherit allarch
 
 SRC_URI = "file://init-tdx \
+           file://init-gcp-tdx \
            file://init-sev"
 S = "${WORKDIR}"
 FILES:${PN} = "*"
@@ -12,6 +13,8 @@ FILES:${PN} = "*"
 do_install() {
     if [ "${MACHINE}" = "secret-vm-sev" ]; then
         install -m 0755 ${S}/init-sev ${D}/init
+    elif [ "${MACHINE}" = "secret-vm-gcp-tdx" ]; then
+        install -m 0755 ${S}/init-gcp-tdx ${D}/init
     else
         install -m 0755 ${S}/init-tdx ${D}/init
     fi
