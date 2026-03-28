@@ -10,6 +10,8 @@ SRC_URI = " \
 SRC_URI[md5sum] = "474f5fe69676f588634b856dd34705ef"
 SRC_URI[sha256sum] = "6a4838e2cdb26e4c0e07367ac0d3bcf799d56b5286f68fa201be3d3ddb88aac4"
 
+COMPATIBLE_MACHINE = "secret-vm-tdx"
+
 do_unpack() {
 	chmod +x ${DL_DIR}/${NVIDIA_ARCHIVE_NAME}.run
 	rm -rf ${NVIDIA_SRC}

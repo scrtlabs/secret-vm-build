@@ -10,6 +10,8 @@ SRC_URI = " \
 SRC_URI[md5sum] = "8d98a183bf994af0ff19980e0ef430f2"
 SRC_URI[sha256sum] = "8c0d4f967b7932c4ab5714272aee8103392b0a702c92afa555176d36205829f9"
 
+COMPATIBLE_MACHINE = "secret-vm-sev"
+
 do_unpack() {
 	chmod +x ${DL_DIR}/${NVIDIA_ARCHIVE_NAME}.run
 	rm -rf ${NVIDIA_SRC}
