@@ -36,6 +36,7 @@ do_install() {
     install -m 0744 ${S}/scripts/secret-vm-keygen.sh ${D}${bindir}/secret-vm-keygen.sh
     install -m 0744 ${S}/scripts/renew-certificates.sh ${D}${bindir}/renew-certificates.sh
     install -m 0744 ${S}/scripts/utils.sh ${D}${bindir}/utils.sh
+    install -m 0744 ${S}/scripts/get_poc_token.sh ${D}${bindir}/get_poc_token.sh
 
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${S}/services/secret-vm-attest-rest.service ${D}${systemd_unitdir}/system/
@@ -55,6 +56,7 @@ FILES:${PN} = "${bindir}/secret-vm-start.sh \
                ${bindir}/secret-vm-functions.sh \
                ${bindir}/renew-certificates.sh \
                ${bindir}/utils.sh \
+               ${bindir}/get_poc_token.sh \
                ${systemd_unitdir}/system/secret-vm-attest-rest.service \
                ${systemd_unitdir}/system/secret-vm-docker-start.service \
                ${systemd_unitdir}/system/secret-vm-startup.service \
