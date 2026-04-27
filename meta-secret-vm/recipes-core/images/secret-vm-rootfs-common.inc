@@ -9,7 +9,8 @@ IMAGE_INSTALL = "base-files \
                  busybox \
                  systemd \
                  secret-vm-attest-rest-server \
-                 docker-compose"
+                 docker-compose \
+                 ca-certificates"
 
 IMAGE_INSTALL:append:secret-vm-tdx = " attest-tool secret-vm-scripts-tdx dstack-util e2fsprogs-resize2fs"
 
