@@ -3,8 +3,8 @@ DESCRIPTION = "A REST API server providing attestation and verification services
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRC_URI = "git://github.com/scrtlabs/secret-vm-attest-rest-server.git;branch=add-ita-jwt;protocol=https"
-SRCREV = "83a7e6acbb609f808a0bc01ba5efae1af65c6c58"
+SRC_URI = "git://github.com/scrtlabs/secret-vm-attest-rest-server.git;branch=master;protocol=https"
+SRCREV = "3fd98df2666265ef362a08a65d3fc68e2a870da3"
 
 GO_IMPORT = "github.com/scrtlabs/secret-vm-attest-rest-server"
 GO_INSTALL = "${GO_IMPORT}"
