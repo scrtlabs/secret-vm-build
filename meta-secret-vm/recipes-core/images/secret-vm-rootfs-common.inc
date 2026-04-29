@@ -9,13 +9,14 @@ IMAGE_INSTALL = "base-files \
                  busybox \
                  systemd \
                  secret-vm-attest-rest-server \
-                 docker-compose"
+                 docker-compose \
+                 ca-certificates"
 
-IMAGE_INSTALL:append:secret-vm-tdx = " attest-tool secret-vm-scripts-tdx dstack-util"
+IMAGE_INSTALL:append:secret-vm-tdx = " attest-tool secret-vm-scripts-tdx dstack-util e2fsprogs-resize2fs"
 
 IMAGE_INSTALL:append:secret-vm-gcp-tdx = " attest-tool-tsm secret-vm-scripts-tdx dstack-util"
 
-IMAGE_INSTALL:append:secret-vm-sev = " secret-vm-scripts-sev"
+IMAGE_INSTALL:append:secret-vm-sev = " secret-vm-scripts-sev e2fsprogs-resize2fs"
 
 IMAGE_FSTYPES = "cpio"
 

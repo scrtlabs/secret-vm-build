@@ -1,6 +1,6 @@
 include secret-vm-scripts-common.inc
 
 SRC_URI = "git://github.com/scrtlabs/secret-vm-ops.git;branch=amd;protocol=https"
-SRCREV = "4d85e0ec70ba1fc0eb920570e9dc67b2f43fe06b"
+SRCREV = "2b6ff31d5df56cedf6a6bba89ba214e52353c6f1"
 
 RDEPENDS:${PN} += "snpguest"
