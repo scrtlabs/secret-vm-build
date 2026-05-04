@@ -15,15 +15,14 @@ RDEPENDS:${PN} += "systemd \
                    signing-server \
                    kms-query \
                    gkms-utils \
+                   svm-supervisor \
                    crypt-tool"
 
 inherit systemd
 
 SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE:${PN} = "secret-vm-attest-rest.service \
-                         secret-vm-docker-start.service \
-                         secret-vm-startup.service \
-                         secret-vm-network-setup.service"
+                         secret-vm-supervisor.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install() {
@@ -40,9 +39,7 @@ do_install() {
 
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${S}/services/secret-vm-attest-rest.service ${D}${systemd_unitdir}/system/
-    install -m 0644 ${S}/services/secret-vm-docker-start.service ${D}${systemd_unitdir}/system/
-    install -m 0644 ${S}/services/secret-vm-startup.service ${D}${systemd_unitdir}/system/
-    install -m 0644 ${S}/services/secret-vm-network-setup.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${S}/services/secret-vm-supervisor.service ${D}${systemd_unitdir}/system/
 
     install -d ${D}${systemd_unitdir}/network
     install -m 0644 ${S}/configs/10-enp.network ${D}${systemd_unitdir}/network
@@ -58,7 +55,5 @@ FILES:${PN} = "${bindir}/secret-vm-start.sh \
                ${bindir}/utils.sh \
                ${bindir}/get_poc_token.sh \
                ${systemd_unitdir}/system/secret-vm-attest-rest.service \
-               ${systemd_unitdir}/system/secret-vm-docker-start.service \
-               ${systemd_unitdir}/system/secret-vm-startup.service \
-               ${systemd_unitdir}/system/secret-vm-network-setup.service \
+               ${systemd_unitdir}/system/secret-vm-supervisor.service \
                ${systemd_unitdir}/network/10-enp.network"
