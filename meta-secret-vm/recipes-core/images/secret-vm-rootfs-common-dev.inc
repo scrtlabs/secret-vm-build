@@ -2,8 +2,8 @@ IMAGE_INSTALL += " sshd git"
 ROOTFS_POSTPROCESS_COMMAND += "add_env; configure_dropbear;"
 
 add_env() {
-    install -d ${IMAGE_ROOTFS}/usr/lib/systemd/system/secret-vm-startup.service.d
-    cat <<EOF > ${IMAGE_ROOTFS}/usr/lib/systemd/system/secret-vm-startup.service.d/override.conf
+    install -d ${IMAGE_ROOTFS}/usr/lib/systemd/system/secret-vm-supervisor.service.d
+    cat <<EOF > ${IMAGE_ROOTFS}/usr/lib/systemd/system/secret-vm-supervisor.service.d/override.conf
 [Service]
 Environment="DEBUG=true"
 EOF
