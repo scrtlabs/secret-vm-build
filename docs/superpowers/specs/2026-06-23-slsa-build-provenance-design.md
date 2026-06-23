@@ -22,7 +22,7 @@ variants). The job:
 - Renames per-target artifacts to include the version, then publishes them
   to a GitHub Release via `softprops/action-gh-release@v1` (`prerelease: true`).
 
-The release contains ~13 artifacts across three targets:
+The release contains 14 artifacts across three targets:
 
 | Target    | Artifacts |
 |-----------|-----------|
@@ -99,14 +99,16 @@ gh attestation verify <artifact-file> \
 
 > **Offline-bundle reliability — load-bearing, test it:** offline
 > verification works **one artifact at a time** — pass a single artifact
-> file plus the bundle. Do **not** expect to verify all 13 artifacts in one
+> file plus the bundle. Do **not** expect to verify all 14 artifacts in one
 > command: `gh attestation verify` does not accept file globs (cli/cli
 > #9215, open), and `--bundle` against a bundle holding multiple entries has
 > open issues (#10059). With a v2+ single-attestation-many-subjects bundle,
-> verifying one file should find its digest among the subjects — but this is
-> **not guaranteed** across `gh` versions, so the implementation MUST treat
+> verifying one file should find its digest among the subjects — `gh`'s own
+> `--bundle` help states it accepts "a single bundle in a JSON file," which
+> is exactly this case, so it is expected to work. It is still **not
+> guaranteed** across `gh` versions, so the implementation MUST treat
 > Success criterion 3 as a real gate, run early, not a formality.
-> **Fallback (treat as a likely path, not a remote one):** if per-file
+> **Fallback (contingency if the gate fails):** if per-file
 > offline verification against the combined bundle fails, emit one
 > attestation/bundle per artifact (loop `attest-build-provenance` per
 > subject, equivalent to the v1 model) and attach per-artifact bundles.

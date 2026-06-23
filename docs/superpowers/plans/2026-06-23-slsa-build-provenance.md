@@ -17,7 +17,7 @@ These apply to **every** task; copied verbatim from the design spec (`docs/super
 - **Bundle naming:** single combined bundle → `provenance-<version-or-tag>.sigstore.json` (`.json`, not `.jsonl`).
 - **Verification must constrain the signer workflow.** Canonical command:
   `gh attestation verify <artifact> --repo scrtlabs/secret-vm-build --signer-workflow scrtlabs/secret-vm-build/.github/workflows/build.yaml`. `--signer-workflow` is matched as a **regex** (cli/cli #9507).
-- **`gh` floor for verification:** recommend `gh >= 2.60` (confirm against the exact commands).
+- **`gh` floor for verification:** recommend `gh >= 2.60` (verified working on `gh 2.62.0`; `--signer-workflow` landed in cli/cli #9507, well before 2.60).
 - **SLSA level claimed:** Build Level 2 at most (self-hosted runner blocks L3; predicate trust caveat). Never use the word "non-forgeable."
 - **Every `gh`-calling step must set `env: GH_TOKEN: ${{ github.token }}`.**
 - **Avoid script injection:** pass `${{ inputs.* }}` and `${{ matrix.* }}` into `run:` steps via `env:`, never interpolate them directly into the script body.
@@ -97,7 +97,7 @@ Find the final step (it is `- name: Release` using `softprops/action-gh-release@
 
 - [ ] **Step 4: Add the bundle to the `Release` step's `files:` list**
 
-The existing `Release` step ends with a `files: |` block listing the 13 artifacts. Append one line to that block (keep existing entries):
+The existing `Release` step ends with a `files: |` block listing the 14 artifacts. Append one line to that block (keep existing entries):
 ```yaml
             artifacts/provenance-${{ steps.get_version.outputs.VERSION }}.sigstore.json
 ```
@@ -177,8 +177,10 @@ jobs:
           TAGS_INPUT: ${{ inputs.tags }}
         run: |
           set -euo pipefail
-          json=$(printf '%s' "$TAGS_INPUT" | tr ',' ' ' | xargs -n1 | jq -R . | jq -cs .)
-          if [ "$json" = "[]" ]; then
+          # jq-only split on commas/whitespace (no xargs — avoids shell quote
+          # processing that could merge/drop tokens on quoted input).
+          json=$(printf '%s' "$TAGS_INPUT" | jq -Rsc 'split("[,[:space:]]+";"") | map(select(length > 0))')
+          if [ -z "$json" ] || [ "$json" = "[]" ]; then
             echo "No tags parsed from input '$TAGS_INPUT'" >&2
             exit 1
           fi
@@ -205,17 +207,26 @@ jobs:
           TAG: ${{ matrix.tag }}
         run: |
           set -euo pipefail
-          dir="assets/${TAG}"
+          # Each matrix leg runs on its own fresh runner, so a fixed dir name is
+          # safe and keeps the tag out of later subject-path interpolation.
+          dir="release-assets"
           rm -rf "$dir"; mkdir -p "$dir"
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir "$dir"
           # Drop any previously-uploaded provenance so we never attest a prior bundle
           rm -f "$dir"/*.sigstore.json "$dir"/*.sigstore.jsonl
-          echo "Subjects to attest:"; ls -la "$dir"
+          # Guard: fail loudly if nothing remains to attest (e.g. a tag whose only
+          # asset was a prior provenance bundle) — otherwise the glob matches nothing.
+          count=$(find "$dir" -type f | wc -l | tr -d ' ')
+          if [ "$count" -eq 0 ]; then
+            echo "No attestable assets for tag $TAG after removing provenance files" >&2
+            exit 1
+          fi
+          echo "Subjects to attest ($count):"; ls -la "$dir"
       - name: Attest build provenance
         id: attest
         uses: actions/attest-build-provenance@v4
         with:
-          subject-path: "assets/${{ matrix.tag }}/*"
+          subject-path: "release-assets/*"
       - name: Stage and upload provenance bundle
         env:
           TAG: ${{ matrix.tag }}
@@ -224,6 +235,9 @@ jobs:
           set -euo pipefail
           out="provenance-${TAG}.sigstore.json"
           cp "$BUNDLE_PATH" "$out"
+          # --clobber deletes the existing same-named asset BEFORE uploading the
+          # new one; if this upload fails the prior bundle is gone until a re-run.
+          # Acceptable because the workflow is idempotent (re-dispatch restores it).
           gh release upload "$TAG" "$out" --repo "$GITHUB_REPOSITORY" --clobber
 ```
 
@@ -245,12 +259,14 @@ Expected: exit code 0. (Same `artifact-metadata` caveat as Task 1, Step 6.)
 
 - [ ] **Step 4: Sanity-check the tag-parsing logic locally**
 
-Run (replicates the parse step's shell):
+Run (replicates the parse step's shell), including a hostile quoted token:
 ```bash
 TAGS_INPUT="v0.0.30, v0.0.28 v0.0.29"
-printf '%s' "$TAGS_INPUT" | tr ',' ' ' | xargs -n1 | jq -R . | jq -cs .
+printf '%s' "$TAGS_INPUT" | jq -Rsc 'split("[,[:space:]]+";"") | map(select(length > 0))'
+TAGS_INPUT='v1 "v2 v3"'
+printf '%s' "$TAGS_INPUT" | jq -Rsc 'split("[,[:space:]]+";"") | map(select(length > 0))'
 ```
-Expected: `["v0.0.30","v0.0.28","v0.0.29"]`.
+Expected: `["v0.0.30","v0.0.28","v0.0.29"]` then `["v1","\"v2","v3\""]` — note the second shows quotes are treated as literal characters (no shell quote-merging), so a quoted tag simply becomes invalid tags that fail later at `gh release download`, rather than silently merging.
 
 - [ ] **Step 5: Commit**
 
@@ -319,6 +335,10 @@ boundary with the build job, so the provenance is authenticated but not
 isolated/unforgeable. Only the signing certificate and timestamps are
 non-manipulable; the predicate's contents are as trustworthy as the
 workflow that produced them.
+
+> Because the build runs on a self-hosted runner, do **not** pass
+> `--deny-self-hosted-runners` to `gh attestation verify` — it will reject
+> these otherwise-valid release attestations.
 
 ### Backfilled releases
 
