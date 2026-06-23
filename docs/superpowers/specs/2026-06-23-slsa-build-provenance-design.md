@@ -262,9 +262,11 @@ local script cannot mint a repo-scoped attestation.
      approach — it can't silently miss a newly-introduced artifact type.)
   2. Run `actions/attest-build-provenance` with `subject-path` globbing the
      remaining files in `<dir>`.
-  3. Copy the bundle to `provenance-<tag>.sigstore.json` and upload it to
-     the release (`gh release upload <tag> provenance-<tag>.sigstore.json
-     --clobber`). Note `--clobber` **deletes the existing same-named asset
+  3. Copy the bundle to `provenance-backfill-<tag>.sigstore.json` (a
+     **distinct** name from the build workflow's `provenance-<tag>.sigstore.json`,
+     so backfill can never `--clobber`/overwrite a stronger build-time bundle)
+     and upload it to the release (`gh release upload <tag>
+     provenance-backfill-<tag>.sigstore.json --clobber`). Note `--clobber` **deletes the existing same-named asset
      before** uploading the new one (cli/cli #8822); if the upload then
      fails the prior bundle is gone, but the workflow is idempotent so a
      re-run restores it.

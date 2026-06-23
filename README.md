@@ -75,7 +75,10 @@ gh attestation verify <artifact-file> \
   --signer-workflow scrtlabs/secret-vm-build/.github/workflows/build.yaml
 ```
 
-To pin a specific release, add `--source-ref refs/tags/<tag>` and/or
+This proves the artifact was built by this workflow, but does **not** by
+itself bind the artifact to one specific release — if identical bytes ship
+under more than one tag it may match another tag's attestation. To bind to a
+specific release, add `--source-ref refs/tags/<tag>` and/or
 `--source-digest <commit-sha>` (these two flags require `gh >= 2.68`; the
 base verification commands above work on `gh >= 2.60`).
 
@@ -91,7 +94,10 @@ gh attestation verify <artifact-file> \
 
 > `--signer-workflow` is matched as a regular expression, and
 > `gh attestation verify` operates on one file at a time (it does not accept
-> file globs).
+> file globs). Offline `--bundle` verification of a combined multi-subject
+> bundle has had `gh` edge cases across versions; if it fails on a given
+> release, verify online (omit `--bundle`) against GitHub's attestation
+> store, which is the primary path.
 
 ### SLSA level
 
@@ -114,10 +120,17 @@ Releases published before provenance was added can be attested with the
 manual `Backfill Provenance` workflow. Backfill attests the digests of the
 release-asset bytes **as they exist at backfill time** — it cannot prove how
 those artifacts were originally built. Backfilled attestations are signed by
-`provenance-backfill.yaml`, so verify them with:
+`provenance-backfill.yaml` and attached under a distinct asset name
+(`provenance-backfill-<tag>.sigstore.json`, so they never overwrite a
+build-time `provenance-<tag>.sigstore.json`). Verify them with:
 
 ```bash
 gh attestation verify <artifact-file> \
   --repo scrtlabs/secret-vm-build \
   --signer-workflow scrtlabs/secret-vm-build/.github/workflows/provenance-backfill.yaml
 ```
+
+> **Runner prerequisite:** `actions/attest-build-provenance@v4` runs on
+> Node 24, which requires the self-hosted build runner's Actions agent to be
+> reasonably current (GitHub Actions runner ≥ v2.327.1). A stale runner will
+> complete the build and then fail at the attestation step.

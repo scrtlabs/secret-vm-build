@@ -8,6 +8,9 @@ name: Backfill Provenance
 # signed by THIS workflow, so verify them with
 #   --signer-workflow scrtlabs/secret-vm-build/.github/workflows/provenance-backfill.yaml
 # (a build.yaml signer-workflow check will correctly reject them).
+# The bundle is uploaded under a DISTINCT asset name
+# (provenance-backfill-<tag>.sigstore.json) so it can never overwrite a
+# stronger build-time provenance-<tag>.sigstore.json asset on the same release.
 
 on:
   workflow_dispatch:
@@ -33,7 +36,7 @@ jobs:
           set -euo pipefail
           # jq-only split on commas/whitespace (no xargs — avoids shell quote
           # processing that could merge/drop tokens on quoted input).
-          json=$(printf '%s' "$TAGS_INPUT" | jq -Rsc 'split("[,[:space:]]+";"") | map(select(length > 0))')
+          json=$(printf '%s' "$TAGS_INPUT" | jq -Rsc 'split("[,[:space:]]+";"") | map(select(length > 0)) | unique')
           if [ -z "$json" ] || [ "$json" = "[]" ]; then
             echo "No tags parsed from input '$TAGS_INPUT'" >&2
             exit 1
@@ -65,12 +68,14 @@ jobs:
           # safe and keeps the tag out of later subject-path interpolation.
           dir="release-assets"
           rm -rf "$dir"; mkdir -p "$dir"
-          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir "$dir"
-          # Drop any previously-uploaded provenance so we never attest a prior bundle
+          gh release download --repo "$GITHUB_REPOSITORY" --dir "$dir" -- "$TAG"
+          # Drop any previously-uploaded provenance (build OR backfill) so we never
+          # attest a prior bundle as a subject.
           rm -f "$dir"/*.sigstore.json "$dir"/*.sigstore.jsonl
           # Guard: fail loudly if nothing remains to attest (e.g. a tag whose only
           # asset was a prior provenance bundle) — otherwise the glob matches nothing.
-          count=$(find "$dir" -type f | wc -l | tr -d ' ')
+          # maxdepth 1 mirrors the non-recursive "release-assets/*" attest glob below.
+          count=$(find "$dir" -maxdepth 1 -type f | wc -l | tr -d ' ')
           if [ "$count" -eq 0 ]; then
             echo "No attestable assets for tag $TAG after removing provenance files" >&2
             exit 1
@@ -87,9 +92,10 @@ jobs:
           BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
         run: |
           set -euo pipefail
-          out="provenance-${TAG}.sigstore.json"
+          # Distinct asset name: never overwrites a build-time provenance-<tag> asset.
+          out="provenance-backfill-${TAG}.sigstore.json"
           cp "$BUNDLE_PATH" "$out"
           # --clobber deletes the existing same-named asset BEFORE uploading the
           # new one; if this upload fails the prior bundle is gone until a re-run.
           # Acceptable because the workflow is idempotent (re-dispatch restores it).
-          gh release upload "$TAG" "$out" --repo "$GITHUB_REPOSITORY" --clobber
+          gh release upload --repo "$GITHUB_REPOSITORY" --clobber -- "$TAG" "$out"

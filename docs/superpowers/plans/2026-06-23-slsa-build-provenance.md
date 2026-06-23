@@ -138,7 +138,9 @@ Manually-triggered, per-tag provenance for already-published releases (spec Comp
 
 **Interfaces:**
 - Consumes: existing GitHub releases by tag; `github.token`.
-- Produces: per existing release, an attestation in GitHub's store and a `provenance-<tag>.sigstore.json` asset. Signer-workflow identity is `.github/workflows/provenance-backfill.yaml` — deliberately distinct from `build.yaml` so the two verify separately (Task 3 / spec Success criterion 4).
+- Produces: per existing release, an attestation in GitHub's store and a `provenance-backfill-<tag>.sigstore.json` asset. Signer-workflow identity is `.github/workflows/provenance-backfill.yaml` — deliberately distinct from `build.yaml` so the two verify separately (Task 3 / spec Success criterion 4).
+
+> **Post-review hardening (as merged):** the committed workflow differs from the verbatim block below by incorporating PR-review fixes — a **distinct** backfill asset name `provenance-backfill-<tag>.sigstore.json` (so it never clobbers a build-time `provenance-<tag>.sigstore.json`), `| unique` in the tag parse (dedupe racing matrix legs), `--` argument separators before `"$TAG"` in the `gh` calls, and `find -maxdepth 1` to mirror the non-recursive attest glob. The committed `.github/workflows/provenance-backfill.yaml` is the source of truth.
 
 - [ ] **Step 1: Create the workflow file**
 
