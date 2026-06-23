@@ -291,10 +291,9 @@ Add a "Build provenance / verifying releases" section to `README.md`:
 - The canonical verification command **including `--signer-workflow`**
   (online) and the `--bundle` form (offline), with `--source-ref`/
   `--source-digest` pinning shown as options.
-- The minimum `gh` CLI version required for `gh attestation verify`
-  (state a concrete floor; given the offline-bundle fixes referenced above,
-  recommend `gh >= 2.60`, and confirm against the exact commands at
-  implementation).
+- The minimum `gh` CLI version required for `gh attestation verify`:
+  base commands work on `gh >= 2.60`; the optional `--source-ref`/
+  `--source-digest` pinning flags require `gh >= 2.68`.
 - The honest SLSA **Build Level 2** statement and why (self-hosted runner;
   predicate trust caveat).
 - The backfill caveat, including that backfilled releases verify against

@@ -17,7 +17,7 @@ These apply to **every** task; copied verbatim from the design spec (`docs/super
 - **Bundle naming:** single combined bundle → `provenance-<version-or-tag>.sigstore.json` (`.json`, not `.jsonl`).
 - **Verification must constrain the signer workflow.** Canonical command:
   `gh attestation verify <artifact> --repo scrtlabs/secret-vm-build --signer-workflow scrtlabs/secret-vm-build/.github/workflows/build.yaml`. `--signer-workflow` is matched as a **regex** (cli/cli #9507).
-- **`gh` floor for verification:** recommend `gh >= 2.60` (verified working on `gh 2.62.0`; `--signer-workflow` landed in cli/cli #9507, well before 2.60).
+- **`gh` floor for verification:** base commands (`--signer-workflow`, `--bundle`, `--repo`) require `gh >= 2.60` (verified working on `gh 2.62.0`). The optional `--source-ref`/`--source-digest` pinning flags require `gh >= 2.68` (introduced in cli/cli #10308).
 - **SLSA level claimed:** Build Level 2 at most (self-hosted runner blocks L3; predicate trust caveat). Never use the word "non-forgeable."
 - **Every `gh`-calling step must set `env: GH_TOKEN: ${{ github.token }}`.**
 - **Avoid script injection:** pass `${{ inputs.* }}` and `${{ matrix.* }}` into `run:` steps via `env:`, never interpolate them directly into the script body.
@@ -309,7 +309,8 @@ gh attestation verify <artifact-file> \
 ```
 
 To pin a specific release, add `--source-ref refs/tags/<tag>` and/or
-`--source-digest <commit-sha>`.
+`--source-digest <commit-sha>` (these two flags require `gh >= 2.68`; the
+base verification commands above work on `gh >= 2.60`).
 
 Offline / air-gapped verification, one artifact at a time, against the
 attached bundle:

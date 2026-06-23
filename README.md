@@ -76,7 +76,8 @@ gh attestation verify <artifact-file> \
 ```
 
 To pin a specific release, add `--source-ref refs/tags/<tag>` and/or
-`--source-digest <commit-sha>`.
+`--source-digest <commit-sha>` (these two flags require `gh >= 2.68`; the
+base verification commands above work on `gh >= 2.60`).
 
 Offline / air-gapped verification, one artifact at a time, against the
 attached bundle:
