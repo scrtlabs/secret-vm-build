@@ -83,16 +83,29 @@ specific release, add `--source-ref refs/tags/<tag>` and/or
 base verification commands above work on `gh >= 2.60`).
 
 Offline / air-gapped verification, one artifact at a time, against the
-attached bundle:
+attached bundle. `--bundle` supplies the attestation itself, but `gh` still
+needs Sigstore's TUF trust root. On a machine that has run `gh attestation
+verify` online before, that root is cached and the command below works as-is.
+For a **truly air-gapped** host, first export the trust root on an online
+machine and carry it over:
 
 ```bash
+# once, on an online machine:
+gh attestation trusted-root > trusted_root.jsonl
+```
+
+```bash
+# offline, with trusted_root.jsonl alongside the artifact and bundle:
 gh attestation verify <artifact-file> \
   --repo scrtlabs/secret-vm-build \
   --bundle provenance-<version>.sigstore.json \
+  --custom-trusted-root trusted_root.jsonl \
   --signer-workflow scrtlabs/secret-vm-build/.github/workflows/build.yaml
 ```
 
-> `--signer-workflow` is matched as a regular expression, and
+> `--custom-trusted-root` is only needed when the cached TUF root is
+> unavailable (a fully offline host); online and previously-cached machines
+> can omit it. `--signer-workflow` is matched as a regular expression, and
 > `gh attestation verify` operates on one file at a time (it does not accept
 > file globs). Offline `--bundle` verification of a combined multi-subject
 > bundle has had `gh` edge cases across versions; if it fails on a given
@@ -114,6 +127,14 @@ workflow that produced them.
 > `--deny-self-hosted-runners` to `gh attestation verify` — it will reject
 > these otherwise-valid release attestations.
 
+> **Runner prerequisite:** `actions/attest-build-provenance@v4` runs on
+> Node 24, which requires the self-hosted build runner's Actions agent to be
+> reasonably current (GitHub Actions runner ≥ v2.327.1). A stale runner will
+> complete the multi-hour build and then fail at the attestation step — and
+> because attestation gates the release, no release is published. Confirm the
+> runner agent version (and outbound HTTPS to Fulcio/Rekor/Sigstore TUF +
+> OIDC) before the next real tag.
+
 ### Backfilled releases
 
 Releases published before provenance was added can be attested with the
@@ -130,7 +151,5 @@ gh attestation verify <artifact-file> \
   --signer-workflow scrtlabs/secret-vm-build/.github/workflows/provenance-backfill.yaml
 ```
 
-> **Runner prerequisite:** `actions/attest-build-provenance@v4` runs on
-> Node 24, which requires the self-hosted build runner's Actions agent to be
-> reasonably current (GitHub Actions runner ≥ v2.327.1). A stale runner will
-> complete the build and then fail at the attestation step.
+(Backfill itself runs on `ubuntu-latest`, so the runner prerequisite below
+does not apply to it — only to the build workflow.)
