@@ -7,11 +7,11 @@ inherit kernel
 
 LINUX_VERSION ?= "6.16.12"
 
-SRC_URI = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${LINUX_VERSION}.tar.gz \
+SRC_URI = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${LINUX_VERSION}.tar.xz \
            file://defconfig \
            file://secret-vm-gcp.cfg"
 
-SRC_URI[sha256sum] = "ffc6af80b014ddebd55e116aa29a9f7a5256c87a29a8a9dd97270b6d49625109"
+SRC_URI[sha256sum] = "7ca4debc5ca912ebb8a76944a5c118afd5d09e31ef43c494adb14273da29a26e"
 LINUX_VERSION_EXTENSION = "-upstream"
 
 PV = "${LINUX_VERSION}${SRCPV}"
