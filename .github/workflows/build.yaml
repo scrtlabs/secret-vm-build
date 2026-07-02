@@ -32,6 +32,8 @@ jobs:
 
           mv -v artifacts/sev/rootfs-dev{,-${{ steps.get_version.outputs.VERSION }}-sev}.iso
           mv -v artifacts/sev/rootfs-prod{,-${{ steps.get_version.outputs.VERSION }}-sev}.iso
+          mv -v artifacts/sev/rootfs-gpu-dev{,-${{ steps.get_version.outputs.VERSION }}-sev}.iso
+          mv -v artifacts/sev/rootfs-gpu-prod{,-${{ steps.get_version.outputs.VERSION }}-sev}.iso
           mv -v artifacts/sev/ovmf{,-${{ steps.get_version.outputs.VERSION }}-sev}.fd
           mv -v artifacts/sev/bzImage{,-${{ steps.get_version.outputs.VERSION }}-sev}
           mv -v artifacts/sev/initramfs{,-${{ steps.get_version.outputs.VERSION }}-sev}.cpio.gz
@@ -78,6 +80,14 @@ jobs:
           path: artifacts/sev/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
       - uses: actions/upload-artifact@v4
         with:
+          name: rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
+          path: artifacts/sev/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
+          path: artifacts/sev/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
+      - uses: actions/upload-artifact@v4
+        with:
           name: ovmf-${{ steps.get_version.outputs.VERSION }}-sev.fd
           path: artifacts/sev/ovmf-${{ steps.get_version.outputs.VERSION }}-sev.fd
       - uses: actions/upload-artifact@v4
@@ -110,6 +120,8 @@ jobs:
             artifacts/tdx/initramfs-${{ steps.get_version.outputs.VERSION }}-tdx.cpio.gz
             artifacts/sev/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
             artifacts/sev/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
             artifacts/sev/ovmf-${{ steps.get_version.outputs.VERSION }}-sev.fd
             artifacts/sev/bzImage-${{ steps.get_version.outputs.VERSION }}-sev
             artifacts/sev/initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz

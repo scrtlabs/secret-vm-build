@@ -4,6 +4,7 @@ LICENSE = "MIT"
 inherit core-image
 
 PACKAGE_INSTALL = "base-files \
+                   jq \
                    busybox \
                    secret-vm-initramfs-files"
 

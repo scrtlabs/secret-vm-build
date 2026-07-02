@@ -5,6 +5,11 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 
 S = "${WORKDIR}/git"
 
+PACKAGES += "${PN}-gpu"
+
+RDEPENDS:${PN}-gpu += "python3 \
+                       python3-nv-attestation-sdk"
+
 RDEPENDS:${PN} += "systemd \
                    bash \
                    curl \
@@ -36,6 +41,7 @@ do_install() {
     install -m 0744 ${S}/scripts/renew-certificates.sh ${D}${bindir}/renew-certificates.sh
     install -m 0744 ${S}/scripts/utils.sh ${D}${bindir}/utils.sh
     install -m 0744 ${S}/scripts/get_poc_token.sh ${D}${bindir}/get_poc_token.sh
+    install -m 0744 ${S}/scripts/gpu-attest.py ${D}${bindir}/gpu-attest
 
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${S}/services/secret-vm-attest-rest.service ${D}${systemd_unitdir}/system/
@@ -57,3 +63,5 @@ FILES:${PN} = "${bindir}/secret-vm-start.sh \
                ${systemd_unitdir}/system/secret-vm-attest-rest.service \
                ${systemd_unitdir}/system/secret-vm-supervisor.service \
                ${systemd_unitdir}/network/10-enp.network"
+
+FILES:${PN}-gpu = "${bindir}/gpu-attest"
