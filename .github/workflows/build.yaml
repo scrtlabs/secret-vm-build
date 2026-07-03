@@ -12,6 +12,11 @@ on:
 jobs:
   build:
     runs-on: secret-vm-build-runner
+    permissions:
+      id-token: write          # mint OIDC token for Sigstore signing
+      attestations: write      # write to the attestation store
+      artifact-metadata: write # required by actions/attest@v4
+      contents: write          # required by the existing release upload
     steps:
       - name: Get the version
         id: get_version
@@ -106,6 +111,32 @@ jobs:
         with:
           name: rootfs-prod-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
           path: artifacts/gcp-tdx/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
+      - name: Attest build provenance
+        id: attest
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
+        with:
+          subject-path: |
+            artifacts/tdx/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+            artifacts/tdx/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+            artifacts/tdx/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+            artifacts/tdx/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}-tdx.iso
+            artifacts/tdx/ovmf-${{ steps.get_version.outputs.VERSION }}-tdx.fd
+            artifacts/tdx/bzImage-${{ steps.get_version.outputs.VERSION }}-tdx
+            artifacts/tdx/initramfs-${{ steps.get_version.outputs.VERSION }}-tdx.cpio.gz
+            artifacts/sev/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/ovmf-${{ steps.get_version.outputs.VERSION }}-sev.fd
+            artifacts/sev/bzImage-${{ steps.get_version.outputs.VERSION }}-sev
+            artifacts/sev/initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz
+            artifacts/gcp-tdx/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
+            artifacts/gcp-tdx/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
+      - name: Stage provenance bundle
+        env:
+          BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
+        run: cp "$BUNDLE_PATH" "artifacts/provenance-${VERSION}.sigstore.json"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -127,3 +158,4 @@ jobs:
             artifacts/sev/initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz
             artifacts/gcp-tdx/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
             artifacts/gcp-tdx/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-gcp-tdx.wic.tar.gz
+            artifacts/provenance-${{ steps.get_version.outputs.VERSION }}.sigstore.json

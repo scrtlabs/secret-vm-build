@@ -1,0 +1,101 @@
+name: Backfill Provenance
+
+# Manually-triggered backfill of SLSA provenance for EXISTING releases.
+# CAVEAT: this attests the digests of the release-asset bytes AS DOWNLOADED NOW.
+# It cannot prove how the artifacts were originally built (they were produced
+# outside this workflow) — it is signed hash-notarization, weaker than the
+# build-time provenance produced by build.yaml. Backfilled attestations are
+# signed by THIS workflow, so verify them with
+#   --signer-workflow scrtlabs/secret-vm-build/.github/workflows/provenance-backfill.yaml
+# (a build.yaml signer-workflow check will correctly reject them).
+# The bundle is uploaded under a DISTINCT asset name
+# (provenance-backfill-<tag>.sigstore.json) so it can never overwrite a
+# stronger build-time provenance-<tag>.sigstore.json asset on the same release.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: "Release tag(s) to attest: single, or comma/space-separated (e.g. 'v0.0.30' or 'v0.0.30, v0.0.28')"
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.parse.outputs.tags }}
+    steps:
+      - name: Parse tags input into a JSON array
+        id: parse
+        env:
+          TAGS_INPUT: ${{ inputs.tags }}
+        run: |
+          set -euo pipefail
+          # jq-only split on commas/whitespace (no xargs — avoids shell quote
+          # processing that could merge/drop tokens on quoted input).
+          json=$(printf '%s' "$TAGS_INPUT" | jq -Rsc 'split("[,[:space:]]+";"") | map(select(length > 0)) | unique')
+          if [ -z "$json" ] || [ "$json" = "[]" ]; then
+            echo "No tags parsed from input '$TAGS_INPUT'" >&2
+            exit 1
+          fi
+          echo "tags=$json" >> "$GITHUB_OUTPUT"
+          echo "Parsed tags: $json"
+
+  backfill:
+    needs: parse
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        tag: ${{ fromJSON(needs.parse.outputs.tags) }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Download release assets into a clean directory
+        env:
+          TAG: ${{ matrix.tag }}
+        run: |
+          set -euo pipefail
+          # Each matrix leg runs on its own fresh runner, so a fixed dir name is
+          # safe and keeps the tag out of later subject-path interpolation.
+          dir="release-assets"
+          rm -rf "$dir"; mkdir -p "$dir"
+          gh release download --repo "$GITHUB_REPOSITORY" --dir "$dir" -- "$TAG"
+          # Drop any previously-uploaded provenance (build OR backfill) so we never
+          # attest a prior bundle as a subject.
+          rm -f "$dir"/*.sigstore.json "$dir"/*.sigstore.jsonl
+          # Guard: fail loudly if nothing remains to attest (e.g. a tag whose only
+          # asset was a prior provenance bundle) — otherwise the glob matches nothing.
+          # maxdepth 1 mirrors the non-recursive "release-assets/*" attest glob below.
+          count=$(find "$dir" -maxdepth 1 -type f | wc -l | tr -d ' ')
+          if [ "$count" -eq 0 ]; then
+            echo "No attestable assets for tag $TAG after removing provenance files" >&2
+            exit 1
+          fi
+          echo "Subjects to attest ($count):"; ls -la "$dir"
+      - name: Attest build provenance
+        id: attest
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
+        with:
+          subject-path: "release-assets/*"
+      - name: Stage and upload provenance bundle
+        env:
+          TAG: ${{ matrix.tag }}
+          BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
+        run: |
+          set -euo pipefail
+          # Distinct asset name: never overwrites a build-time provenance-<tag> asset.
+          out="provenance-backfill-${TAG}.sigstore.json"
+          cp "$BUNDLE_PATH" "$out"
+          # --clobber deletes the existing same-named asset BEFORE uploading the
+          # new one; if this upload fails the prior bundle is gone until a re-run.
+          # Acceptable because the workflow is idempotent (re-dispatch restores it).
+          gh release upload --repo "$GITHUB_REPOSITORY" --clobber -- "$TAG" "$out"
