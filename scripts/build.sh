@@ -42,7 +42,7 @@ build() {
 	DISTRO=secret-vm bitbake \
 		mc:gcp-tdx:secret-vm-initramfs mc:gcp-tdx:secret-vm-rootfs-dev mc:gcp-tdx:secret-vm-rootfs-prod mc:gcp-tdx:virtual/kernel \
 		mc:tdx:secret-vm-initramfs mc:tdx:secret-vm-rootfs-dev mc:tdx:secret-vm-rootfs-prod mc:tdx:secret-vm-rootfs-gpu-dev mc:tdx:secret-vm-rootfs-gpu-prod mc:tdx:virtual/kernel mc:tdx:virtual/ovmf \
-		mc:sev:secret-vm-initramfs mc:sev:secret-vm-rootfs-dev mc:sev:secret-vm-rootfs-prod mc:sev:virtual/kernel mc:sev:virtual/ovmf
+		mc:sev:secret-vm-initramfs mc:sev:secret-vm-rootfs-dev mc:sev:secret-vm-rootfs-prod mc:sev:secret-vm-rootfs-gpu-dev mc:sev:secret-vm-rootfs-gpu-prod mc:sev:virtual/kernel mc:sev:virtual/ovmf
 }
 
 install() {
@@ -70,6 +70,8 @@ install() {
 	cp -L $SEV_DEPLOY/bzImage $ARTIFACTS_DIR/sev/bzImage
 	cp -L $SEV_DEPLOY/secret-vm-rootfs-prod-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-prod.cpio
 	cp -L $SEV_DEPLOY/secret-vm-rootfs-dev-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-dev.cpio
+	cp -L $SEV_DEPLOY/secret-vm-rootfs-gpu-dev-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-gpu-dev.cpio
+	cp -L $SEV_DEPLOY/secret-vm-rootfs-gpu-prod-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-gpu-prod.cpio
 	cp -L $SEV_DEPLOY/secret-vm-initramfs-secret-vm-sev.rootfs.cpio.gz $ARTIFACTS_DIR/sev/initramfs.cpio.gz
 	cp -L $SEV_DEPLOY/ovmf.fd $ARTIFACTS_DIR/sev/ovmf.fd
 
@@ -79,6 +81,8 @@ install() {
 	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/tdx/rootfs-gpu-dev.cpio $ARTIFACTS_DIR/tdx rootfs-gpu-dev.iso
 	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-prod.cpio $ARTIFACTS_DIR/sev rootfs-prod.iso
 	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-dev.cpio $ARTIFACTS_DIR/sev rootfs-dev.iso
+	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-gpu-prod.cpio $ARTIFACTS_DIR/sev rootfs-gpu-prod.iso
+	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-gpu-dev.cpio $ARTIFACTS_DIR/sev rootfs-gpu-dev.iso
 	qemu-img create -f qcow2 $ARTIFACTS_DIR/encryptedfs.qcow2 300G
 }
 
