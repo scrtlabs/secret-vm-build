@@ -125,6 +125,8 @@ jobs:
             artifacts/tdx/initramfs-${{ steps.get_version.outputs.VERSION }}-tdx.cpio.gz
             artifacts/sev/rootfs-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
             artifacts/sev/rootfs-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/rootfs-gpu-dev-${{ steps.get_version.outputs.VERSION }}-sev.iso
+            artifacts/sev/rootfs-gpu-prod-${{ steps.get_version.outputs.VERSION }}-sev.iso
             artifacts/sev/ovmf-${{ steps.get_version.outputs.VERSION }}-sev.fd
             artifacts/sev/bzImage-${{ steps.get_version.outputs.VERSION }}-sev
             artifacts/sev/initramfs-${{ steps.get_version.outputs.VERSION }}-sev.cpio.gz
