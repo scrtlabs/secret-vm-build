@@ -13,6 +13,7 @@ docker build --platform linux/amd64 -t secret-vm-build -f $SCRIPTS_DIR/docker/Do
 
 docker run --platform linux/amd64 --rm \
         --user $(id -u):$(id -g) \
+        -e MACHINES \
         -v $ROOT_DIR:/secret-vm-build \
         -v $BUILD_DIR:/secret-vm-build/build \
         -v $ARTIFACTS_DIR:/secret-vm-build/artifacts \

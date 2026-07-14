@@ -8,6 +8,10 @@ BUILD_DIR=$ROOT_DIR/build
 POKY_DIR=$ROOT_DIR/poky
 ARTIFACTS_DIR=$ROOT_DIR/artifacts
 
+# Which machines to build/install. Space-separated subset of "tdx sev gcp-tdx".
+# Default = all (matches CI). Override, e.g. MACHINES=tdx for a TDX-only build.
+MACHINES="${MACHINES:-tdx sev gcp-tdx}"
+
 setup() {
 	#rm -rf $ARTIFACTS_DIR
 	mkdir -p $ARTIFACTS_DIR
@@ -39,50 +43,60 @@ setup() {
 }
 
 build() {
-	DISTRO=secret-vm bitbake \
-		mc:gcp-tdx:secret-vm-initramfs mc:gcp-tdx:secret-vm-rootfs-dev mc:gcp-tdx:secret-vm-rootfs-prod mc:gcp-tdx:virtual/kernel \
-		mc:tdx:secret-vm-initramfs mc:tdx:secret-vm-rootfs-dev mc:tdx:secret-vm-rootfs-prod mc:tdx:secret-vm-rootfs-gpu-dev mc:tdx:secret-vm-rootfs-gpu-prod mc:tdx:virtual/kernel mc:tdx:virtual/ovmf \
-		mc:sev:secret-vm-initramfs mc:sev:secret-vm-rootfs-dev mc:sev:secret-vm-rootfs-prod mc:sev:secret-vm-rootfs-gpu-dev mc:sev:secret-vm-rootfs-gpu-prod mc:sev:virtual/kernel mc:sev:virtual/ovmf
+	local targets=""
+	case " $MACHINES " in *" gcp-tdx "*) targets="$targets mc:gcp-tdx:secret-vm-initramfs mc:gcp-tdx:secret-vm-rootfs-dev mc:gcp-tdx:secret-vm-rootfs-prod mc:gcp-tdx:virtual/kernel" ;; esac
+	case " $MACHINES " in *" tdx "*)     targets="$targets mc:tdx:secret-vm-initramfs mc:tdx:secret-vm-rootfs-dev mc:tdx:secret-vm-rootfs-prod mc:tdx:secret-vm-rootfs-gpu-dev mc:tdx:secret-vm-rootfs-gpu-prod mc:tdx:virtual/kernel mc:tdx:virtual/ovmf" ;; esac
+	case " $MACHINES " in *" sev "*)     targets="$targets mc:sev:secret-vm-initramfs mc:sev:secret-vm-rootfs-dev mc:sev:secret-vm-rootfs-prod mc:sev:secret-vm-rootfs-gpu-dev mc:sev:secret-vm-rootfs-gpu-prod mc:sev:virtual/kernel mc:sev:virtual/ovmf" ;; esac
+	DISTRO=secret-vm bitbake $targets
 }
 
 install() {
-	GCP_TDX_DEPLOY=$BUILD_DIR/tmp-gcp-tdx-glibc/deploy/images/secret-vm-gcp-tdx
-	mkdir -p $ARTIFACTS_DIR/gcp-tdx
-	cp -L $GCP_TDX_DEPLOY/secret-vm-rootfs-prod-secret-vm-gcp-tdx.rootfs.wic $ARTIFACTS_DIR/gcp-tdx/disk.raw
-	tar czvf $ARTIFACTS_DIR/gcp-tdx/rootfs-prod.wic.tar.gz -C $ARTIFACTS_DIR/gcp-tdx disk.raw
-	rm -fv $ARTIFACTS_DIR/gcp-tdx/disk.raw
-	cp -L $GCP_TDX_DEPLOY/secret-vm-rootfs-dev-secret-vm-gcp-tdx.rootfs.wic $ARTIFACTS_DIR/gcp-tdx/disk.raw
-	tar czvf $ARTIFACTS_DIR/gcp-tdx/rootfs-dev.wic.tar.gz -C $ARTIFACTS_DIR/gcp-tdx disk.raw
-	rm -fv $ARTIFACTS_DIR/gcp-tdx/disk.raw
+	case " $MACHINES " in *" gcp-tdx "*)
+		GCP_TDX_DEPLOY=$BUILD_DIR/tmp-gcp-tdx-glibc/deploy/images/secret-vm-gcp-tdx
+		mkdir -p $ARTIFACTS_DIR/gcp-tdx
+		cp -L $GCP_TDX_DEPLOY/secret-vm-rootfs-prod-secret-vm-gcp-tdx.rootfs.wic $ARTIFACTS_DIR/gcp-tdx/disk.raw
+		tar czvf $ARTIFACTS_DIR/gcp-tdx/rootfs-prod.wic.tar.gz -C $ARTIFACTS_DIR/gcp-tdx disk.raw
+		rm -fv $ARTIFACTS_DIR/gcp-tdx/disk.raw
+		cp -L $GCP_TDX_DEPLOY/secret-vm-rootfs-dev-secret-vm-gcp-tdx.rootfs.wic $ARTIFACTS_DIR/gcp-tdx/disk.raw
+		tar czvf $ARTIFACTS_DIR/gcp-tdx/rootfs-dev.wic.tar.gz -C $ARTIFACTS_DIR/gcp-tdx disk.raw
+		rm -fv $ARTIFACTS_DIR/gcp-tdx/disk.raw
+		;;
+	esac
 
-	TDX_DEPLOY=$BUILD_DIR/tmp-tdx-glibc/deploy/images/secret-vm-tdx
-	mkdir -p $ARTIFACTS_DIR/tdx
-	cp -L $TDX_DEPLOY/bzImage $ARTIFACTS_DIR/tdx/bzImage
-	cp -L $TDX_DEPLOY/secret-vm-rootfs-prod-secret-vm-tdx.rootfs.cpio $ARTIFACTS_DIR/tdx/rootfs-prod.cpio
-	cp -L $TDX_DEPLOY/secret-vm-rootfs-dev-secret-vm-tdx.rootfs.cpio $ARTIFACTS_DIR/tdx/rootfs-dev.cpio
-	cp -L $TDX_DEPLOY/secret-vm-rootfs-gpu-dev-secret-vm-tdx.rootfs.cpio $ARTIFACTS_DIR/tdx/rootfs-gpu-dev.cpio
-	cp -L $TDX_DEPLOY/secret-vm-rootfs-gpu-prod-secret-vm-tdx.rootfs.cpio $ARTIFACTS_DIR/tdx/rootfs-gpu-prod.cpio
-	cp -L $TDX_DEPLOY/secret-vm-initramfs-secret-vm-tdx.rootfs.cpio.gz $ARTIFACTS_DIR/tdx/initramfs.cpio.gz
-	cp -L $TDX_DEPLOY/ovmf.fd $ARTIFACTS_DIR/tdx/ovmf.fd
+	case " $MACHINES " in *" tdx "*)
+		TDX_DEPLOY=$BUILD_DIR/tmp-tdx-glibc/deploy/images/secret-vm-tdx
+		mkdir -p $ARTIFACTS_DIR/tdx
+		cp -L $TDX_DEPLOY/bzImage $ARTIFACTS_DIR/tdx/bzImage
+		cp -L $TDX_DEPLOY/secret-vm-rootfs-prod-secret-vm-tdx.rootfs.cpio $ARTIFACTS_DIR/tdx/rootfs-prod.cpio
+		cp -L $TDX_DEPLOY/secret-vm-rootfs-dev-secret-vm-tdx.rootfs.cpio $ARTIFACTS_DIR/tdx/rootfs-dev.cpio
+		cp -L $TDX_DEPLOY/secret-vm-rootfs-gpu-dev-secret-vm-tdx.rootfs.cpio $ARTIFACTS_DIR/tdx/rootfs-gpu-dev.cpio
+		cp -L $TDX_DEPLOY/secret-vm-rootfs-gpu-prod-secret-vm-tdx.rootfs.cpio $ARTIFACTS_DIR/tdx/rootfs-gpu-prod.cpio
+		cp -L $TDX_DEPLOY/secret-vm-initramfs-secret-vm-tdx.rootfs.cpio.gz $ARTIFACTS_DIR/tdx/initramfs.cpio.gz
+		cp -L $TDX_DEPLOY/ovmf.fd $ARTIFACTS_DIR/tdx/ovmf.fd
+		$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/tdx/rootfs-prod.cpio $ARTIFACTS_DIR/tdx rootfs-prod.iso
+		$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/tdx/rootfs-dev.cpio $ARTIFACTS_DIR/tdx rootfs-dev.iso
+		$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/tdx/rootfs-gpu-prod.cpio $ARTIFACTS_DIR/tdx rootfs-gpu-prod.iso
+		$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/tdx/rootfs-gpu-dev.cpio $ARTIFACTS_DIR/tdx rootfs-gpu-dev.iso
+		;;
+	esac
 
-	SEV_DEPLOY=$BUILD_DIR/tmp-sev-glibc/deploy/images/secret-vm-sev
-	mkdir -p $ARTIFACTS_DIR/sev
-	cp -L $SEV_DEPLOY/bzImage $ARTIFACTS_DIR/sev/bzImage
-	cp -L $SEV_DEPLOY/secret-vm-rootfs-prod-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-prod.cpio
-	cp -L $SEV_DEPLOY/secret-vm-rootfs-dev-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-dev.cpio
-	cp -L $SEV_DEPLOY/secret-vm-rootfs-gpu-dev-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-gpu-dev.cpio
-	cp -L $SEV_DEPLOY/secret-vm-rootfs-gpu-prod-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-gpu-prod.cpio
-	cp -L $SEV_DEPLOY/secret-vm-initramfs-secret-vm-sev.rootfs.cpio.gz $ARTIFACTS_DIR/sev/initramfs.cpio.gz
-	cp -L $SEV_DEPLOY/ovmf.fd $ARTIFACTS_DIR/sev/ovmf.fd
+	case " $MACHINES " in *" sev "*)
+		SEV_DEPLOY=$BUILD_DIR/tmp-sev-glibc/deploy/images/secret-vm-sev
+		mkdir -p $ARTIFACTS_DIR/sev
+		cp -L $SEV_DEPLOY/bzImage $ARTIFACTS_DIR/sev/bzImage
+		cp -L $SEV_DEPLOY/secret-vm-rootfs-prod-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-prod.cpio
+		cp -L $SEV_DEPLOY/secret-vm-rootfs-dev-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-dev.cpio
+		cp -L $SEV_DEPLOY/secret-vm-rootfs-gpu-dev-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-gpu-dev.cpio
+		cp -L $SEV_DEPLOY/secret-vm-rootfs-gpu-prod-secret-vm-sev.rootfs.cpio $ARTIFACTS_DIR/sev/rootfs-gpu-prod.cpio
+		cp -L $SEV_DEPLOY/secret-vm-initramfs-secret-vm-sev.rootfs.cpio.gz $ARTIFACTS_DIR/sev/initramfs.cpio.gz
+		cp -L $SEV_DEPLOY/ovmf.fd $ARTIFACTS_DIR/sev/ovmf.fd
+		$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-prod.cpio $ARTIFACTS_DIR/sev rootfs-prod.iso
+		$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-dev.cpio $ARTIFACTS_DIR/sev rootfs-dev.iso
+		$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-gpu-prod.cpio $ARTIFACTS_DIR/sev rootfs-gpu-prod.iso
+		$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-gpu-dev.cpio $ARTIFACTS_DIR/sev rootfs-gpu-dev.iso
+		;;
+	esac
 
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/tdx/rootfs-prod.cpio $ARTIFACTS_DIR/tdx rootfs-prod.iso
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/tdx/rootfs-dev.cpio $ARTIFACTS_DIR/tdx rootfs-dev.iso
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/tdx/rootfs-gpu-prod.cpio $ARTIFACTS_DIR/tdx rootfs-gpu-prod.iso
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/tdx/rootfs-gpu-dev.cpio $ARTIFACTS_DIR/tdx rootfs-gpu-dev.iso
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-prod.cpio $ARTIFACTS_DIR/sev rootfs-prod.iso
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-dev.cpio $ARTIFACTS_DIR/sev rootfs-dev.iso
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-gpu-prod.cpio $ARTIFACTS_DIR/sev rootfs-gpu-prod.iso
-	$SCRIPTS_DIR/cpio_to_iso.sh $ARTIFACTS_DIR/sev/rootfs-gpu-dev.cpio $ARTIFACTS_DIR/sev rootfs-gpu-dev.iso
 	qemu-img create -f qcow2 $ARTIFACTS_DIR/encryptedfs.qcow2 300G
 }
 
